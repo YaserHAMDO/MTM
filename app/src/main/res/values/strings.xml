@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MTM Mobile</string>
+    <string name="for_more">Daha fazla mecra ve yayına erişim fırsatı!</string>
+    <string name="todo">TODO</string>
+    <string name="user_name_and_email">Kullancı adı veya E-mail</string>
+    <string name="required_field">Gerekli Alan*</string>
+    <string name="login">Giriş Yap</string>
+    <string name="password">Şifre</string>
+</resources>

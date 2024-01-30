@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    android:gravity="bottom">
+
+    <!-- image viwer to view the images -->
+
+    <ImageView
+
+        android:visibility="gone"
+        android:id="@+id/imageViewMain2"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        />
+<!--    android:background="@drawable/yaser_unicorn_ic_group_170"-->
+    <ImageView
+        android:id="@+id/imageViewMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+      />
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView25"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:text="Sniffer Platinium"-->
+<!--        android:textColor="#3C3C3C"-->
+<!--        android:textSize="24sp"-->
+<!--        android:textStyle="bold" />-->
+
+    <TextView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Sniffer gold ve daha fazlasi" />
+</LinearLayout>
