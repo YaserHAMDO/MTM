@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class CustomAdapter extends BaseAdapter {
             holder.mediaImageView = convertView.findViewById(R.id.xxxx);
             holder.textView = convertView.findViewById(R.id.yyyy);
             holder.linearLayout = convertView.findViewById(R.id.linearLayout);
+            holder.progressView = convertView.findViewById(R.id.progressBar);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -61,6 +63,10 @@ public class CustomAdapter extends BaseAdapter {
         // Set text
         holder.textView.setText(itemData.getText());
 
+        // Set progress bar visibility
+        holder.progressView.setVisibility(itemData.isProgressBarVisible() ? View.VISIBLE : View.GONE);
+        holder.mediaImageView.setVisibility(itemData.isProgressBarVisible() ? View.GONE : View.VISIBLE);
+
         return convertView;
     }
 
@@ -68,5 +74,6 @@ public class CustomAdapter extends BaseAdapter {
         ImageView mediaImageView;
         TextView textView;
         LinearLayout linearLayout;
+        ProgressBar progressView;
     }
 }

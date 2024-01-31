@@ -30,6 +30,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:textSize="20sp"
+            android:textColor="#4E4B66"
             android:text="Medya Gündemi"/>
 
         <androidx.cardview.widget.CardView
@@ -56,6 +57,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="7dp"
+        android:scrollbars="none"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
         android:scrollbars="none"/>
 
 

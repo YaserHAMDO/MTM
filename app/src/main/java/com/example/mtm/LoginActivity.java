@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.LogRecord;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -30,6 +32,8 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "LoginActivity";
+
     ViewPagerAdapter mViewPagerAdapter;
 
     TextInputLayout userNameTextInputLayout;
@@ -37,12 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView requiredUserNameTextView, requiredPasswordTextView;
     EditText usernameEditText, passwordEditText;
     ViewPager mViewPager;
-
-    int[] images = {
-            R.drawable.test1,
-            R.drawable.test1,
-            R.drawable.test1
-    };
 
     private Handler handler;
     int page=0;
@@ -61,6 +59,12 @@ public class LoginActivity extends AppCompatActivity {
 
         CircleIndicator indicator = findViewById(R.id.indicator);
 
+        int[] images = {
+                R.drawable.test1,
+                R.drawable.test1,
+                R.drawable.test1
+        };
+
         // Initializing the ViewPagerAdapter
         mViewPagerAdapter = new ViewPagerAdapter(getApplication(), images);
         // Adding the Adapter to the ViewPager
@@ -76,7 +80,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-//                Toast.makeText(LoginActivity.this, ""  + position, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -94,13 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             String password = passwordEditText.getText().toString();
             
             if (!userName.equals("") && !password.equals("")) {
-
-                Intent i = new Intent(this, MainActivity.class);
-//                Bundle options = ActivityOptions.makeCustomAnimation(this, 0, R.anim.launch_screen_animation).toBundle();
-//                startActivity(i, options);
-                startActivity(i);
-                finish();
-
+                getToken();
             }
             else {
                 if (userName.equals("")) {
@@ -149,47 +146,68 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        getToken();
+        ImageView test = findViewById(R.id.test);
+        test.setOnClickListener(view -> {
+            usernameEditText.setText("yasershareef1995@gmail.com");
+            passwordEditText.setText("yas12345");
+        });
+
+
 
     }
 
     private void getToken() {
 
+        String userName = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
 
-        ApiService apiService = RetrofitClient.getApiService();
-        Call<TokenModel> call = apiService.getToken(
-                "account-mobile",
-                "6323a00d-974f-46b9-974d-37e9a1588c59",
-                "password",
-                "yasershareef1995@gmail.com",
-                "yas12345"
-                );
-        // Make API call to get token
-//        Call<ResponseBody> call = apiService.getToken(request);
+        ApiService apiService = RetrofitClient.getClient(1).create(ApiService.class);
+
+        Map<String, String> fields = new HashMap<>();
+        fields.put("client_id", "account-mobile");
+        fields.put("client_secret", "6323a00d-974f-46b9-974d-37e9a1588c59");
+        fields.put("grant_type", "password");
+        fields.put("username", userName);
+        fields.put("password", password);
+
+        Call<TokenModel> call = apiService.getToken(fields);
+
+        Logger.getInstance().logDebug(TAG, "getToken", 1, fields);
+
         call.enqueue(new Callback<TokenModel>() {
             @Override
             public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
+
+                Logger.getInstance().logDebug(TAG, "getToken", 2, response.body());
+
                 if (response.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "XXxx", Toast.LENGTH_SHORT).show();
+
                     TokenModel tokenModel = response.body();
                     if (tokenModel != null) {
-                        // Token received, do something with it
-//                        Log.d("TOKEN", "Access Token: " + tokenModel.getAccessToken());
 
-                        Toast.makeText(LoginActivity.this, tokenModel.getAccessToken(), Toast.LENGTH_SHORT).show();
+                        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+                        preferenceManager.putString(Constants.KEY_ACCESS_TOKEN, tokenModel.getAccessToken());
+                        preferenceManager.putString(Constants.KEY_REFRESH_TOKEN, tokenModel.getRefreshToken());
+
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+
                     }
-                } else {
-                    Toast.makeText(LoginActivity.this, "failed\n" +  response.message() + "\n" + response.errorBody() + "\n"  + response.code(), Toast.LENGTH_SHORT).show();
-                    // Request not successful, handle error
-//                    Log.e("TOKEN", "Failed to get token. Error: " + response.message());
+
+                }
+                else {
+
+                    Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+
                 }
             }
 
             @Override
             public void onFailure(Call<TokenModel> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "zzzzzzzz", Toast.LENGTH_SHORT).show();
-                // Request failed, handle error
-//                Log.e("TOKEN", "Failed to get token. Error: " + t.getMessage());
+
+                Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+                Logger.getInstance().logDebug(TAG, "getToken", 3, t.getMessage());
             }
         });
     }

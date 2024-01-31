@@ -14,150 +14,369 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity implements CustomAdapter2.OnItemClickListener  {
+
+    private static final String TAG = "DetailsActivity";
 
 //    private LinearLayout matchesLinearLayout;
 
     private RecyclerView recyclerView;
+    private RecyclerView recyclerView2;
     private CustomAdapter2 adapter;
+    private CustomAdapter3 adapter2;
 
+    ArrayList<Models> siyasetModels;
+    ArrayList<Models> ekonomiModels;
+    ArrayList<Models> dunyaModels;
+    ArrayList<Models> kulturModels;
+    ArrayList<Models> yasamModels;
+    ArrayList<Models> sporModels;
+    ArrayList<Models> isModels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-
-
-//        matchesLinearLayout = findViewById(R.id.matchesLinearLayout_newChatFragment);
-
-
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerView2 = findViewById(R.id.recyclerView2);
+
+        recyclerView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+//        getMediaAgenda();
+
+
+        MediaAgendaModel result = DataHolder.getInstance().getMediaAgendaModel();
+
+        if (result != null) {
+            ArrayList<String> userMatch2 = new ArrayList<>();
+            siyasetModels = new ArrayList<>();
+            ekonomiModels = new ArrayList<>();
+            dunyaModels = new ArrayList<>();
+            kulturModels = new ArrayList<>();
+            yasamModels = new ArrayList<>();
+            sporModels = new ArrayList<>();
+            isModels = new ArrayList<>();
+
+            String genderType = "";
+
+            for (int i = 0; i < result.getData().getDocs().size(); i++) {
+
+                String newGenderType = result.getData().getDocs().get(i).getAgendaType().getName();
+                if (!newGenderType.equals(genderType)) {
+                    userMatch2.add(newGenderType);
+                    genderType = newGenderType;
+                }
+            }
+
+            setTypesList(userMatch2);
 
 
 
-//
-//        // Create Retrofit instance
-//        Retrofit retrofit = RetrofitClient.getClientApi();
-//
-//        // Assuming you have already created Retrofit instance
-//        ApiService apiService = retrofit.create(ApiService.class);
-//
-//// Call the mediaAgenda method with appropriate parameters
-//        Call<MediaAgendaModel> call = apiService.mediaAgenda(
-//                "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ6SG9uOXFlcUxHdWVUU0VMYkNDVFRfOXJXaHFmOGNJRHpCd1N0TTZ4R1FRIn0.eyJqdGkiOiI1M2I1NjdiMi00NzcyLTRhZDQtOGZlYi00MWNkZmIxOWUyNmMiLCJleHAiOjE3MDY2MjMwOTgsIm5iZiI6MCwiaWF0IjoxNzA2NjA4Njk4LCJpc3MiOiJodHRwczovL3NlY3VyaXR5Lm1lZHlhdGFraXAuY29tL2F1dGgvcmVhbG1zL21lZHlhdGFraXAuY29tIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImY6ZTEwODNmNGUtYTJlMy00NjVmLTk0NTctMWM2MzFjM2JlODRmOjhhMGM5MTM0LTIzOGUtNDk2Ny1hNjJhLWE4MjE1ZGY1NzMwYSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFjY291bnQtbW9iaWxlIiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiODVmOTdhZTEtYTc0ZS00YWRhLTgxYmUtMmE4NDhiNGMxYWE4IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJNZXN1dCBBeWfDvG4gLSBNb2JpbGUgVGVzdCIsInByZWZlcnJlZF91c2VybmFtZSI6Im1lc3V0YXlndW4zNSIsImxvY2FsZSI6InRyIiwiZ2l2ZW5fbmFtZSI6Ik1lc3V0IEF5Z8O8biAtIE1vYmlsZSBUZXN0IiwiZW1haWwiOiJtZXN1dGF5Z3VuMzVAaWNsb3VkLmNvbSJ9.Kftm-hLphWGlXzdiiUOX9aw5Itdov7FHx4Zu6DdGoMSCJ2h8vxHSBbvkBvbovDZLyGwp0_1gpSD9GQwRgqeGcoGoCBHUjHCzCVRIW11Tf6XMHpcO03Axuq1w1maGcT12lwdKVVYLbeEt0P3jWFvtXEeTVTLblmqYnoOMebFWPuEgsjZ_ZXBiLYkFcIIAtEbyr_0DMLJwa2qqL9woDkmU757rCyH1lJPeowHvBK6bj6kvQLSdxxg_A8x0IjqSfIAkq1oRIYectq1mXNYlUzVFgGydBGBAu1qeuKm40IB6GiEcHsCGyMGdXfzWxD4_SKc8lYOCEJFoG7fIBbzOi0Sa0A",
-//                22632,
-//                true, // addHash
-//                true, // addClip
-//                true, // addContent
-//                true, // addDocs
-//                true, // addTitle
-//                "2024-01-25"
-//        );
-//
-//// Execute the call asynchronously
-//        call.enqueue(new Callback<MediaAgendaModel>() {
-//            @Override
-//            public void onResponse(Call<MediaAgendaModel> call, Response<MediaAgendaModel> response) {
-//                if (response.isSuccessful()) {
-//                    // Handle successful response
-//                    MediaAgendaModel result = response.body();
-//
-//                    ArrayList<String> userMatch2 = new ArrayList<>();
-//
-//                    String genderType = "";
-//                    for (int i = 0; i < result.getData().getDocs().size(); i++) {
-//
-//                        String newGenderType = result.getData().getDocs().get(i).getAgendaType().getName();
-//                        if (!newGenderType.equals(genderType)) {
-//                            userMatch2.add(newGenderType);
-//                            genderType = newGenderType;
-//                        }
-//                    }
-//                    setTypesList(userMatch2);
-//
-//
-//                    Toast.makeText(DetailsActivity.this, "isSuccessful", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    // Handle error response
-//
-//                    Toast.makeText(DetailsActivity.this, "isSuccessful xxx", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MediaAgendaModel> call, Throwable t) {
-//                // Handle network errors
-//
-//                Toast.makeText(DetailsActivity.this, "isSuccessful zzzzzz", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
+
+            String videoUrl;
+
+            for (int i = 0; i < result.getData().getDocs().size() ; i++) {
+
+                videoUrl = "";
+                if (result.getData().getDocs() != null && result.getData().getDocs().get(i).getClips() != null && result.getData().getDocs().get(i).getClips().getBc() != null && result.getData().getDocs().get(i).getClips().getBc().getDocs() != null && result.getData().getDocs().get(i).getClips().getBc().getDocs().size() > 0) {
+                    videoUrl =  Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getClips().getBc().getDocs().get(0).getVideo();
+                }
+                
+                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Siyaset")) {
+                    
+                    siyasetModels.add(new Models(
+                            "Siyaset",
+                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            videoUrl,
+                            result.getData().getDocs().get(i).getAgendaType().getName(),
+                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                    ));
+                }
+
+                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Ekonomi")) {
+                    ekonomiModels.add(new Models(
+                            "Ekonomi",
+                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            videoUrl,
+                            result.getData().getDocs().get(i).getAgendaType().getName(),
+                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                    ));
+                }
+
+                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Dünya")) {
+                    dunyaModels.add(new Models(
+                            "Dünya",
+                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            videoUrl,
+                            result.getData().getDocs().get(i).getAgendaType().getName(),
+                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                    ));
+                }
+
+                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Kültür-Sanat")) {
+                    kulturModels.add(new Models(
+                            "Kültür-Sanat",
+                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            videoUrl,
+                            result.getData().getDocs().get(i).getAgendaType().getName(),
+                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                    ));
+                }
+
+                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Yaşam")) {
+                    yasamModels.add(new Models(
+                            "Yaşam",
+                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            videoUrl,
+                            result.getData().getDocs().get(i).getAgendaType().getName(),
+                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                    ));
+                }
+
+                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Spor")) {
+                    sporModels.add(new Models(
+                            "spor",
+                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            videoUrl,
+                            result.getData().getDocs().get(i).getAgendaType().getName(),
+                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                    ));
+                }
+
+                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("İş Dünyası")) {
+                    isModels.add(new Models(
+                            "İş Dünyası",
+                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            videoUrl,
+                            result.getData().getDocs().get(i).getAgendaType().getName(),
+                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                    ));
+                }
+
+            }
+
+
+
+
+            setTypesList2(siyasetModels);
+        } else {
+            // Handle case where no data is available
+        }
+
 
     }
-//
-//    private void updateUserMatches(ArrayList<String> userMatch2) {
-//        if (userMatch2 != null && userMatch2.size() > 0) {
-//
-//
-//            for(int i = 0; i < userMatch2.size(); i++) {
-//                LayoutInflater layoutInflater = LayoutInflater.from(this);
-//                View view = layoutInflater.inflate(R.layout.text2, matchesLinearLayout, false);
-//
-//                TextView textView = view.findViewById(R.id.greeting_tv1);
-//                View view1 = view.findViewById(R.id.viewxx);
-//
-//                textView.setText(userMatch2.get(i));
-//
-//
-//                int finalJ = i;
-//                view.setOnClickListener(v -> {
-//
-//                    view1.setVisibility(View.VISIBLE);
-////                        Intent intent = new Intent(getContext(), NewChatActivity.class);
-////
-////                        preferenceManager.putString(Constants.KEY_CHAT_OPPOSITE_PROFILE_IMAGE, Constants.NEW_KEY_SITTER_IMAGE_URL +  userMatch2.get(finalJ).getProfile_image());
-////                        preferenceManager.putString(Constants.KEY_CHAT_OPPOSITE_USER_NAME, userMatch2.get(finalJ).getFullname());
-////                        preferenceManager.putString(Constants.KEY_CHAT_OPPOSITE_FCM, userMatch2.get(finalJ).getFcm());
-////                        preferenceManager.putString(Constants.KEY_CHAT_OPPOSITE_FUID, userMatch2.get(finalJ).getFuid());
-////                        preferenceManager.putInt(Constants.KEY_CHAT_OPPOSITE_SUPER_LIKE, userMatch2.get(finalJ).getSuper_like());
-////                        preferenceManager.putString(Constants.KEY_CHAT_USER_GUID, userMatch2.get(finalJ).getUser_guid());
-////                        preferenceManager.putString(Constants.KEY_CHAT_MATCH_GUID, userMatch2.get(finalJ).getUser_match_guid());
-////                        preferenceManager.putString(Constants.KEY_CHAT_OPPOSITE_GUID, userMatch2.get(finalJ).getUser_guid());
-////                        preferenceManager.putString(Constants.KEY_CHAT_OWN_GUID, userMatch2.get(finalJ).getUser_own_guid());
-////
-////
-////                        preferenceManager.putInt(Constants.KEY_PREVIEW_POSITION_TEMPORARY,finalJ);
-////
-////                        preferenceManager.putString(Constants.KEY_CAME_FROM,"chatFragment");
-//
-////                        startActivity(intent);
-//
-//
-//
-//                });
-//
-//
-//                matchesLinearLayout.addView(view);
-//
-//            }
-//        }
-//
-//    }
+
+    private void getMediaAgenda() {
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MediaAgendaModel> call = apiService.getMediaAgenda(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                22632,
+                true,
+                true,
+                true,
+                true,
+                true,
+                "2024-01-25"
+        );
+
+        call.enqueue(new Callback<MediaAgendaModel>() {
+            @Override
+            public void onResponse(Call<MediaAgendaModel> call, Response<MediaAgendaModel> response) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+
+                if (response.isSuccessful()) {
+
+
+                    MediaAgendaModel result = response.body();
+
+                    ArrayList<String> userMatch2 = new ArrayList<>();
+                    siyasetModels = new ArrayList<>();
+                    ekonomiModels = new ArrayList<>();
+                    dunyaModels = new ArrayList<>();
+                    kulturModels = new ArrayList<>();
+                    yasamModels = new ArrayList<>();
+                    sporModels = new ArrayList<>();
+                    isModels = new ArrayList<>();
+
+                    String genderType = "";
+
+                    for (int i = 0; i < result.getData().getDocs().size(); i++) {
+
+                        String newGenderType = result.getData().getDocs().get(i).getAgendaType().getName();
+                        if (!newGenderType.equals(genderType)) {
+                            userMatch2.add(newGenderType);
+                            genderType = newGenderType;
+                        }
+                    }
+
+                    setTypesList(userMatch2);
+
+
+
+
+
+
+
+                    for (int i = 0; i < result.getData().getDocs().size() ; i++) {
+
+                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Siyaset")) {
+                            siyasetModels.add(new Models(
+                                    "Siyaset",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    "videoUrl",
+                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                            ));
+                        }
+
+                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Ekonomi")) {
+                            ekonomiModels.add(new Models(
+                                    "Ekonomi",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    "videoUrl",
+                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                            ));
+                        }
+
+                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Dünya")) {
+                            dunyaModels.add(new Models(
+                                    "Dünya",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    "videoUrl",
+                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                            ));
+                        }
+
+                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Kültür-Sanat")) {
+                            kulturModels.add(new Models(
+                                    "Kültür-Sanat",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    "rl",
+                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                            ));
+                        }
+
+                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Yaşam")) {
+                            yasamModels.add(new Models(
+                                    "Yaşam",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    "videoUrl",
+                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                            ));
+                        }
+
+                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Spor")) {
+                            sporModels.add(new Models(
+                                    "Spor",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    "videoUrl",
+                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                            ));
+                        }
+
+                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("İş Dünyası")) {
+                            isModels.add(new Models(
+                                    "İş Dünyası",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    "videoUrl",
+                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                            ));
+                        }
+
+                    }
+
+
+
+
+                    setTypesList2(siyasetModels);
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MediaAgendaModel> call, Throwable t) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+            }
+        });
+
+
+    }
 
     private void setTypesList(List<String> dataList) {
         recyclerView.setAdapter(null);
-
-        adapter = new CustomAdapter2(this, dataList);
+        adapter = new CustomAdapter2(this, dataList, this);
         recyclerView.setAdapter(adapter);
     }
 
+    private void setTypesList2(List<Models> dataList) {
+        recyclerView2.setAdapter(null);
+        adapter2 = new CustomAdapter3(this, dataList);
+        recyclerView2.setAdapter(adapter2);
+    }
+
+    @Override
+    public void onItemClick(String position) {
+
+        recyclerView2.setAdapter(null);
+
+        switch (position) {
+            case "Siyaset":
+                setTypesList2(siyasetModels);
+                break;
+
+            case "Ekonomi":
+                setTypesList2(ekonomiModels);
+                break;
+
+            case "Dünya":
+                setTypesList2(dunyaModels);
+                break;
+
+            case "Kültür-Sanat":
+                setTypesList2(kulturModels);
+                break;
+
+            case "Yaşam":
+                setTypesList2(yasamModels);
+                break;
+
+            case "Spor":
+                setTypesList2(sporModels);
+                break;
+
+            case "İş Dünyası":
+                setTypesList2(isModels);
+                break;
+        }
+
+
+    }
 }

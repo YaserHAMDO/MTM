@@ -15,11 +15,27 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/xxxx"
+        <FrameLayout
             android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/media_icon"/>
+            android:layout_height="45dp">
+
+
+            <ProgressBar
+                android:visibility="gone"
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <ImageView
+                android:id="@+id/xxxx"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/media_icon"/>
+
+        </FrameLayout>
+
+
 
         <TextView
             android:id="@+id/yyyy"

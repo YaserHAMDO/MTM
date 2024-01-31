@@ -17,8 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     ImageView profileImageView, notificationImageView;
     GridView gridView;
@@ -33,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.test6,
             R.drawable.test6
     };
-
+    CustomAdapter adapter;
     private Handler handler;
     int page = 0;
     private int delay = 2000; //milliseconds
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new ItemData(R.drawable.opinion_writers_icon, R.drawable.test15, "Köşe Yazarları"));
 
 
-        CustomAdapter adapter = new CustomAdapter(this, items);
+        adapter = new CustomAdapter(this, items);
         gridView.setAdapter(adapter);
 
 
@@ -120,14 +125,223 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
         });
 
+//        gridView.setOnItemClickListener((parent, view, position, id) -> {
+//            ItemData itemData = items.get(position);
+//            // Toggle the visibility of the progress bar for the clicked item
+//            itemData.setProgressBarVisible(!itemData.isProgressBarVisible());
+//            // Notify the adapter that the data has changed
+//            adapter.notifyDataSetChanged();
+//
+//            // Start the details activity or perform any other action
+////            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+////            intent.putExtra("itemData", itemData.getText());
+////            startActivity(intent);
+//        });
+
         gridView.setOnItemClickListener((parent, view, position, id) -> {
-            ItemData itemData = items.get(position);
-            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-            intent.putExtra("itemData", itemData.getText());
-            startActivity(intent);
+
+            getMediaAgenda(position);
+
+
+            // Start some asynchronous task (e.g., loading data)
+            // You can replace this with your actual task
+            // For demonstration, I'm using a handler to simulate a delay
+//            new Handler().postDelayed(() -> {
+//                // After completing the task, hide progress bar for the clicked item
+//                itemData.setProgressBarVisible(false);
+//
+//                // Notify the adapter that data has changed
+//                adapter.notifyDataSetChanged();
+//
+//                // Start the details activity or perform any other action
+//                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+//                intent.putExtra("itemData", itemData.getText());
+//                startActivity(intent);
+//            }, 2000); // Simulating a delay of 2 seconds
         });
 
+
+
     }
+
+    private void getMediaAgenda(int position) {
+
+
+        ItemData itemData = items.get(position);
+
+        // Show progress bar for the clicked item
+        itemData.setProgressBarVisible(true);
+
+        // Notify the adapter that data has changed
+        adapter.notifyDataSetChanged();
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MediaAgendaModel> call = apiService.getMediaAgenda(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                22632,
+                true,
+                true,
+                true,
+                true,
+                true,
+                "2024-01-25"
+        );
+
+        call.enqueue(new Callback<MediaAgendaModel>() {
+            @Override
+            public void onResponse(Call<MediaAgendaModel> call, Response<MediaAgendaModel> response) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                if (response.isSuccessful()) {
+
+
+
+
+                    MediaAgendaModel result = response.body();
+
+
+                    DataHolder.getInstance().setMediaAgendaModel(result);
+
+//                    ArrayList<String> userMatch2 = new ArrayList<>();
+//                    siyasetModels = new ArrayList<>();
+//                    ekonomiModels = new ArrayList<>();
+//                    dunyaModels = new ArrayList<>();
+//                    kulturModels = new ArrayList<>();
+//                    yasamModels = new ArrayList<>();
+//                    sporModels = new ArrayList<>();
+//                    isModels = new ArrayList<>();
+//
+//                    String genderType = "";
+//
+//                    for (int i = 0; i < result.getData().getDocs().size(); i++) {
+//
+//                        String newGenderType = result.getData().getDocs().get(i).getAgendaType().getName();
+//                        if (!newGenderType.equals(genderType)) {
+//                            userMatch2.add(newGenderType);
+//                            genderType = newGenderType;
+//                        }
+//                    }
+//
+//                    setTypesList(userMatch2);
+//
+//
+//
+//
+//
+//
+//
+//                    for (int i = 0; i < result.getData().getDocs().size() ; i++) {
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Siyaset")) {
+//                            siyasetModels.add(new Models(
+//                                    "Siyaset",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Ekonomi")) {
+//                            ekonomiModels.add(new Models(
+//                                    "Ekonomi",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Dünya")) {
+//                            dunyaModels.add(new Models(
+//                                    "Dünya",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Kültür-Sanat")) {
+//                            kulturModels.add(new Models(
+//                                    "Kültür-Sanat",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Yaşam")) {
+//                            yasamModels.add(new Models(
+//                                    "Yaşam",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Spor")) {
+//                            sporModels.add(new Models(
+//                                    "spor",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("İş Dünyası")) {
+//                            isModels.add(new Models(
+//                                    "İş Dünyası",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                    }
+//
+//
+//
+//
+//                    setTypesList2(siyasetModels);
+
+
+
+                    Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MediaAgendaModel> call, Throwable t) {
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
 
 
 

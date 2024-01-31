@@ -15,13 +15,15 @@ import java.util.List;
 
 public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHolder> {
 
-    private Context context;
-    private List<String> dataList;
+    private final Context context;
+    private final List<String> dataList;
     private int selectedItem = 0;
+    private final OnItemClickListener listener;
 
-    public CustomAdapter2(Context context, List<String> dataList) {
+    public CustomAdapter2(Context context, List<String> dataList, OnItemClickListener listener) {
         this.context = context;
         this.dataList = dataList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,6 +38,9 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
         final int pos = position;
         String item = dataList.get(pos);
         holder.textView.setText(item);
+        holder.type = item;
+
+
 
         // Change text color if the item is selected
         if (selectedItem == pos) {
@@ -59,9 +64,8 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
 
                 // Notify adapter that data has changed
                 notifyDataSetChanged();
+                listener.onItemClick(holder.type);
 
-                // Show a toast with the clicked item
-                Toast.makeText(context, "Clicked: " + dataList.get(pos), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -71,14 +75,19 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
         return dataList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         View view;
+        String type;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.greeting_tv1);
             view = itemView.findViewById(R.id.viewxx);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(String position);
     }
 }
