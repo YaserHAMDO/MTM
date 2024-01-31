@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,7 +89,10 @@ public class CustomAdapter3 extends RecyclerView.Adapter<CustomAdapter3.ViewHold
         });
 
         holder.readMoreLinearLayout.setOnClickListener(view -> {
-
+            Intent intent = new Intent(context, ImageShowActivity.class);
+            intent.putExtra("imageUrl", item.getMagazineImageUrl());
+            Toast.makeText(context, item.getMagazineImageUrl(), Toast.LENGTH_SHORT).show();
+            context.startActivity(intent);
         });
     }
 

@@ -86,19 +86,25 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
 
 
             String videoUrl;
+            String magazineUrl;
 
             for (int i = 0; i < result.getData().getDocs().size() ; i++) {
 
                 videoUrl = "";
+                magazineUrl = "";
                 if (result.getData().getDocs() != null && result.getData().getDocs().get(i).getClips() != null && result.getData().getDocs().get(i).getClips().getBc() != null && result.getData().getDocs().get(i).getClips().getBc().getDocs() != null && result.getData().getDocs().get(i).getClips().getBc().getDocs().size() > 0) {
                     videoUrl =  Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getClips().getBc().getDocs().get(0).getVideo();
                 }
-                
+                  if (result.getData().getDocs() != null && result.getData().getDocs().get(i).getClips() != null && result.getData().getDocs().get(i).getClips().getPm() != null && result.getData().getDocs().get(i).getClips().getPm().getDocs() != null && result.getData().getDocs().get(i).getClips().getPm().getDocs().size() > 0) {
+                      magazineUrl =  Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getImageStoragePath();
+                }
+
                 if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Siyaset")) {
-                    
+
                     siyasetModels.add(new Models(
                             "Siyaset",
                             Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            magazineUrl,
                             videoUrl,
                             result.getData().getDocs().get(i).getAgendaType().getName(),
                             result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -109,6 +115,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                     ekonomiModels.add(new Models(
                             "Ekonomi",
                             Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            magazineUrl,
                             videoUrl,
                             result.getData().getDocs().get(i).getAgendaType().getName(),
                             result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -119,6 +126,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                     dunyaModels.add(new Models(
                             "Dünya",
                             Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            magazineUrl,
                             videoUrl,
                             result.getData().getDocs().get(i).getAgendaType().getName(),
                             result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -129,6 +137,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                     kulturModels.add(new Models(
                             "Kültür-Sanat",
                             Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            magazineUrl,
                             videoUrl,
                             result.getData().getDocs().get(i).getAgendaType().getName(),
                             result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -139,6 +148,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                     yasamModels.add(new Models(
                             "Yaşam",
                             Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            magazineUrl,
                             videoUrl,
                             result.getData().getDocs().get(i).getAgendaType().getName(),
                             result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -149,6 +159,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                     sporModels.add(new Models(
                             "spor",
                             Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            magazineUrl,
                             videoUrl,
                             result.getData().getDocs().get(i).getAgendaType().getName(),
                             result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -159,6 +170,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                     isModels.add(new Models(
                             "İş Dünyası",
                             Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                            magazineUrl,
                             videoUrl,
                             result.getData().getDocs().get(i).getAgendaType().getName(),
                             result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -240,6 +252,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                             siyasetModels.add(new Models(
                                     "Siyaset",
                                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     "videoUrl",
                                     result.getData().getDocs().get(i).getAgendaType().getName(),
                                     result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -249,6 +262,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                         if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Ekonomi")) {
                             ekonomiModels.add(new Models(
                                     "Ekonomi",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     "videoUrl",
                                     result.getData().getDocs().get(i).getAgendaType().getName(),
@@ -260,6 +274,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                             dunyaModels.add(new Models(
                                     "Dünya",
                                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     "videoUrl",
                                     result.getData().getDocs().get(i).getAgendaType().getName(),
                                     result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -269,6 +284,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                         if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Kültür-Sanat")) {
                             kulturModels.add(new Models(
                                     "Kültür-Sanat",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     "rl",
                                     result.getData().getDocs().get(i).getAgendaType().getName(),
@@ -280,6 +296,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                             yasamModels.add(new Models(
                                     "Yaşam",
                                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     "videoUrl",
                                     result.getData().getDocs().get(i).getAgendaType().getName(),
                                     result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -290,6 +307,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                             sporModels.add(new Models(
                                     "Spor",
                                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     "videoUrl",
                                     result.getData().getDocs().get(i).getAgendaType().getName(),
                                     result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
@@ -299,6 +317,7 @@ public class DetailsActivity extends AppCompatActivity implements CustomAdapter2
                         if (result.getData().getDocs().get(i).getAgendaType().getName().equals("İş Dünyası")) {
                             isModels.add(new Models(
                                     "İş Dünyası",
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
                                     "videoUrl",
                                     result.getData().getDocs().get(i).getAgendaType().getName(),
