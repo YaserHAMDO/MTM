@@ -140,8 +140,9 @@ public class MainActivity extends AppCompatActivity {
 
         gridView.setOnItemClickListener((parent, view, position, id) -> {
 
-            getMediaAgenda(position);
+//            getMediaAgenda(position);
 
+            newspaperFirstPages(position);
 
             // Start some asynchronous task (e.g., loading data)
             // You can replace this with your actual task
@@ -342,6 +343,77 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void newspaperFirstPages(int position) {
+
+
+        ItemData itemData = items.get(position);
+
+        // Show progress bar for the clicked item
+        itemData.setProgressBarVisible(true);
+
+        // Notify the adapter that data has changed
+        adapter.notifyDataSetChanged();
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<NewspaperFirstPagesModel> call = apiService.newspaperFirstPages(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                22632,
+                0,
+                50,
+                "2024-01-29"
+        );
+
+        call.enqueue(new Callback<NewspaperFirstPagesModel>() {
+            @Override
+            public void onResponse(Call<NewspaperFirstPagesModel> call, Response<NewspaperFirstPagesModel> response) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                if (response.isSuccessful()) {
+
+
+
+
+                    NewspaperFirstPagesModel result = response.body();
+
+                    DataHolder.getInstance().setNewspaperFirstPagesModel(result);
+
+                    Intent intent = new Intent(MainActivity.this, NewspaperFirstPageActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewspaperFirstPagesModel> call, Throwable t) {
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+            }
+        });
+
+
+    }
 
 
 

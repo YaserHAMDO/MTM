@@ -4,6 +4,369 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ProfileActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:paddingHorizontal="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/backIconImageView"
+                    android:padding="5dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/left_arrow_blue" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textSize="20sp"
+                    android:textColor="#4E4B66"
+                    android:text="Profile"/>
+
+                <androidx.cardview.widget.CardView
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp">
+
+                    <ImageView
+                        android:id="@+id/notificationImageView"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/notification_icon" />
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/dorduncuLayoutfgd"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/test16"
+                app:layout_constraintBottom_toBottomOf="@+id/asdfasdfasdf"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/asdfasdfasdf">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/profile_icon2" />
+
+            </FrameLayout>
+
+            <TextView
+                android:layout_marginEnd="20dp"
+                android:visibility="invisible"
+                android:id="@+id/requiredUserNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/required_field"
+                android:textColor="@color/red"
+                android:layout_gravity="end"
+                android:textSize="8sp"
+                android:layout_marginTop="20dp"
+                tools:ignore="SmallSp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/userNameTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Kullanıcı adı">
+
+
+
+                <EditText
+                    android:id="@+id/edit_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textCapWords"
+                    android:maxLines="1"
+                    android:textColor="@color/color2"
+                    android:backgroundTint="@android:color/transparent"
+                    android:autofillHints="" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_marginEnd="20dp"
+                android:id="@+id/requiredPasswordTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/required_field"
+                android:textColor="@color/red"
+                android:layout_gravity="end"
+                android:visibility="invisible"
+                android:textSize="8sp"
+                android:layout_marginTop="15dp"
+                tools:ignore="SmallSp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/passwordTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="email">
+
+
+
+                <EditText
+                    android:id="@+id/passwordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textCapWords"
+                    android:maxLines="1"
+                    android:textColor="@color/color2"
+                    android:backgroundTint="@android:color/transparent"
+                    tools:ignore="TextFields"
+                    android:autofillHints="" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/color3"
+                android:text="Yardım ve Destek İçin Bize Ulaş "/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingVertical="10dp"
+                android:id="@+id/loginMaterialButton"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="Çıkış Yap"
+                android:backgroundTint="#D88030"/>
+
+            <TextView
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color3"
+                android:textStyle="bold"
+                android:text="Paylaş"/>
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:animateLayoutChanges="true"
+                        android:background="@drawable/test16"
+                        android:backgroundTint="@color/color5"
+                        app:layout_constraintEnd_toEndOf="parent">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/telegram_icon"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_marginTop="2dp"
+                        android:textSize="12sp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color3"
+                        android:text="Telegram"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:animateLayoutChanges="true"
+                        android:background="@drawable/test16"
+                        android:backgroundTint="@color/color5"
+                        app:layout_constraintEnd_toEndOf="parent">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/twitter_icon"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_marginTop="2dp"
+                        android:textSize="12sp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color3"
+                        android:text="Twitter"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:animateLayoutChanges="true"
+                        android:background="@drawable/test16"
+                        android:backgroundTint="@color/color5"
+                        app:layout_constraintEnd_toEndOf="parent">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/whatsapp_icon"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_marginTop="2dp"
+                        android:textSize="12sp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color3"
+                        android:text="Whatsapp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:animateLayoutChanges="true"
+                        android:background="@drawable/test16"
+                        android:backgroundTint="@color/color5"
+                        app:layout_constraintEnd_toEndOf="parent">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/email_icon"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_marginTop="2dp"
+                        android:textSize="12sp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color3"
+                        android:text="E-mail"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:animateLayoutChanges="true"
+                        android:background="@drawable/test16"
+                        android:backgroundTint="@color/color5"
+                        app:layout_constraintEnd_toEndOf="parent">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/share_icon"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_marginTop="2dp"
+                        android:textSize="12sp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color3"
+                        android:text="More"/>
+
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="80dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color3"
+                android:textStyle="bold"
+                android:text="Beğen Ve Yorum Yaz"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

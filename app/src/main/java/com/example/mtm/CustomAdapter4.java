@@ -1,12 +1,10 @@
 package com.example.mtm;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,19 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CustomAdapter3 extends RecyclerView.Adapter<CustomAdapter3.ViewHolder> {
+public class CustomAdapter4 extends RecyclerView.Adapter<CustomAdapter4.ViewHolder> {
 
     private final Context context;
-    private final List<Models> dataList;
+    private final List<String> dataList;
     private int selectedItem = 0;
+    private final OnItemClickListener listener;
 
-
-    public CustomAdapter3(Context context, List<Models> dataList) {
+    public CustomAdapter4(Context context, List<String> dataList, OnItemClickListener listener) {
         this.context = context;
         this.dataList = dataList;
-
+        this.listener = listener;
     }
 
     @NonNull
@@ -40,12 +39,13 @@ public class CustomAdapter3 extends RecyclerView.Adapter<CustomAdapter3.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final int pos = position;
-        Models item = dataList.get(pos);
-        holder.title.setText(item.getTitle());
-        holder.body.setText(item.getBody());
+        String item = dataList.get(position);
 
 
-        Glide.with(context).load(item.getImageUrl()).into(holder.imageView);
+        Glide.with(context).load(item).into(holder.imageView);
+
+
+
         // Change text color if the item is selected
 //        if (selectedItem == pos) {
 //            holder.textView.setTextColor(context.getColor(R.color.black));
@@ -68,30 +68,9 @@ public class CustomAdapter3 extends RecyclerView.Adapter<CustomAdapter3.ViewHold
 
                 // Notify adapter that data has changed
                 notifyDataSetChanged();
+//                listener.onItemClick(holder.type);
 
             }
-        });
-
-        if (item.getVideoUrl() != null && !item.getVideoUrl().equals("")) {
-            holder.watchLinearLayout.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.watchLinearLayout.setVisibility(View.GONE);
-        }
-
-
-        holder.watchLinearLayout.setOnClickListener(view -> {
-
-            Intent intent = new Intent(context, VideoActivity.class);
-            intent.putExtra("videoUrl", item.getVideoUrl());
-            context.startActivity(intent);
-
-        });
-
-        holder.readMoreLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(context, ImageShowActivity.class);
-            intent.putExtra("imageUrl", item.getMagazineImageUrl());
-            context.startActivity(intent);
         });
     }
 
@@ -101,23 +80,15 @@ public class CustomAdapter3 extends RecyclerView.Adapter<CustomAdapter3.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView title;
-        TextView body;
         ImageView imageView;
-        LinearLayout watchLinearLayout;
-        LinearLayout readMoreLinearLayout;
-
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.title);
-            body = itemView.findViewById(R.id.body);
             imageView = itemView.findViewById(R.id.festivalsImageView_newHubFragment);
-            watchLinearLayout = itemView.findViewById(R.id.watchLinearLayout);
-            readMoreLinearLayout = itemView.findViewById(R.id.readMoreLinearLayout);
-
         }
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(String position);
+    }
 }
