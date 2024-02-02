@@ -38,5 +38,46 @@ public interface ApiService {
     );
 
 
+    @GET("api/data/pm/newspaper")
+    Call<NewsPaperFullPagesModel> newspaperFullPages(
+            @Header("Authorization") String authToken,
+            @Query("customerId") int customerId,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("addImageInfo") boolean addImageInfo,
+            @Query("addPages") boolean addPages,
+            @Query("distribution") String distribution,
+            @Query("mediaType") String mediaType,
+            @Query("date") String date
+    );
+
+    @GET("api/data/pm/newspaper")
+    Call<MagazineFullPagesModel> magazines(
+            @Header("Authorization") String authToken,
+            @Query("customerId") int customerId,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("addImageInfo") boolean addImageInfo,
+            @Query("addPages") boolean addPages,
+            @Query("distribution") String distribution,
+            @Query("mediaType") String mediaType,
+            @Query("dateStart") String date
+    );
+
+    @GET("api/data/pm/columnists")
+    Call<ColumnistsModel> columnists(
+            @Header("Authorization") String authToken,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("customerId") int customerId,
+            @Query("addTagMap") boolean addTagMap,
+            @Query("dateStart") String dateStart,
+            @Query("dateEnd") String dateEnd,
+            @Query("ignoreType") String ignoreType,
+            @Query("groupByParent") boolean groupByParent,
+            @Query("onlyColmnList") boolean onlyColmnList
+    );
+
+
 
 }

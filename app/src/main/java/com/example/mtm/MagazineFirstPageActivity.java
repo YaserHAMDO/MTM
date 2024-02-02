@@ -1,15 +1,12 @@
 package com.example.mtm;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.GridView;
-import android.widget.ListAdapter;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewspaperFirstPageActivity extends AppCompatActivity implements CustomAdapter5.OnItemClickListener {
+public class MagazineFirstPageActivity extends AppCompatActivity implements CustomAdapter5.OnItemClickListener {
 
     private static final String TAG = "NewspaperFirstPageActivity";
 
@@ -27,17 +24,17 @@ public class NewspaperFirstPageActivity extends AppCompatActivity implements Cus
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_newspaper_first_page);
+        setContentView(R.layout.activity_magazine_first_page);
 
         gridView = findViewById(R.id.gridView);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        setTypesList3();
+        setTypesList2();
     }
 
     private void setTypesList2() {
 
-        NewsPaperFullPagesModel result = DataHolder.getInstance().getNewsPaperFullPagesModel();
+        NewspaperFirstPagesModel result = DataHolder.getInstance().getNewspaperFirstPagesModel();
 
         ArrayList<Model2> model2s = new ArrayList<>();
 
@@ -90,61 +87,6 @@ public class NewspaperFirstPageActivity extends AppCompatActivity implements Cus
 
     }
 
-
-    private void setTypesList3() {
-
-        MagazineFullPagesModel result = DataHolder.getInstance().getMagazineFullPagesModel();
-
-        ArrayList<Model2> model2s = new ArrayList<>();
-
-        List<ItemData2> items;
-
-        items = new ArrayList<>();
-
-
-        for (int i = 0; i < result.getData().size(); i++) {
-//            model2s.add(new Model2( Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageInfo().getMediaPath()));
-            items.add(new ItemData2(
-                    Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageFirstPage(),
-                    result.getData().get(i).getName(),
-                    result.getData().get(i).getImageInfo().getMediaPath(),
-                    result.getData().get(i).getImageInfo().getPageFile(),
-                    result.getData().get(i).getGno() + ""
-
-            ));
-
-        }
-
-//        recyclerView.setAdapter(null);
-//        CustomAdapter4 adapter = new CustomAdapter4(this, model2s, this);
-//        recyclerView.setAdapter(adapter);
-
-
-
-//        items.add(new ItemData(R.drawable.news_icon, R.drawable.test8, "Haber Listesi"));
-//        items.add(new ItemData(R.drawable.media2_icon, R.drawable.test9, "Medya Gündemi"));
-//
-//        items.add(new ItemData(R.drawable.media_icon, R.drawable.test10, "Yazılı"));
-//        items.add(new ItemData(R.drawable.internet_icon, R.drawable.test11, "İnternet"));
-//        items.add(new ItemData(R.drawable.visual_and_auditory_icon, R.drawable.test12, "Görsel & İşitsel"));
-//
-//        items.add(new ItemData(R.drawable.newspapers_icon, R.drawable.test13, "Gazeteler"));
-//        items.add(new ItemData(R.drawable.magazines_icon, R.drawable.test14, "Dergiler"));
-//        items.add(new ItemData(R.drawable.opinion_writers_icon, R.drawable.test15, "Köşe Yazarları"));
-//
-
-//        CustomAdapte5 adapter;
-//
-//        adapter = new CustomAdapte5(this, items);
-//        gridView.setAdapter(adapter);
-
-
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.setAdapter(new CustomAdapter5(this, items, this));
-
-    }
 
     private void newspaperFirstPages(String mediaPath, String pageFile, String gno) {
 
@@ -209,7 +151,7 @@ public class NewspaperFirstPageActivity extends AppCompatActivity implements Cus
 
 
 
-                    Intent intent = new Intent(NewspaperFirstPageActivity.this, NewspaperFullPageActivity.class);
+                    Intent intent = new Intent(MagazineFirstPageActivity.this, NewspaperFullPageActivity.class);
                     intent.putExtra("mediaPath", mediaPath + "page/" + pageFile + "-");
                     intent.putExtra("count", count);
                     startActivity(intent);

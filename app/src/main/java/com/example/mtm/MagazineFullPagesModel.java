@@ -2,12 +2,11 @@ package com.example.mtm;
 
 import java.util.ArrayList;
 
-public class NewspaperFirstPagesModel {
+public class MagazineFullPagesModel {
 
     public ArrayList<Datum> data;
     public Pagination pagination;
     public Response response;
-
 
     public ArrayList<Datum> getData() {
         return data;
@@ -22,40 +21,55 @@ public class NewspaperFirstPagesModel {
     }
 
     public class Datum{
-        public long gno;
         public int id;
-        public String date;
         public String name;
-        public String logo;
-        public String imageFirstPage;
+        public String cdate;
+        public double circulation;
+        public String date;
+        public Object gno;
+        public ArrayList<Page> pages;
         public ImageInfo imageInfo;
-
-        public long getGno() {
-            return gno;
-        }
+        public String imageFirstPage;
+        public String logo;
 
         public int getId() {
             return id;
-        }
-
-        public String getDate() {
-            return date;
         }
 
         public String getName() {
             return name;
         }
 
-        public String getLogo() {
-            return logo;
+        public String getCdate() {
+            return cdate;
+        }
+
+        public double getCirculation() {
+            return circulation;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public Object getGno() {
+            return gno;
+        }
+
+        public ArrayList<Page> getPages() {
+            return pages;
+        }
+
+        public ImageInfo getImageInfo() {
+            return imageInfo;
         }
 
         public String getImageFirstPage() {
             return imageFirstPage;
         }
 
-        public ImageInfo getImageInfo() {
-            return imageInfo;
+        public String getLogo() {
+            return logo;
         }
     }
 
@@ -69,6 +83,14 @@ public class NewspaperFirstPagesModel {
 
         public String getPageFile() {
             return pageFile;
+        }
+    }
+
+    public class Page{
+        public int no;
+
+        public int getNo() {
+            return no;
         }
     }
 
@@ -102,6 +124,5 @@ public class NewspaperFirstPagesModel {
             return status;
         }
     }
-
 
 }

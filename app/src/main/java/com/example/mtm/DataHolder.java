@@ -5,6 +5,9 @@ public class DataHolder {
 
     private MediaAgendaModel mediaAgendaModel;
     private NewspaperFirstPagesModel newspaperFirstPagesModel;
+    private NewsPaperFullPagesModel newsPaperFullPagesModel;
+    private MagazineFullPagesModel magazineFullPagesModel;
+    private ColumnistsModel columnistsModel;
 
     private DataHolder() {}
 
@@ -26,5 +29,29 @@ public class DataHolder {
 
     public void setNewspaperFirstPagesModel(NewspaperFirstPagesModel newspaperFirstPagesModel) {
         this.newspaperFirstPagesModel = newspaperFirstPagesModel;
+    }
+
+    public NewsPaperFullPagesModel getNewsPaperFullPagesModel() {
+        return newsPaperFullPagesModel;
+    }
+
+    public void setNewsPaperFullPagesModel(NewsPaperFullPagesModel newsPaperFullPagesModel) {
+        this.newsPaperFullPagesModel = newsPaperFullPagesModel;
+    }
+
+    public MagazineFullPagesModel getMagazineFullPagesModel() {
+        return magazineFullPagesModel;
+    }
+
+    public void setMagazineFullPagesModel(MagazineFullPagesModel magazineFullPagesModel) {
+        this.magazineFullPagesModel = magazineFullPagesModel;
+    }
+
+    public ColumnistsModel getColumnistsModel() {
+        return columnistsModel;
+    }
+
+    public void setColumnistsModel(ColumnistsModel columnistsModel) {
+        this.columnistsModel = columnistsModel;
     }
 }

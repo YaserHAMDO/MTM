@@ -140,9 +140,40 @@ public class MainActivity extends AppCompatActivity {
 
         gridView.setOnItemClickListener((parent, view, position, id) -> {
 
+
+            switch (position) {
+                case 0:
+
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+                    getMediaAgenda(position);
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+                case 6:
+                    newspaperFirstPages(position);
+                    break;
+                case 7:
+                    magazine(position);
+                    break;
+                case 8:
+                    columnists(position);
+                    break;
+            }
+
 //            getMediaAgenda(position);
 
-            newspaperFirstPages(position);
+
 
             // Start some asynchronous task (e.g., loading data)
             // You can replace this with your actual task
@@ -416,6 +447,163 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void magazine(int position) {
+
+
+        ItemData itemData = items.get(position);
+
+        // Show progress bar for the clicked item
+        itemData.setProgressBarVisible(true);
+
+        // Notify the adapter that data has changed
+        adapter.notifyDataSetChanged();
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MagazineFullPagesModel> call = apiService.magazines(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                22632,
+                0,
+                50,
+                true,
+                true,
+                "National",
+                "Magazine",
+                "2024-01-29"
+        );
+
+        call.enqueue(new Callback<MagazineFullPagesModel>() {
+            @Override
+            public void onResponse(Call<MagazineFullPagesModel> call, Response<MagazineFullPagesModel> response) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                if (response.isSuccessful()) {
+
+
+
+
+
+
+                    MagazineFullPagesModel result = response.body();
+
+                    Toast.makeText(MainActivity.this, response.body().getData().size() + "", Toast.LENGTH_SHORT).show();
+
+                    DataHolder.getInstance().setMagazineFullPagesModel(result);
+
+                    Intent intent = new Intent(MainActivity.this, NewspaperFirstPageActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MagazineFullPagesModel> call, Throwable t) {
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+
+
+    private void columnists(int position) {
+
+
+        ItemData itemData = items.get(position);
+
+        // Show progress bar for the clicked item
+        itemData.setProgressBarVisible(true);
+
+        // Notify the adapter that data has changed
+        adapter.notifyDataSetChanged();
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<ColumnistsModel> call = apiService.columnists(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                50,
+                22632,
+                true,
+                "2024-01-31",
+                "2024-01-31",
+                "UNIGNORED",
+                true,
+                false
+        );
+
+        call.enqueue(new Callback<ColumnistsModel>() {
+            @Override
+            public void onResponse(Call<ColumnistsModel> call, Response<ColumnistsModel> response) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                if (response.isSuccessful()) {
+
+
+
+                    ColumnistsModel result = response.body();
+
+                    DataHolder.getInstance().setColumnistsModel(result);
+
+                    Intent intent = new Intent(MainActivity.this, ColumnistsActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ColumnistsModel> call, Throwable t) {
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+            }
+        });
+
+
+    }
 
     @Override
     protected void onResume() {
