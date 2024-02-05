@@ -32,12 +32,12 @@ public class NewspaperFirstPageActivity extends AppCompatActivity implements Cus
         gridView = findViewById(R.id.gridView);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        setTypesList3();
+        setTypesList2();
     }
 
     private void setTypesList2() {
 
-        NewsPaperFullPagesModel result = DataHolder.getInstance().getNewsPaperFullPagesModel();
+        NewspaperFirstPagesModel result = DataHolder.getInstance().getNewspaperFirstPagesModel();
 
         ArrayList<Model2> model2s = new ArrayList<>();
 
@@ -171,7 +171,7 @@ public class NewspaperFirstPageActivity extends AppCompatActivity implements Cus
                 true,
                 "National",
                 "Newspaper",
-                "2024-01-29"
+                MyUtils.getCurrentDate()
         );
 
         call.enqueue(new Callback<NewsPaperFullPagesModel>() {

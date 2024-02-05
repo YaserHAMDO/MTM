@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
                 22632,
                 0,
                 50,
-                "2024-01-29"
+                MyUtils.getCurrentDate()
         );
 
         call.enqueue(new Callback<NewspaperFirstPagesModel>() {
@@ -472,7 +472,7 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 "National",
                 "Magazine",
-                "2024-01-29"
+                MyUtils.getCurrentDate()
         );
 
         call.enqueue(new Callback<MagazineFullPagesModel>() {
@@ -500,7 +500,7 @@ public class MainActivity extends AppCompatActivity {
 
                     DataHolder.getInstance().setMagazineFullPagesModel(result);
 
-                    Intent intent = new Intent(MainActivity.this, NewspaperFirstPageActivity.class);
+                    Intent intent = new Intent(MainActivity.this, MagazineFirstPageActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
                     startActivity(intent);
 
@@ -551,8 +551,8 @@ public class MainActivity extends AppCompatActivity {
                 50,
                 22632,
                 true,
-                "2024-01-31",
-                "2024-01-31",
+                MyUtils.getCurrentDate(),
+                MyUtils.getCurrentDate(),
                 "UNIGNORED",
                 true,
                 false
@@ -562,7 +562,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ColumnistsModel> call, Response<ColumnistsModel> response) {
 
-                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+                Logger.getInstance().logDebug(TAG, "columnists", 2, response.body());
 
                 // Show progress bar for the clicked item
                 itemData.setProgressBarVisible(false);
@@ -598,7 +598,7 @@ public class MainActivity extends AppCompatActivity {
                 // Notify the adapter that data has changed
                 adapter.notifyDataSetChanged();
 
-                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+                Logger.getInstance().logDebug(TAG, "columnists", 3, t.getMessage());
             }
         });
 

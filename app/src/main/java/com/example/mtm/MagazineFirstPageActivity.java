@@ -34,7 +34,7 @@ public class MagazineFirstPageActivity extends AppCompatActivity implements Cust
 
     private void setTypesList2() {
 
-        NewspaperFirstPagesModel result = DataHolder.getInstance().getNewspaperFirstPagesModel();
+        MagazineFullPagesModel result = DataHolder.getInstance().getMagazineFullPagesModel();
 
         ArrayList<Model2> model2s = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public class MagazineFirstPageActivity extends AppCompatActivity implements Cust
                 true,
                 "National",
                 "Newspaper",
-                "2024-01-29"
+                MyUtils.getCurrentDate()
         );
 
         call.enqueue(new Callback<NewsPaperFullPagesModel>() {
