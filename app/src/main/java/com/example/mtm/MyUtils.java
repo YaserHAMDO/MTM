@@ -19,6 +19,22 @@ public class MyUtils {
         return currentDate.format(formatter);
     }
 
+    // Method to subtract a day from the current date and return it as a string
+    public static String getPreviousDate(int days) {
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Subtract one day from the current date
+        LocalDate previousDate = currentDate.minusDays(days);
+
+        // Define the desired date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Format the previous date using the formatter
+        return previousDate.format(formatter);
+    }
+
+
     // Method to handle sharing the link
     public static void shareLink(String url, Context context) {
         // Create a new intent with the ACTION_SEND action

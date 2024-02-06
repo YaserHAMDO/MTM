@@ -8,6 +8,8 @@ public class DataHolder {
     private NewsPaperFullPagesModel newsPaperFullPagesModel;
     private MagazineFullPagesModel magazineFullPagesModel;
     private ColumnistsModel columnistsModel;
+    private VisualMediaModel visualMediaModel;
+    private SubMenuVisualMediaModel subMenuVisualMediaModel;
 
     private DataHolder() {}
 
@@ -53,5 +55,21 @@ public class DataHolder {
 
     public void setColumnistsModel(ColumnistsModel columnistsModel) {
         this.columnistsModel = columnistsModel;
+    }
+
+    public VisualMediaModel getVisualMediaModel() {
+        return visualMediaModel;
+    }
+
+    public void setVisualMediaModel(VisualMediaModel visualMediaModel) {
+        this.visualMediaModel = visualMediaModel;
+    }
+
+    public SubMenuVisualMediaModel getSubMenuVisualMediaModel() {
+        return subMenuVisualMediaModel;
+    }
+
+    public void setSubMenuVisualMediaModel(SubMenuVisualMediaModel subMenuVisualMediaModel) {
+        this.subMenuVisualMediaModel = subMenuVisualMediaModel;
     }
 }

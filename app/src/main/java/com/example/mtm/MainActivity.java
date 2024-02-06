@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
                 case 5:
-
+                    visualMedia(position);
                     break;
                 case 6:
                     newspaperFirstPages(position);
@@ -599,6 +599,91 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
 
                 Logger.getInstance().logDebug(TAG, "columnists", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+
+
+    private void visualMedia(int position) {
+
+
+        ItemData itemData = items.get(position);
+
+        // Show progress bar for the clicked item
+        itemData.setProgressBarVisible(true);
+
+        // Notify the adapter that data has changed
+        adapter.notifyDataSetChanged();
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<VisualMediaModel> call = apiService.visualMedia(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                1000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(7),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true
+        );
+
+        call.enqueue(new Callback<VisualMediaModel>() {
+            @Override
+            public void onResponse(Call<VisualMediaModel> call, Response<VisualMediaModel> response) {
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                if (response.isSuccessful()) {
+
+
+
+                    VisualMediaModel result = response.body();
+
+                    DataHolder.getInstance().setVisualMediaModel(result);
+
+                    Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VisualMediaModel> call, Throwable t) {
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
             }
         });
 
