@@ -2,7 +2,6 @@ package com.example.mtm;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -15,20 +14,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class VisualMediaActivity extends AppCompatActivity implements CustomAdapter8.OnItemClickListener{
+public class InternetActivity extends AppCompatActivity implements CustomAdapter8.OnItemClickListener{
 
-    private static final String TAG = "VisualMediaActivity";
+    private static final String TAG = "InternetActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visual_media);
+        setContentView(R.layout.activity_internet);
 
         setTypesList2();
     }
     private void setTypesList2() {
 
-        VisualMediaModel result = DataHolder.getInstance().getVisualMediaModel();
+        InternetModel result = DataHolder.getInstance().getInternetModel();
 
 //        ArrayList<Model2> model2s = new ArrayList<>();
 
@@ -47,7 +46,7 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
 
                 items4.add(new ItemData4(
                         result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getName(),
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getNewsCount(),
+                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getDocCount(),
                         result.getData().getMenu().getMenu().get(i).getId() + "",
                         result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getId() + ""
                 ));
@@ -57,7 +56,7 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
 
             items.add(new ItemData5(
                     result.getData().getMenu().getMenu().get(i).getName(),
-                    result.getData().getMenu().getMenu().get(i).getNewsCount(),
+                    result.getData().getMenu().getMenu().get(i).getDocCount(),
                     items4
             ));
 
@@ -94,7 +93,7 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
 
     }
 
-    private void SubMenuVisualMedia(String menuId, String subMenuId) {
+    private void SubInternet(String menuId, String subMenuId) {
 
 
 
@@ -111,10 +110,10 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
 
         ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
 
-        Call<SubMenuVisualMediaModel> call = apiService.subMenuVisualMedia(
+        Call<InternetSubModel> call = apiService.subInternet(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                50,
+                10000,
                 22632,
                 true,
                 true,
@@ -125,22 +124,22 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
                 true,
                 true,
                 true,
-                true,
                 MyUtils.getPreviousDate(1),
                 MyUtils.getCurrentDate(),
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+//                "NEWS",
                 "UNIGNORED",
                 true,
+//                "2024010003615660",
                 menuId,
                 subMenuId,
                 false,
                 false
         );
-        call.enqueue(new Callback<SubMenuVisualMediaModel>() {
+        call.enqueue(new Callback<InternetSubModel>() {
             @Override
-            public void onResponse(Call<SubMenuVisualMediaModel> call, Response<SubMenuVisualMediaModel> response) {
+            public void onResponse(Call<InternetSubModel> call, Response<InternetSubModel> response) {
 
                 Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 2, response.body());
 
@@ -154,11 +153,11 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
 
 
 
-                    SubMenuVisualMediaModel result = response.body();
+                    InternetSubModel result = response.body();
 
-                    DataHolder.getInstance().setSubMenuVisualMediaModel(result);
+                    DataHolder.getInstance().setInternetSubModel(result);
 
-                    Intent intent = new Intent(VisualMediaActivity.this, VisualMediaDetailsActivity.class);
+                    Intent intent = new Intent(InternetActivity.this, SubInternetActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
                     startActivity(intent);
 
@@ -170,7 +169,7 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
             }
 
             @Override
-            public void onFailure(Call<SubMenuVisualMediaModel> call, Throwable t) {
+            public void onFailure(Call<InternetSubModel> call, Throwable t) {
 
 //                // Show progress bar for the clicked item
 //                itemData.setProgressBarVisible(false);
@@ -196,7 +195,7 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
 
     @Override
     public void onItemClick(String menuId, String subMenuId) {
-        SubMenuVisualMedia(menuId, subMenuId);
+        SubInternet(menuId, subMenuId);
 
 //        Intent intent = new Intent(this, ImageShowActivity.class);
 //        intent.putExtra("imageUrl", mediaPath);

@@ -1,21 +1,21 @@
 package com.example.mtm;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class VisualMediaDetailsActivity extends AppCompatActivity implements CustomAdapter9.OnItemClickListener{
+public class SubInternetActivity extends AppCompatActivity implements CustomAdapter9.OnItemClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visual_media_details_activity);
+        setContentView(R.layout.internet_sub_details_activity);
 
         setTypesList2();
 
@@ -23,7 +23,7 @@ public class VisualMediaDetailsActivity extends AppCompatActivity implements Cus
 
     private void setTypesList2() {
 
-        SubMenuVisualMediaModel result = DataHolder.getInstance().getSubMenuVisualMediaModel();
+        InternetSubModel result = DataHolder.getInstance().getInternetSubModel();
 
 //        ArrayList<Model2> model2s = new ArrayList<>();
 
@@ -38,11 +38,11 @@ public class VisualMediaDetailsActivity extends AppCompatActivity implements Cus
             ItemData6 f = new ItemData6("","","","","","");
             items.add(new ItemData6(
                     result.getData().getDocs().get(i).getTitle(),
-                    result.getData().getDocs().get(i).getMedia().getName(),
+                    result.getData().getDocs().get(i).getMedia().getType().getName(),
                     "",
                     result.getData().getDocs().get(i).getPublishDate(),
-                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
-                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
+                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
+                    result.getData().getDocs().get(i).getUrl()
             ));
 
         }
@@ -80,8 +80,8 @@ public class VisualMediaDetailsActivity extends AppCompatActivity implements Cus
 
     @Override
     public void onItemClick(String mediaPath) {
-        Intent intent = new Intent(this, VideoActivity.class);
-        intent.putExtra("videoUrl", mediaPath);
-        startActivity(intent);
+//        Intent intent = new Intent(this, VideoActivity.class);
+//        intent.putExtra("videoUrl", mediaPath);
+//        startActivity(intent);
     }
 }

@@ -10,6 +10,8 @@ public class DataHolder {
     private ColumnistsModel columnistsModel;
     private VisualMediaModel visualMediaModel;
     private SubMenuVisualMediaModel subMenuVisualMediaModel;
+    private InternetModel internetModel;
+    private InternetSubModel InternetSubModel;
 
     private DataHolder() {}
 
@@ -71,5 +73,21 @@ public class DataHolder {
 
     public void setSubMenuVisualMediaModel(SubMenuVisualMediaModel subMenuVisualMediaModel) {
         this.subMenuVisualMediaModel = subMenuVisualMediaModel;
+    }
+
+    public InternetModel getInternetModel() {
+        return internetModel;
+    }
+
+    public void setInternetModel(InternetModel internetModel) {
+        this.internetModel = internetModel;
+    }
+
+    public com.example.mtm.InternetSubModel getInternetSubModel() {
+        return InternetSubModel;
+    }
+
+    public void setInternetSubModel(com.example.mtm.InternetSubModel internetSubModel) {
+        InternetSubModel = internetSubModel;
     }
 }

@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
                 case 4:
-
+                    internet(position);
                     break;
                 case 5:
                     visualMedia(position);
@@ -633,7 +633,7 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 true,
                 true,
-                MyUtils.getPreviousDate(7),
+                MyUtils.getPreviousDate(1),
                 MyUtils.getCurrentDate(),
                 "07:00:00",
                 "23:59:00",
@@ -642,6 +642,7 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 true
         );
+        System.out.println("YASER " + MyUtils.getPreviousDate(1) + " 07:00:00 " + MyUtils.getCurrentDate() + " 23:59:00");
 
         call.enqueue(new Callback<VisualMediaModel>() {
             @Override
@@ -676,6 +677,90 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<VisualMediaModel> call, Throwable t) {
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void internet(int position) {
+
+
+        ItemData itemData = items.get(position);
+
+        // Show progress bar for the clicked item
+        itemData.setProgressBarVisible(true);
+
+        // Notify the adapter that data has changed
+        adapter.notifyDataSetChanged();
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<InternetModel> call = apiService.internet(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                10000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true
+        );
+        System.out.println("YASER " + MyUtils.getPreviousDate(1) + " 07:00:00 " + MyUtils.getCurrentDate() + " 23:59:00");
+
+        call.enqueue(new Callback<InternetModel>() {
+            @Override
+            public void onResponse(Call<InternetModel> call, Response<InternetModel> response) {
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
+
+                // Show progress bar for the clicked item
+                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                if (response.isSuccessful()) {
+
+
+
+                    InternetModel result = response.body();
+
+                    DataHolder.getInstance().setInternetModel(result);
+
+                    Intent intent = new Intent(MainActivity.this, InternetActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InternetModel> call, Throwable t) {
 
                 // Show progress bar for the clicked item
                 itemData.setProgressBarVisible(false);

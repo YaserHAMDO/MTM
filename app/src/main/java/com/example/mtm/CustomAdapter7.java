@@ -45,10 +45,21 @@ public class CustomAdapter7 extends RecyclerView.Adapter<CustomAdapter7.ViewHold
             holder.recyclerView.setVisibility(holder.recyclerView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
         });
 
+        boolean orange;
+
+        orange = position % 2 == 0;
+
+        if (orange) {
+            holder.view.setBackgroundResource(R.drawable.orange_circule);
+        }
+        else {
+            holder.view.setBackgroundResource(R.drawable.blue_circule);
+        }
+
 
 
         holder.recyclerView.setLayoutManager(new GridLayoutManager(mContext, 1));
-        holder.recyclerView.setAdapter(new CustomAdapter8(mContext, itemData.getItemData4(), listener));
+        holder.recyclerView.setAdapter(new CustomAdapter8(mContext, itemData.getItemData4(), orange, listener));
 
 
         // Set progress bar visibility
@@ -70,12 +81,14 @@ public class CustomAdapter7 extends RecyclerView.Adapter<CustomAdapter7.ViewHold
         TextView nameTextView;
         TextView countTextView;
         RecyclerView recyclerView;
+        View view;
 
         ViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.nameTextView);
             countTextView = itemView.findViewById(R.id.countTextView);
             recyclerView = itemView.findViewById(R.id.recyclerViewxxx);
+            view = itemView.findViewById(R.id.view);
         }
     }
 }

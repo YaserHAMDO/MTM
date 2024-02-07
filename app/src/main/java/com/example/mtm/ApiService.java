@@ -103,8 +103,8 @@ public interface ApiService {
     );
 
 
-    @GET("api/data/dm/news-list")
-    Call<SubMenuVisualMediaModel> SubMenuVisualMedia(
+    @GET("api/data/bc/news-list")
+    Call<SubMenuVisualMediaModel> subMenuVisualMedia(
             @Header("Authorization") String authToken,
             @Query("page") int page,
             @Query("perPage") int perPage,
@@ -114,6 +114,7 @@ public interface ApiService {
             @Query("addDsMenu") boolean addDsMenu,
             @Query("addDsMenuSplitter") boolean addDsMenuSplitter,
             @Query("addDsMenuCount") boolean addDsMenuCount,
+            @Query("addBcProgramData") boolean addBcProgramData,
             @Query("addHash") boolean addHash,
             @Query("addMediaData") boolean addMediaData,
             @Query("addMediaType") boolean addMediaType,
@@ -122,15 +123,71 @@ public interface ApiService {
             @Query("cdateEnd") String cdateEnd,
             @Query("ctimeStart") String ctimeStart,
             @Query("ctimeEnd") String ctimeEnd,
+            @Query("clipType") String clipType,
             @Query("ignoreType") String ignoreType,
             @Query("groupByParent") boolean groupByParent,
-            @Query("groupGnos") String groupGnos,
             @Query("dsMenuId") String dsMenuId,
             @Query("dsSubMenuIds") String dsSubMenuIds,
             @Query("addDataGroup") boolean addDataGroup,
             @Query("addSplitter") boolean addSplitter
     );
 
+
+
+    @GET("api/data/dm/news-list")
+    Call<InternetModel> internet(
+            @Header("Authorization") String authToken,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("customerId") int customerId,
+            @Query("addDocs") boolean addDocs,
+            @Query("addClipBaseData") boolean addClipBaseData,
+            @Query("addDsMenu") boolean addDsMenu,
+            @Query("addDsMenuSplitter") boolean addDsMenuSplitter,
+            @Query("addDsMenuCount") boolean addDsMenuCount,
+
+            @Query("cdateStart") String cdateStart,
+            @Query("cdateEnd") String cdateEnd,
+            @Query("ctimeStart") String ctimeStart,
+            @Query("ctimeEnd") String ctimeEnd,
+            @Query("ignoreType") String ignoreType,
+
+            @Query("groupByParent") boolean groupByParent,
+            @Query("addDataGroup") boolean addDataGroup,
+            @Query("addSplitter") boolean addSplitter
+    );
+
+
+
+    @GET("api/data/dm/news-list")
+    Call<InternetSubModel> subInternet(
+            @Header("Authorization") String authToken,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("customerId") int customerId,
+            @Query("addDocs") boolean addDocs,
+            @Query("addClipBaseData") boolean addClipBaseData,
+            @Query("addDsMenu") boolean addDsMenu,
+            @Query("addDsMenuSplitter") boolean addDsMenuSplitter,
+            @Query("addDsMenuCount") boolean addDsMenuCount,
+//            @Query("addBcProgramData") boolean addBcProgramData,
+            @Query("addHash") boolean addHash,
+            @Query("addMediaData") boolean addMediaData,
+            @Query("addMediaType") boolean addMediaType,
+            @Query("addTagMap") boolean addTagMap,
+            @Query("cdateStart") String cdateStart,
+            @Query("cdateEnd") String cdateEnd,
+            @Query("ctimeStart") String ctimeStart,
+            @Query("ctimeEnd") String ctimeEnd,
+//            @Query("clipType") String clipType,
+            @Query("ignoreType") String ignoreType,
+            @Query("groupByParent") boolean groupByParent,
+//            @Query("groupGnos") String groupGnos,
+            @Query("dsMenuId") String dsMenuId,
+            @Query("dsSubMenuIds") String dsSubMenuIds,
+            @Query("addDataGroup") boolean addDataGroup,
+            @Query("addSplitter") boolean addSplitter
+    );
 
 
 }

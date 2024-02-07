@@ -148,10 +148,10 @@ public class LoginActivity extends AppCompatActivity {
 
         ImageView test = findViewById(R.id.test);
         test.setOnClickListener(view -> {
-//            usernameEditText.setText("yasershareef1995@gmail.com");
-//            passwordEditText.setText("yas12345");
-            usernameEditText.setText("mesutaygun35@icloud.com");
-            passwordEditText.setText("Picasso1881");
+            usernameEditText.setText("yasershareef1995@gmail.com");
+            passwordEditText.setText("yas12345");
+//            usernameEditText.setText("mesutaygun35@icloud.com");
+//            passwordEditText.setText("Picasso1881");
         });
 
 

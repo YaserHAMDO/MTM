@@ -16,9 +16,11 @@ public class CustomAdapter8 extends RecyclerView.Adapter<CustomAdapter8.ViewHold
     private Context mContext;
     private List<ItemData4> mItems;
     private final OnItemClickListener listener;
-    public CustomAdapter8(Context context, List<ItemData4> items, OnItemClickListener listener) {
+    private boolean orange;
+    public CustomAdapter8(Context context, List<ItemData4> items, boolean orange, OnItemClickListener listener) {
         mContext = context;
         mItems = items;
+        this.orange = orange;
         this.listener = listener;
     }
 
@@ -42,7 +44,15 @@ public class CustomAdapter8 extends RecyclerView.Adapter<CustomAdapter8.ViewHold
         holder.itemView.setOnClickListener(view -> {
 //            listener.onItemClick("39096", "113582");
             listener.onItemClick(itemData.getMenuId(), itemData.getSubMenuId());
+            System.out.println("hasan yaser " + itemData.getMenuId() + " " + itemData.getSubMenuId());
         });
+
+        if (orange) {
+            holder.view.setBackgroundResource(R.drawable.baseline_play_arrow_24_2);
+        }
+        else {
+            holder.view.setBackgroundResource(R.drawable.baseline_play_arrow_24);
+        }
 
 
         // Set progress bar visibility
@@ -57,11 +67,13 @@ public class CustomAdapter8 extends RecyclerView.Adapter<CustomAdapter8.ViewHold
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView countTextView;
+        View view;
 
         ViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.nameTextView);
             countTextView = itemView.findViewById(R.id.countTextView);
+            view = itemView.findViewById(R.id.view);
 
         }
     }

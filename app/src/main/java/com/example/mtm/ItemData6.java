@@ -2,28 +2,24 @@ package com.example.mtm;
 
 public class ItemData6 {
 
-    private final String journalistImageUrl;
     private final String journalistName;
     private final String mediaName;
     private final String title;
     private final String date;
     private final String imageStoragePath;
+    private final String shareLink;
 
-    public ItemData6(String journalistImageUrl, String journalistName, String mediaName, String title, String date, String imageStoragePath) {
-        this.journalistImageUrl = journalistImageUrl;
+    public ItemData6(String journalistName, String mediaName, String title, String date, String imageStoragePath, String shareLink) {
         this.journalistName = journalistName;
         this.mediaName = mediaName;
         this.title = title;
         this.date = date;
         this.imageStoragePath = imageStoragePath;
+        this.shareLink = shareLink;
     }
 
     public String getImageStoragePath() {
         return imageStoragePath;
-    }
-
-    public String getJournalistImageUrl() {
-        return journalistImageUrl;
     }
 
     public String getJournalistName() {
@@ -40,5 +36,9 @@ public class ItemData6 {
 
     public String getDate() {
         return date;
+    }
+
+    public String getShareLink() {
+        return shareLink;
     }
 }

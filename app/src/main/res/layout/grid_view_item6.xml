@@ -24,10 +24,11 @@
 
 
             <View
+                android:id="@+id/view"
                 android:layout_gravity="center_vertical"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/blue_circule"/>
+                android:background="@drawable/baseline_play_arrow_24_2"/>
 
             <TextView
                 android:id="@+id/nameTextView"
@@ -57,7 +58,7 @@
                 android:maxLines="3"
                 android:textStyle="bold"
                 android:text="25"
-                android:textColor="@color/black"
+                android:textColor="@color/color3"
                 android:textSize="15sp" />
 
 
@@ -67,7 +68,7 @@
                 android:layout_height="21dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/right_arrow"
-                android:backgroundTint="@color/color3"/>
+                android:backgroundTint="@color/color6"/>
 
 
         </LinearLayout>

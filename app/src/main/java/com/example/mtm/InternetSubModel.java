@@ -3,11 +3,12 @@ package com.example.mtm;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class SubMenuVisualMediaModel {
+public class InternetSubModel {
 
     public Data data;
     public Pagination pagination;
     public Response response;
+
 
     public Data getData() {
         return data;
@@ -21,7 +22,7 @@ public class SubMenuVisualMediaModel {
         return response;
     }
 
-    public class Data {
+    public class Data{
         public ArrayList<Doc> docs;
 
         public ArrayList<Doc> getDocs() {
@@ -29,7 +30,7 @@ public class SubMenuVisualMediaModel {
         }
     }
 
-    public class DataSplitter {
+    public class DataSplitter{
         public int id;
         public String name;
         public ArrayList<Tag> tags;
@@ -47,7 +48,7 @@ public class SubMenuVisualMediaModel {
         }
     }
 
-    public class Doc {
+    public class Doc{
         public Object gno;
         public String gnoHash;
         public Object mtoGno;
@@ -58,10 +59,11 @@ public class SubMenuVisualMediaModel {
         public int newsType;
         public Media media;
         public ArrayList<TagMap> tagMap;
-        public Program program;
-        public String duration;
-        public String video;
-        public String publishTime;
+        public String url;
+        public boolean img_clip;
+        public boolean img_screen;
+        public String srcType;
+        public String srcFirstSeen;
         public String imageStoragePath;
 
         public Object getGno() {
@@ -104,20 +106,24 @@ public class SubMenuVisualMediaModel {
             return tagMap;
         }
 
-        public Program getProgram() {
-            return program;
+        public String getUrl() {
+            return url;
         }
 
-        public String getDuration() {
-            return duration;
+        public boolean isImg_clip() {
+            return img_clip;
         }
 
-        public String getVideo() {
-            return video;
+        public boolean isImg_screen() {
+            return img_screen;
         }
 
-        public String getPublishTime() {
-            return publishTime;
+        public String getSrcType() {
+            return srcType;
+        }
+
+        public String getSrcFirstSeen() {
+            return srcFirstSeen;
         }
 
         public String getImageStoragePath() {
@@ -125,10 +131,12 @@ public class SubMenuVisualMediaModel {
         }
     }
 
-    public class Media {
+    public class Media{
         public int id;
         public String name;
-        public String type;
+        public Type type;
+        public Date cdatetime;
+        public String priority;
         public String logo;
 
         public int getId() {
@@ -139,8 +147,16 @@ public class SubMenuVisualMediaModel {
             return name;
         }
 
-        public String getType() {
+        public Type getType() {
             return type;
+        }
+
+        public Date getCdatetime() {
+            return cdatetime;
+        }
+
+        public String getPriority() {
+            return priority;
         }
 
         public String getLogo() {
@@ -148,7 +164,7 @@ public class SubMenuVisualMediaModel {
         }
     }
 
-    public class Pagination {
+    public class Pagination{
         public int currentPage;
         public int perPage;
         public int totalPage;
@@ -176,26 +192,17 @@ public class SubMenuVisualMediaModel {
         }
     }
 
-    public class Program {
-        public int id;
-        public String name;
-
-        public int getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
-    public class Response {
+    public class Response{
         public boolean status;
 
         public boolean isStatus() {
             return status;
         }
     }
+
+
+
+
     public class Tag{
         public int id;
 
@@ -221,4 +228,24 @@ public class SubMenuVisualMediaModel {
             return dataSplitters;
         }
     }
+
+    public class Type{
+        public int id;
+        public String name;
+        public Date cdatetime;
+
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Date getCdatetime() {
+            return cdatetime;
+        }
+    }
+
 }

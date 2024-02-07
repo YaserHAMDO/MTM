@@ -14,7 +14,13 @@
         android:theme="@style/Theme.MTM"
         tools:targetApi="31">
         <activity
+            android:name=".SubInternetActivity"
+            android:exported="false" />
+        <activity
             android:name=".VisualMediaDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InternetActivity"
             android:exported="false" />
         <activity
             android:name=".VisualMediaActivity"

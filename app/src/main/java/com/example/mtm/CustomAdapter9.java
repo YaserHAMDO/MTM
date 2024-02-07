@@ -38,7 +38,7 @@ public class CustomAdapter9 extends RecyclerView.Adapter<CustomAdapter9.ViewHold
         ItemData6 itemData = mItems.get(position);
 
         // Load image using Glide
-        Glide.with(mContext).load(itemData.getJournalistImageUrl()).into(holder.journalistImageView);
+        Glide.with(mContext).load(itemData.getImageStoragePath()).into(holder.journalistImageView);
 
         holder.mediaNameTextView.setText(itemData.getMediaName());
         holder.journalistNameTextView.setText(itemData.getJournalistName());
@@ -47,12 +47,12 @@ public class CustomAdapter9 extends RecyclerView.Adapter<CustomAdapter9.ViewHold
 
 
         holder.itemView.setOnClickListener(view -> {
-            listener.onItemClick(itemData.getImageStoragePath());
+            listener.onItemClick(itemData.getShareLink());
         });
 
         holder.shareCardView.setOnClickListener(view -> {
 
-            MyUtils.shareLink("Test link", mContext);
+            MyUtils.shareLink(itemData.getShareLink(), mContext);
 
         });
 
