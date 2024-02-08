@@ -13,17 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
-import com.example.mtm.model.ItemData3;
+import com.example.mtm.model.ColumnistModel;
 import com.example.mtm.util.MyUtils;
 
 import java.util.List;
 
-public class CustomAdapter6 extends RecyclerView.Adapter<CustomAdapter6.ViewHolder> {
+public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<ItemData3> mItems;
+    private List<ColumnistModel> mItems;
     private final OnItemClickListener listener;
-    public CustomAdapter6(Context context, List<ItemData3> items, OnItemClickListener listener) {
+    public ColumnistAdapter(Context context, List<ColumnistModel> items, OnItemClickListener listener) {
         mContext = context;
         mItems = items;
         this.listener = listener;
@@ -38,7 +38,7 @@ public class CustomAdapter6 extends RecyclerView.Adapter<CustomAdapter6.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ItemData3 itemData = mItems.get(position);
+        ColumnistModel itemData = mItems.get(position);
 
         // Load image using Glide
         Glide.with(mContext).load(itemData.getJournalistImageUrl()).into(holder.journalistImageView);

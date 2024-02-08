@@ -1,6 +1,6 @@
 package com.example.mtm.model;
 
-public class ItemData3 {
+public class ColumnistModel {
 
 
     private final String journalistImageUrl;
@@ -10,7 +10,7 @@ public class ItemData3 {
     private final String date;
     private final String imageStoragePath;
 
-    public ItemData3(String journalistImageUrl, String journalistName, String mediaName, String title, String date, String imageStoragePath) {
+    public ColumnistModel(String journalistImageUrl, String journalistName, String mediaName, String title, String date, String imageStoragePath) {
         this.journalistImageUrl = journalistImageUrl;
         this.journalistName = journalistName;
         this.mediaName = mediaName;
