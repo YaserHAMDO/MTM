@@ -4,6 +4,6 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/transparent"
-    tools:context=".LaunchScreenActivity">
+    tools:context=".activity.LaunchScreenActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
