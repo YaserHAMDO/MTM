@@ -2,16 +2,17 @@ package com.example.mtm.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mtm.R;
-import com.example.mtm.adapter.CustomAdapter7;
-import com.example.mtm.adapter.CustomAdapter8;
-import com.example.mtm.model.ItemData4;
-import com.example.mtm.model.ItemData5;
+import com.example.mtm.adapter.VisualMediaAdapter;
+import com.example.mtm.adapter.SubVisualMediaAdapter;
+import com.example.mtm.model.SubVisualMediaModel;
+import com.example.mtm.model.VisualMediaModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
@@ -29,37 +30,47 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class VisualMediaActivity extends AppCompatActivity implements CustomAdapter8.OnItemClickListener {
+public class VisualMediaActivity extends AppCompatActivity implements SubVisualMediaAdapter.OnItemClickListener {
 
     private static final String TAG = "VisualMediaActivity";
+
+    private ImageView backIconImageView;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_media);
 
-        setTypesList2();
+        init();
+        setItemClickListeners();
+        setData();
+
     }
-    private void setTypesList2() {
+
+    private void init() {
+        backIconImageView = findViewById(R.id.backIconImageView);
+        recyclerView = findViewById(R.id.recyclerView);
+    }
+
+    private void setItemClickListeners() {
+        backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+    }
+
+    private void setData() {
 
         VisualMediaResponse result = DataHolder.getInstance().getVisualMediaModel();
 
-//        ArrayList<Model2> model2s = new ArrayList<>();
-
-        List<ItemData5> items;
-        List<ItemData4> items4;
-
-
-        items = new ArrayList<>();
-
+        List<VisualMediaModel> items = new ArrayList<>();
+        List<SubVisualMediaModel> items2;
 
 
         for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
-            items4 = new ArrayList<>();
+            items2 = new ArrayList<>();
 
             for (int j = 0; j < result.getData().getMenu().getMenu().get(i).getSubMenus().size(); j++) {
 
-                items4.add(new ItemData4(
+                items2.add(new SubVisualMediaModel(
                         result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getName(),
                         result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getNewsCount(),
                         result.getData().getMenu().getMenu().get(i).getId() + "",
@@ -68,57 +79,20 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
 
             }
 
-
-            items.add(new ItemData5(
+            items.add(new VisualMediaModel(
                     result.getData().getMenu().getMenu().get(i).getName(),
                     result.getData().getMenu().getMenu().get(i).getNewsCount(),
-                    items4
+                    items2
             ));
 
         }
 
-//        recyclerView.setAdapter(null);
-//        CustomAdapter4 adapter = new CustomAdapter4(this, model2s, this);
-//        recyclerView.setAdapter(adapter);
-
-
-
-//        items.add(new ItemData(R.drawable.news_icon, R.drawable.test8, "Haber Listesi"));
-//        items.add(new ItemData(R.drawable.media2_icon, R.drawable.test9, "Medya Gündemi"));
-//
-//        items.add(new ItemData(R.drawable.media_icon, R.drawable.test10, "Yazılı"));
-//        items.add(new ItemData(R.drawable.internet_icon, R.drawable.test11, "İnternet"));
-//        items.add(new ItemData(R.drawable.visual_and_auditory_icon, R.drawable.test12, "Görsel & İşitsel"));
-//
-//        items.add(new ItemData(R.drawable.newspapers_icon, R.drawable.test13, "Gazeteler"));
-//        items.add(new ItemData(R.drawable.magazines_icon, R.drawable.test14, "Dergiler"));
-//        items.add(new ItemData(R.drawable.opinion_writers_icon, R.drawable.test15, "Köşe Yazarları"));
-//
-
-//        CustomAdapte5 adapter;
-//
-//        adapter = new CustomAdapte5(this, items);
-//        gridView.setAdapter(adapter);
-
-
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        recyclerView.setAdapter(new CustomAdapter7(this, items, this));
+        recyclerView.setAdapter(new VisualMediaAdapter(this, items, this));
 
     }
 
     private void SubMenuVisualMedia(String menuId, String subMenuId) {
-
-
-
-//        ItemData itemData = items.get(position);
-//
-//        // Show progress bar for the clicked item
-//        itemData.setProgressBarVisible(true);
-//
-//        // Notify the adapter that data has changed
-//        adapter.notifyDataSetChanged();
 
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
@@ -158,26 +132,17 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
 
                 Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 2, response.body());
 
-//                // Show progress bar for the clicked item
-//                itemData.setProgressBarVisible(false);
-//
-//                // Notify the adapter that data has changed
-//                adapter.notifyDataSetChanged();
-
                 if (response.isSuccessful()) {
-
-
 
                     SubMenuVisualMediaResponse result = response.body();
 
                     DataHolder.getInstance().setSubMenuVisualMediaModel(result);
 
-                    Intent intent = new Intent(VisualMediaActivity.this, VisualMediaDetailsActivity.class);
+                    Intent intent = new Intent(VisualMediaActivity.this, SubVisualMediaActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
                     startActivity(intent);
 
                 } else {
-
 
 
                 }
@@ -186,34 +151,16 @@ public class VisualMediaActivity extends AppCompatActivity implements CustomAdap
             @Override
             public void onFailure(Call<SubMenuVisualMediaResponse> call, Throwable t) {
 
-//                // Show progress bar for the clicked item
-//                itemData.setProgressBarVisible(false);
-//
-//                // Notify the adapter that data has changed
-//                adapter.notifyDataSetChanged();
 
                 Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 3, t.getMessage());
             }
         });
 
-
     }
 
-
-
-//    @Override
-//    public void onItemClick(String mediaPath) {
-//
-//
-//
-//    }
 
     @Override
     public void onItemClick(String menuId, String subMenuId) {
         SubMenuVisualMedia(menuId, subMenuId);
-
-//        Intent intent = new Intent(this, ImageShowActivity.class);
-//        intent.putExtra("imageUrl", mediaPath);
-//        startActivity(intent);
     }
 }

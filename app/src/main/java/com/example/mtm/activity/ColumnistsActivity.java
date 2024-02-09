@@ -2,6 +2,7 @@ package com.example.mtm.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,12 +20,25 @@ import java.util.List;
 
 public class ColumnistsActivity extends AppCompatActivity implements ColumnistAdapter.OnItemClickListener {
 
+    private ImageView backIconImageView;
+    private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_columnists);
 
+        init();
+        setItemClickListeners();
         setData();
+    }
+
+    private void init() {
+        backIconImageView = findViewById(R.id.backIconImageView);
+        recyclerView = findViewById(R.id.recyclerView);
+    }
+
+    private void setItemClickListeners() {
+        backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
     }
 
     private void setData() {
@@ -45,8 +59,6 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
             ));
 
         }
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(new ColumnistAdapter(this, items, this));
 

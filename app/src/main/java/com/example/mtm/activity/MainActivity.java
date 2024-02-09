@@ -12,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.mtm.R;
-import com.example.mtm.adapter.CustomAdapter;
+import com.example.mtm.adapter.MainActivityAdapter;
 import com.example.mtm.adapter.ViewPagerAdapter;
-import com.example.mtm.model.ItemData;
+import com.example.mtm.model.MainActivityModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.ColumnistsResponse;
@@ -41,23 +41,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    ImageView profileImageView, notificationImageView;
-    GridView gridView;
-    ViewPagerAdapter mViewPagerAdapter;
+    private ImageView profileImageView, notificationImageView;
+    private GridView gridView;
+    private ViewPagerAdapter mViewPagerAdapter;
+    private ViewPager mViewPager;
+    private List<MainActivityModel> items;
+    private MainActivityAdapter adapter;
 
-    ViewPager mViewPager;
-
-    List<ItemData> items;
-
-    int[] images = {
-            R.drawable.test6,
-            R.drawable.test6,
-            R.drawable.test6
-    };
-    CustomAdapter adapter;
     private Handler handler;
     int page = 0;
-    private int delay = 2000; //milliseconds
+    private final int delay = 2000; //milliseconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,36 +60,32 @@ public class MainActivity extends AppCompatActivity {
         init();
         setItemClickListeners();
 
-
-
         items = new ArrayList<>();
-        items.add(new ItemData(R.drawable.media_icon, R.drawable.test7, "Medya Raporu"));
-        items.add(new ItemData(R.drawable.news_icon, R.drawable.test8, "Haber Listesi"));
-        items.add(new ItemData(R.drawable.media2_icon, R.drawable.test9, "Medya Gündemi"));
+        items.add(new MainActivityModel(R.drawable.media_icon, R.drawable.test7, "Medya Raporu"));
+        items.add(new MainActivityModel(R.drawable.news_icon, R.drawable.test8, "Haber Listesi"));
+        items.add(new MainActivityModel(R.drawable.media2_icon, R.drawable.test9, "Medya Gündemi"));
 
-        items.add(new ItemData(R.drawable.media_icon, R.drawable.test10, "Yazılı"));
-        items.add(new ItemData(R.drawable.internet_icon, R.drawable.test11, "İnternet"));
-        items.add(new ItemData(R.drawable.visual_and_auditory_icon, R.drawable.test12, "Görsel & İşitsel"));
+        items.add(new MainActivityModel(R.drawable.media_icon, R.drawable.test10, "Yazılı"));
+        items.add(new MainActivityModel(R.drawable.internet_icon, R.drawable.test11, "İnternet"));
+        items.add(new MainActivityModel(R.drawable.visual_and_auditory_icon, R.drawable.test12, getString(R.string.visual_media)));
 
-        items.add(new ItemData(R.drawable.newspapers_icon, R.drawable.test13, "Gazeteler"));
-        items.add(new ItemData(R.drawable.magazines_icon, R.drawable.test14, "Dergiler"));
-        items.add(new ItemData(R.drawable.opinion_writers_icon, R.drawable.test15, "Köşe Yazarları"));
+        items.add(new MainActivityModel(R.drawable.newspapers_icon, R.drawable.test13, "Gazeteler"));
+        items.add(new MainActivityModel(R.drawable.magazines_icon, R.drawable.test14, "Dergiler"));
+        items.add(new MainActivityModel(R.drawable.opinion_writers_icon, R.drawable.test15, "Köşe Yazarları"));
 
-
-        adapter = new CustomAdapter(this, items);
+        adapter = new MainActivityAdapter(this, items);
         gridView.setAdapter(adapter);
-
-
-
-
 
         CircleIndicator indicator = findViewById(R.id.indicator);
 
-        // Initializing the ViewPagerAdapter
+        int[] images = {
+                R.drawable.test6,
+                R.drawable.test6,
+                R.drawable.test6
+        };
+
         mViewPagerAdapter = new ViewPagerAdapter(getApplication(), images);
-        // Adding the Adapter to the ViewPager
         mViewPager.setAdapter(mViewPagerAdapter);
-//        handler = new Handler(Looper.getMainLooper());
         indicator.setViewPager(mViewPager);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -141,22 +130,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
         });
 
-//        gridView.setOnItemClickListener((parent, view, position, id) -> {
-//            ItemData itemData = items.get(position);
-//            // Toggle the visibility of the progress bar for the clicked item
-//            itemData.setProgressBarVisible(!itemData.isProgressBarVisible());
-//            // Notify the adapter that the data has changed
-//            adapter.notifyDataSetChanged();
-//
-//            // Start the details activity or perform any other action
-////            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-////            intent.putExtra("itemData", itemData.getText());
-////            startActivity(intent);
-//        });
 
         gridView.setOnItemClickListener((parent, view, position, id) -> {
-
-
             switch (position) {
                 case 0:
 
@@ -187,25 +162,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-//            getMediaAgenda(position);
-
-
-
-            // Start some asynchronous task (e.g., loading data)
-            // You can replace this with your actual task
-            // For demonstration, I'm using a handler to simulate a delay
-//            new Handler().postDelayed(() -> {
-//                // After completing the task, hide progress bar for the clicked item
-//                itemData.setProgressBarVisible(false);
-//
-//                // Notify the adapter that data has changed
-//                adapter.notifyDataSetChanged();
-//
-//                // Start the details activity or perform any other action
-//                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-//                intent.putExtra("itemData", itemData.getText());
-//                startActivity(intent);
-//            }, 2000); // Simulating a delay of 2 seconds
         });
 
 
@@ -215,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     private void getMediaAgenda(int position) {
 
 
-        ItemData itemData = items.get(position);
+        MainActivityModel itemData = items.get(position);
 
         // Show progress bar for the clicked item
         itemData.setProgressBarVisible(true);
@@ -363,13 +319,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                    Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                    Intent intent = new Intent(MainActivity.this, MediaAgendaActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
                     startActivity(intent);
 
                 } else {
 
-
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
 
                 }
             }
@@ -393,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
     private void newspaperFirstPages(int position) {
 
 
-        ItemData itemData = items.get(position);
+        MainActivityModel itemData = items.get(position);
 
         // Show progress bar for the clicked item
         itemData.setProgressBarVisible(true);
@@ -435,13 +393,15 @@ public class MainActivity extends AppCompatActivity {
 
                     DataHolder.getInstance().setNewspaperFirstPagesModel(result);
 
-                    Intent intent = new Intent(MainActivity.this, NewspaperFirstPageActivity.class);
+                    Intent intent = new Intent(MainActivity.this, NewspaperActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
                     startActivity(intent);
 
                 } else {
 
-
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
 
                 }
             }
@@ -462,11 +422,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void magazine(int position) {
 
-
-        ItemData itemData = items.get(position);
+        MainActivityModel itemData = items.get(position);
 
         // Show progress bar for the clicked item
         itemData.setProgressBarVisible(true);
@@ -495,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MagazineFullPagesResponse> call, Response<MagazineFullPagesResponse> response) {
 
-                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+                Logger.getInstance().logDebug(TAG, "magazines", 2, response.body());
 
                 // Show progress bar for the clicked item
                 itemData.setProgressBarVisible(false);
@@ -516,13 +474,15 @@ public class MainActivity extends AppCompatActivity {
 
                     DataHolder.getInstance().setMagazineFullPagesModel(result);
 
-                    Intent intent = new Intent(MainActivity.this, MagazineFirstPageActivity.class);
+                    Intent intent = new Intent(MainActivity.this, MagazineActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
                     startActivity(intent);
 
                 } else {
 
-
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
 
                 }
             }
@@ -536,19 +496,16 @@ public class MainActivity extends AppCompatActivity {
                 // Notify the adapter that data has changed
                 adapter.notifyDataSetChanged();
 
-                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+                Logger.getInstance().logDebug(TAG, "magazines", 3, t.getMessage());
             }
         });
 
 
     }
 
-
-
     private void columnists(int position) {
 
-
-        ItemData itemData = items.get(position);
+        MainActivityModel itemData = items.get(position);
 
         // Show progress bar for the clicked item
         itemData.setProgressBarVisible(true);
@@ -600,7 +557,9 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
 
-
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
 
                 }
             }
@@ -621,12 +580,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     private void visualMedia(int position) {
 
-
-        ItemData itemData = items.get(position);
+        MainActivityModel itemData = items.get(position);
 
         // Show progress bar for the clicked item
         itemData.setProgressBarVisible(true);
@@ -686,6 +642,9 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
 
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
 
 
                 }
@@ -709,8 +668,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void internet(int position) {
 
-
-        ItemData itemData = items.get(position);
+        MainActivityModel itemData = items.get(position);
 
         // Show progress bar for the clicked item
         itemData.setProgressBarVisible(true);
@@ -770,6 +728,9 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
 
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
 
 
                 }
@@ -791,6 +752,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void forbiddenPopup() {
+        Toast.makeText(this, "Forbidden", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -803,7 +768,7 @@ public class MainActivity extends AppCompatActivity {
         handler.removeCallbacks(runnable);
     }
 
-    Runnable runnable = new Runnable() {
+    private final Runnable runnable = new Runnable() {
         public void run() {
 
             if (mViewPagerAdapter.getCount() == page) {

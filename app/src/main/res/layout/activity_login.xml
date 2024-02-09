@@ -53,7 +53,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_marginHorizontal="20dp"
-        android:id="@+id/userNameTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

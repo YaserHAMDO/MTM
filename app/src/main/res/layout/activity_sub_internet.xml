@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".activity.VisualMediaActivity">
+    tools:context=".activity.SubInternetActivity">
 
     <LinearLayout
         android:id="@+id/test12"
@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:textColor="#4E4B66"
-            android:text="@string/visual_media"/>
+            android:text="İnternet"/>
 
         <androidx.cardview.widget.CardView
             android:visibility="visible"

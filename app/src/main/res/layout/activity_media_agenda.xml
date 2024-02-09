@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".activity.VisualMediaActivity">
+    android:orientation="vertical"
+    tools:context=".activity.MediaAgendaActivity">
 
     <LinearLayout
-        android:id="@+id/test12"
         android:layout_marginTop="20dp"
         android:paddingHorizontal="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_gravity="center_vertical"
-            android:id="@+id/backIconImageView"
-            android:padding="5dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/left_arrow_blue" />
+
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/backIconImageView"
+                android:padding="5dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/left_arrow_blue" />
 
         <TextView
             android:layout_width="0dp"
@@ -32,10 +31,9 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:textColor="#4E4B66"
-            android:text="@string/visual_media"/>
+            android:text="Medya Gündemi"/>
 
         <androidx.cardview.widget.CardView
-            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -50,17 +48,23 @@
 
         </androidx.cardview.widget.CardView>
 
+
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        app:layout_constraintTop_toBottomOf="@+id/test12"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="1" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="7dp"
+        android:scrollbars="none"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:scrollbars="none"/>
+
+
+</LinearLayout>

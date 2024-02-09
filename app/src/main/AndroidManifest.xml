@@ -17,7 +17,7 @@
             android:name=".activity.SubInternetActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.VisualMediaDetailsActivity"
+            android:name=".activity.SubVisualMediaActivity"
             android:exported="false" />
         <activity
             android:name=".activity.InternetActivity"
@@ -29,25 +29,25 @@
             android:name=".activity.ColumnistsActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MagazineFirstPageActivity"
+            android:name=".activity.MagazineActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.NewspaperFullPageActivity"
+            android:name=".activity.SubNewspaperActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.NewspaperFirstPageActivity"
+            android:name=".activity.NewspaperActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ImageShowActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.VideoActivity"
+            android:name=".activity.VideoShowActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.DetailsActivity"
+            android:name=".activity.MediaAgendaActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"

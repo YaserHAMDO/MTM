@@ -13,17 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
-import com.example.mtm.model.ColumnistModel;
+import com.example.mtm.model.SubInternetModel;
 import com.example.mtm.util.MyUtils;
 
 import java.util.List;
 
-public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.ViewHolder> {
+public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<ColumnistModel> mItems;
+    private List<SubInternetModel> mItems;
     private final OnItemClickListener listener;
-    public ColumnistAdapter(Context context, List<ColumnistModel> items, OnItemClickListener listener) {
+    public SubInternetAdapter(Context context, List<SubInternetModel> items, OnItemClickListener listener) {
         mContext = context;
         mItems = items;
         this.listener = listener;
@@ -32,30 +32,30 @@ public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_view_columnist_activity, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_view_sub_internet_activity, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ColumnistModel itemData = mItems.get(position);
+        SubInternetModel itemData = mItems.get(position);
 
         // Load image using Glide
-        Glide.with(mContext).load(itemData.getJournalistImageUrl()).into(holder.journalistImageView);
+        Glide.with(mContext).load(itemData.getImageStoragePath()).into(holder.journalistImageView);
 
         holder.mediaNameTextView.setText(itemData.getMediaName());
         holder.journalistNameTextView.setText(itemData.getJournalistName());
         holder.dateTextView.setText(itemData.getDate());
-        holder.titleTextView.setText(itemData.getTitle());
+//        holder.titleTextView.setText(itemData.getTitle());
 
 
         holder.itemView.setOnClickListener(view -> {
-            listener.onItemClick(itemData.getImageStoragePath());
+            listener.onItemClick(itemData.getShareLink());
         });
 
         holder.shareCardView.setOnClickListener(view -> {
 
-            MyUtils.shareLink("Test link", mContext);
+            MyUtils.shareLink(itemData.getShareLink(), mContext);
 
         });
 
@@ -72,7 +72,7 @@ public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.View
         ImageView journalistImageView;
         TextView mediaNameTextView;
         TextView journalistNameTextView;
-        TextView titleTextView;
+//        TextView titleTextView;
         TextView dateTextView;
         CardView shareCardView;
 
@@ -80,10 +80,11 @@ public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.View
         ViewHolder(View itemView) {
             super(itemView);
             journalistImageView = itemView.findViewById(R.id.journalistImageView);
+            dateTextView = itemView.findViewById(R.id.dateTextView);
             mediaNameTextView = itemView.findViewById(R.id.mediaNameTextView);
             journalistNameTextView = itemView.findViewById(R.id.journalistNameTextView);
-            titleTextView = itemView.findViewById(R.id.titleTextView);
-            dateTextView = itemView.findViewById(R.id.dateTextView);
+
+//            titleTextView = itemView.findViewById(R.id.titleTextView);
             shareCardView = itemView.findViewById(R.id.shareCardView);
         }
     }

@@ -23,6 +23,7 @@ import com.example.mtm.response.TokenResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.Logger;
 import com.example.mtm.util.PreferenceManager;
+import com.example.mtm.util.ZoomClass;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -38,17 +39,18 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
-    ViewPagerAdapter mViewPagerAdapter;
+    private ViewPagerAdapter mViewPagerAdapter;
 
-    TextInputLayout userNameTextInputLayout;
-    MaterialButton loginMaterialButton;
-    TextView requiredUserNameTextView, requiredPasswordTextView;
-    EditText usernameEditText, passwordEditText;
-    ViewPager mViewPager;
+    private MaterialButton loginMaterialButton;
+    private TextView requiredUserNameTextView, requiredPasswordTextView;
+    private EditText usernameEditText, passwordEditText;
+    private ViewPager mViewPager;
+    private ImageView test;
+    private CircleIndicator indicator;
 
     private Handler handler;
-    int page=0;
-    private int delay = 2000; //milliseconds
+    private int page = 0;
+    private final int delay = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,25 +58,29 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         init();
+        setItemClickListeners();
+    }
 
-//        userNameTextInputLayout.setHelperTextEnabled(false);
+    private void init() {
+        loginMaterialButton = findViewById(R.id.loginMaterialButton);
+        requiredUserNameTextView = findViewById(R.id.requiredUserNameTextView);
+        requiredPasswordTextView = findViewById(R.id.requiredPasswordTextView);
+        usernameEditText = findViewById(R.id.edit_username);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        mViewPager = findViewById(R.id.viewPagerMaina);
+        test = findViewById(R.id.test);
+        indicator = findViewById(R.id.indicator);
 
         handler = new Handler(Looper.getMainLooper());
 
-        CircleIndicator indicator = findViewById(R.id.indicator);
+        int[] images = { R.drawable.test1, R.drawable.test1, R.drawable.test1};
 
-        int[] images = {
-                R.drawable.test1,
-                R.drawable.test1,
-                R.drawable.test1
-        };
-
-        // Initializing the ViewPagerAdapter
         mViewPagerAdapter = new ViewPagerAdapter(getApplication(), images);
-        // Adding the Adapter to the ViewPager
         mViewPager.setAdapter(mViewPagerAdapter);
-//        handler = new Handler(Looper.getMainLooper());
         indicator.setViewPager(mViewPager);
+    }
+
+    private void setItemClickListeners() {
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -93,19 +99,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
         loginMaterialButton.setOnClickListener(view -> {
 
             String userName = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
-            
+
             if (!userName.equals("") && !password.equals("")) {
                 getToken();
             }
             else {
                 if (userName.equals("")) {
-                    requiredUserNameTextView.setVisibility(View.VISIBLE);  
+                    requiredUserNameTextView.setVisibility(View.VISIBLE);
                 }
                 if (password.equals("")) {
                     requiredPasswordTextView.setVisibility(View.VISIBLE);
@@ -114,9 +118,8 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
-
         usernameEditText.addTextChangedListener(new TextWatcher()  {
-            
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -131,9 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-        
+
         passwordEditText.addTextChangedListener(new TextWatcher()  {
-            
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -149,17 +152,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        ImageView test = findViewById(R.id.test);
         test.setOnClickListener(view -> {
             usernameEditText.setText("yasershareef1995@gmail.com");
             passwordEditText.setText("yas12345");
 //            usernameEditText.setText("mesutaygun35@icloud.com");
 //            passwordEditText.setText("Picasso1881");
         });
-
-
-
     }
 
     private void getToken() {
@@ -218,17 +216,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void init() {
-        userNameTextInputLayout = findViewById(R.id.userNameTextInputLayout);
-        loginMaterialButton = findViewById(R.id.loginMaterialButton);
-        requiredUserNameTextView = findViewById(R.id.requiredUserNameTextView);
-        requiredPasswordTextView = findViewById(R.id.requiredPasswordTextView);
-        usernameEditText = findViewById(R.id.edit_username);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        mViewPager = findViewById(R.id.viewPagerMaina);
-
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -241,7 +228,7 @@ public class LoginActivity extends AppCompatActivity {
         handler.removeCallbacks(runnable);
     }
 
-    Runnable runnable = new Runnable() {
+    private final Runnable runnable = new Runnable() {
         public void run() {
 
             if (mViewPagerAdapter.getCount() == page) {
