@@ -46,8 +46,7 @@ public class SubVisualMediaAdapter extends RecyclerView.Adapter<SubVisualMediaAd
 
         holder.itemView.setOnClickListener(view -> {
 //            listener.onItemClick("39096", "113582");
-            listener.onItemClick(itemData.getMenuId(), itemData.getSubMenuId());
-            System.out.println("hasan yaser " + itemData.getMenuId() + " " + itemData.getSubMenuId());
+            listener.onItemClickSubVisualMedia(itemData.getMenuId(), itemData.getSubMenuId());
         });
 
         if (orange) {
@@ -83,6 +82,6 @@ public class SubVisualMediaAdapter extends RecyclerView.Adapter<SubVisualMediaAd
 
 
     public interface OnItemClickListener {
-        void onItemClick(String menuId, String subMenuId);
+        void onItemClickSubVisualMedia(String menuId, String subMenuId);
     }
 }

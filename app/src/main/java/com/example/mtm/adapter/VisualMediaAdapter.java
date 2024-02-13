@@ -75,7 +75,7 @@ public class VisualMediaAdapter extends RecyclerView.Adapter<VisualMediaAdapter.
     }
 
     @Override
-    public void onItemClick(String menuId, String subMenuId) {
+    public void onItemClickSubVisualMedia(String menuId, String subMenuId) {
 
     }
 

@@ -5,6 +5,7 @@ import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
 import com.example.mtm.response.MagazineFullPagesResponse;
 import com.example.mtm.response.MediaAgendaResponse;
+import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
@@ -22,6 +23,7 @@ public class DataHolder {
     private SubMenuVisualMediaResponse subMenuVisualMediaModel;
     private InternetResponse internetModel;
     private InternetSubResponse InternetSubModel;
+    private MenuListResponse menuListResponse;
 
     private DataHolder() {}
 
@@ -99,5 +101,13 @@ public class DataHolder {
 
     public void setInternetSubModel(InternetSubResponse internetSubModel) {
         InternetSubModel = internetSubModel;
+    }
+
+    public MenuListResponse getMenuListResponse() {
+        return menuListResponse;
+    }
+
+    public void setMenuListResponse(MenuListResponse menuListResponse) {
+        this.menuListResponse = menuListResponse;
     }
 }

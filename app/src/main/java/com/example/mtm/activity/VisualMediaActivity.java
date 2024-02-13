@@ -160,7 +160,7 @@ public class VisualMediaActivity extends AppCompatActivity implements SubVisualM
 
 
     @Override
-    public void onItemClick(String menuId, String subMenuId) {
+    public void onItemClickSubVisualMedia(String menuId, String subMenuId) {
         SubMenuVisualMedia(menuId, subMenuId);
     }
 }

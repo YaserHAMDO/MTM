@@ -50,7 +50,8 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
 
 
         holder.itemView.setOnClickListener(view -> {
-            listener.onItemClick(itemData.getShareLink());
+//            listener.onItemClick(itemData.getShareLink());
+            MyUtils.openLink(itemData.getShareLink(), mContext);
         });
 
         holder.shareCardView.setOnClickListener(view -> {

@@ -5,6 +5,7 @@ import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
 import com.example.mtm.response.MagazineFullPagesResponse;
 import com.example.mtm.response.MediaAgendaResponse;
+import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
@@ -198,6 +199,30 @@ public interface ApiService {
             @Query("dsSubMenuIds") String dsSubMenuIds,
             @Query("addDataGroup") boolean addDataGroup,
             @Query("addSplitter") boolean addSplitter
+    );
+
+
+    @GET("/api/data/pm/news-list")
+    Call<MenuListResponse> menuList(
+            @Header("Authorization") String authToken,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("customerId") int customerId,
+            @Query("addDocs") boolean addDocs,
+            @Query("addClipBaseData") boolean addClipBaseData,
+            @Query("addDsMenu") boolean addDsMenu,
+            @Query("addDsMenuSplitter") boolean addDsMenuSplitter,
+            @Query("addDsMenuCount") boolean addDsMenuCount,
+            @Query("addImageInfo") boolean addImageInfo,
+            @Query("cdateStart") String cdateStart,
+            @Query("cdateEnd") String cdateEnd,
+            @Query("ctimeStart") String ctimeStart,
+            @Query("ctimeEnd") String ctimeEnd,
+            @Query("ignoreType") String ignoreType,
+            @Query("groupByParent") boolean groupByParent,
+            @Query("addDataGroup") boolean addDataGroup,
+            @Query("addSplitter") boolean addSplitter,
+            @Query("onlyColmnList") boolean onlyColmnList
     );
 
 

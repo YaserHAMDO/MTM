@@ -6,7 +6,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -28,6 +30,8 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
     private int viewHeight = 0;
     private PointF mLast = new PointF();
     private PointF mStart = new PointF();
+    private boolean isZoomed = false;
+    private ZoomClassListener mListener;
 
     public ZoomClass(Context context) {
         super(context);
@@ -60,6 +64,12 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
         public boolean onScaleBegin(ScaleGestureDetector detector) {
             mode = ZOOM;
             return true;
+        }
+
+        @Override
+        public void onScaleEnd(@NonNull ScaleGestureDetector detector) {
+//            isZoomed = false;
+            super.onScaleEnd(detector);
         }
 
         @Override
@@ -98,6 +108,27 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
 
         float redundantYSpace = (viewHeight - (scale * imageHeight)) / 2f;
         float redundantXSpace = (viewWidth - (scale * imageWidth)) / 2f;
+        mMatrix.postTranslate(redundantXSpace, redundantYSpace);
+        origWidth = viewWidth - 2 * redundantXSpace;
+        origHeight = viewHeight - 2 * redundantYSpace;
+        setImageMatrix(mMatrix);
+    }
+
+    private void setZoom() {
+        mSaveScale = 2f; // Set scale factor to 2x zoom
+        float scale;
+        if (getDrawable() == null || getDrawable().getIntrinsicWidth() == 0 || getDrawable().getIntrinsicHeight() == 0)
+            return;
+        int imageWidth = getDrawable().getIntrinsicWidth();
+        int imageHeight = getDrawable().getIntrinsicHeight();
+        float scaleX = (float) viewWidth / imageWidth;
+        float scaleY = (float) viewHeight / imageHeight;
+        scale = Math.min(scaleX, scaleY) * mSaveScale; // Apply the zoom factor
+        mMatrix.setScale(scale, scale);
+
+        // Calculate the translation to keep the zoom centered
+        float redundantYSpace = (viewHeight - (scale/2 * imageHeight)) / 2f;
+        float redundantXSpace = (viewWidth - (scale/2 * imageWidth)) / 2f;
         mMatrix.postTranslate(redundantXSpace, redundantYSpace);
         origWidth = viewWidth - 2 * redundantXSpace;
         origHeight = viewHeight - 2 * redundantYSpace;
@@ -172,10 +203,31 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
             case MotionEvent.ACTION_POINTER_UP:
                 mode = NONE;
                 break;
+            case MotionEvent.ACTION_UP:
+                // Check if not zoomed in
+                if (mSaveScale == 1f) {
+                    // Check for swipe gestures
+                    float deltaX = currentPoint.x - mStart.x;
+                    float deltaY = currentPoint.y - mStart.y;
+                    if (Math.abs(deltaX) > Math.abs(deltaY) + 100) {
+                        // Horizontal swipe
+                        if (deltaX > 0) {
+                            if (mListener != null) {
+                                mListener.onSwipeLeft();
+                            }
+                        } else {
+                            if (mListener != null) {
+                                mListener.onSwipeRight();
+                            }
+                        }
+                    }
+                }
+                break;
         }
         setImageMatrix(mMatrix);
-        return false;
+        return true; // Return true to consume the event
     }
+
 
     @Override
     public boolean onDown(MotionEvent motionEvent) {
@@ -210,7 +262,13 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
 
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
-        fitToScreen();
+        if (mSaveScale == 1f) {
+            setZoom();
+        }
+        else {
+            fitToScreen();
+        }
+
         return false;
     }
 
@@ -224,4 +282,14 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
     public static final int ZOOM = 2;
 
 
+    public void setZoomClassListener(ZoomClassListener listener) {
+        mListener = listener;
+    }
+
+
+
+    public interface ZoomClassListener {
+        void onSwipeRight();
+        void onSwipeLeft();
+    }
 }

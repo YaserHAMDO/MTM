@@ -2,6 +2,7 @@ package com.example.mtm.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -48,6 +49,11 @@ public class MyUtils {
 
         // Start the activity with the intent
         context.startActivity(Intent.createChooser(shareIntent, "Share link via"));
+    }
+
+    public static void openLink(String url, Context context) {
+        Intent urlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        context.startActivity(urlIntent);
     }
 
 }

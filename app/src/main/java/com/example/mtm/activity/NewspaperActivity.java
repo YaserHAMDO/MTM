@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -78,7 +79,7 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
     }
 
-    private void newspaperFirstPages(String mediaPath, String pageFile, String gno) {
+    private void newspaperFullPages(String mediaPath, String pageFile, String gno) {
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -124,6 +125,9 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
                 } else {
 
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
 
                 }
             }
@@ -137,10 +141,13 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
     }
 
+    private void forbiddenPopup() {
+        Toast.makeText(this, "Forbidden", Toast.LENGTH_SHORT).show();
+    }
 
 
     @Override
     public void onItemClick(String mediaPath, String pageFile, String gno) {
-        newspaperFirstPages(mediaPath, pageFile, gno);
+        newspaperFullPages(mediaPath, pageFile, gno);
     }
 }

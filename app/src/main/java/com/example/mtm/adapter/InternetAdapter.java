@@ -67,7 +67,7 @@ public class InternetAdapter extends RecyclerView.Adapter<InternetAdapter.ViewHo
     }
 
     @Override
-    public void onItemClick(String menuId, String subMenuId) {
+    public void onItemClickInternetSubList(String menuId, String subMenuId) {
 
     }
 

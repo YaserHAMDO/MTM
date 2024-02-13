@@ -156,7 +156,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
 
     @Override
-    public void onItemClick(String menuId, String subMenuId) {
+    public void onItemClickInternetSubList(String menuId, String subMenuId) {
         SubInternet(menuId, subMenuId);
     }
 }

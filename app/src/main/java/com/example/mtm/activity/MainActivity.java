@@ -21,6 +21,7 @@ import com.example.mtm.response.ColumnistsResponse;
 import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.MagazineFullPagesResponse;
 import com.example.mtm.response.MediaAgendaResponse;
+import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
 import com.example.mtm.response.VisualMediaResponse;
 import com.example.mtm.util.Constants;
@@ -137,19 +138,19 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
                 case 1:
-
+                    newsList(items.get(position));
                     break;
                 case 2:
                     getMediaAgenda(position);
                     break;
                 case 3:
-
+                    menuList(items.get(position), false);
                     break;
                 case 4:
-                    internet(position);
+                    internet(items.get(position), false);
                     break;
                 case 5:
-                    visualMedia(position);
+                    visualMedia(items.get(position), false);
                     break;
                 case 6:
                     newspaperFirstPages(position);
@@ -167,6 +168,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void newsList(MainActivityModel itemData) {
+
+        // Show progress bar for the clicked item
+        itemData.setProgressBarVisible(true);
+
+        // Notify the adapter that data has changed
+        adapter.notifyDataSetChanged();
+
+        menuList(itemData, true);
+
+
+
+    }
+
 
     private void getMediaAgenda(int position) {
 
@@ -580,16 +596,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void visualMedia(int position) {
+    private void visualMedia(MainActivityModel itemData, boolean newsList) {
 
-        MainActivityModel itemData = items.get(position);
+        if (!newsList) {
+            // Show progress bar for the clicked item
+            itemData.setProgressBarVisible(true);
 
-        // Show progress bar for the clicked item
-        itemData.setProgressBarVisible(true);
-
-        // Notify the adapter that data has changed
-        adapter.notifyDataSetChanged();
-
+            // Notify the adapter that data has changed
+            adapter.notifyDataSetChanged();
+        }
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -614,7 +629,6 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 true
         );
-        System.out.println("YASER " + MyUtils.getPreviousDate(1) + " 07:00:00 " + MyUtils.getCurrentDate() + " 23:59:00");
 
         call.enqueue(new Callback<VisualMediaResponse>() {
             @Override
@@ -622,23 +636,32 @@ public class MainActivity extends AppCompatActivity {
 
                 Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
 
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
+//                if (!newsList) {
+                    // Show progress bar for the clicked item
+                    itemData.setProgressBarVisible(false);
 
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
+                    // Notify the adapter that data has changed
+                    adapter.notifyDataSetChanged();
+//                }
 
                 if (response.isSuccessful()) {
-
-
 
                     VisualMediaResponse result = response.body();
 
                     DataHolder.getInstance().setVisualMediaModel(result);
 
-                    Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
+                    if (!newsList) {
+                        Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                        startActivity(intent);
+                    }
+                    else {
+                        Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                        startActivity(intent);
+                    }
+
+
 
                 } else {
 
@@ -653,11 +676,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<VisualMediaResponse> call, Throwable t) {
 
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
+                if(!newsList) {
+                    // Show progress bar for the clicked item
+                    itemData.setProgressBarVisible(false);
 
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
+                    // Notify the adapter that data has changed
+                    adapter.notifyDataSetChanged();
+                }
 
                 Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
             }
@@ -666,16 +691,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void internet(int position) {
+    private void internet(MainActivityModel itemData, boolean newsList) {
 
-        MainActivityModel itemData = items.get(position);
+        if (!newsList) {
+            // Show progress bar for the clicked item
+            itemData.setProgressBarVisible(true);
 
-        // Show progress bar for the clicked item
-        itemData.setProgressBarVisible(true);
-
-        // Notify the adapter that data has changed
-        adapter.notifyDataSetChanged();
-
+            // Notify the adapter that data has changed
+            adapter.notifyDataSetChanged();
+        }
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -700,7 +724,6 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 true
         );
-        System.out.println("YASER " + MyUtils.getPreviousDate(1) + " 07:00:00 " + MyUtils.getCurrentDate() + " 23:59:00");
 
         call.enqueue(new Callback<InternetResponse>() {
             @Override
@@ -708,11 +731,15 @@ public class MainActivity extends AppCompatActivity {
 
                 Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
 
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
+                if (!newsList) {
+                    // Show progress bar for the clicked item
+                    itemData.setProgressBarVisible(false);
 
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
+                    // Notify the adapter that data has changed
+                    adapter.notifyDataSetChanged();
+                }
+
+
 
                 if (response.isSuccessful()) {
 
@@ -722,9 +749,18 @@ public class MainActivity extends AppCompatActivity {
 
                     DataHolder.getInstance().setInternetModel(result);
 
-                    Intent intent = new Intent(MainActivity.this, InternetActivity.class);
+                    if(!newsList) {
+                        Intent intent = new Intent(MainActivity.this, InternetActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                        startActivity(intent);
+                    }
+                    else {
+
+                        visualMedia(itemData, true);
+
+                    }
+
+
 
                 } else {
 
@@ -739,13 +775,116 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<InternetResponse> call, Throwable t) {
 
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
+                if (!newsList) {
+                    // Show progress bar for the clicked item
+                    itemData.setProgressBarVisible(false);
 
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
+                    // Notify the adapter that data has changed
+                    adapter.notifyDataSetChanged();
+                }
 
                 Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void menuList(MainActivityModel itemData, boolean newsList) {
+
+        if (!newsList) {
+            // Show progress bar for the clicked item
+            itemData.setProgressBarVisible(true);
+
+            // Notify the adapter that data has changed
+            adapter.notifyDataSetChanged();
+        }
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MenuListResponse> call = apiService.menuList(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                10000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true,
+                false
+        );
+
+        call.enqueue(new Callback<MenuListResponse>() {
+            @Override
+            public void onResponse(Call<MenuListResponse> call, Response<MenuListResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "menuList", 2, response.body());
+
+                if (!newsList) {
+                    // Show progress bar for the clicked item
+                    itemData.setProgressBarVisible(false);
+
+                    // Notify the adapter that data has changed
+                    adapter.notifyDataSetChanged();
+                }
+
+
+
+                if (response.isSuccessful()) {
+
+
+
+                    MenuListResponse result = response.body();
+
+                    DataHolder.getInstance().setMenuListResponse(result);
+
+                    if(!newsList) {
+                        Intent intent = new Intent(MainActivity.this, PrintedActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                        startActivity(intent);
+                    }
+                    else {
+
+                        internet(itemData, true);
+
+                    }
+
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MenuListResponse> call, Throwable t) {
+
+                if (!newsList) {
+                    // Show progress bar for the clicked item
+                    itemData.setProgressBarVisible(false);
+
+                    // Notify the adapter that data has changed
+                    adapter.notifyDataSetChanged();
+                }
+
+                Logger.getInstance().logDebug(TAG, "menuList", 3, t.getMessage());
             }
         });
 
