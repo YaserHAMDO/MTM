@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/test3"
-        android:paddingBottom="20dp"
+        android:paddingBottom="10dp"
         android:orientation="vertical">
         
         <LinearLayout
@@ -61,10 +61,10 @@
         </LinearLayout>
 
         <androidx.viewpager.widget.ViewPager
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:id="@+id/viewPagerMaina"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="220dp"
             android:nestedScrollingEnabled="true"
             android:scrollIndicators="bottom"/>
 
@@ -80,15 +80,17 @@
     </LinearLayout>
 
     <GridView
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:id="@+id/gridView"
         android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:numColumns="3"
-        android:verticalSpacing="15dp"
-        android:horizontalSpacing="15dp"
-        android:padding="8dp"/>
+        android:verticalSpacing="20dp"
+        android:horizontalSpacing="20dp"
+        android:paddingHorizontal="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="20dp"/>
 
 </LinearLayout>

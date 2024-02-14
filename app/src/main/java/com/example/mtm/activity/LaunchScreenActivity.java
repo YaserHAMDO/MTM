@@ -10,6 +10,13 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mtm.R;
+import com.example.mtm.network.ApiService;
+import com.example.mtm.network.RetrofitClient;
+import com.example.mtm.response.NewsPaperFullPagesResponse;
+import com.example.mtm.util.Constants;
+import com.example.mtm.util.PreferenceManager;
+
+import retrofit2.Call;
 
 @SuppressLint("CustomSplashScreen")
 public class LaunchScreenActivity extends AppCompatActivity {
@@ -25,19 +32,18 @@ public class LaunchScreenActivity extends AppCompatActivity {
 
             Intent i;
 
-            if(true) {
-//                preferenceManager.clear();
-//                i = new Intent(this, NewLoginActivity.class);
+            PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
-//                startActivity(new Intent(LaunchScreenActivity.this, PhoneAuthActivityTest.class));
-                i = new Intent(this, LoginActivity.class);
+            String token = preferenceManager.getString(Constants.KEY_ACCESS_TOKEN);
+
+            if(token != null && !token.equals("")) {
+
+                i = new Intent(this, MainActivity.class);
             }
 
             else {
-//                preferenceManager.putString(Constants.KEY_CAME_FROM,"LaunchScreenActivityRefreshToken");
-//                preferenceManager.putBoolean(Constants.KEY_LOCATION_TAKEN, false);
-                i = new Intent(this, MainActivity.class);
-
+                preferenceManager.clear();
+                i = new Intent(this, LoginActivity.class);
             }
 
             Bundle options = ActivityOptions.makeCustomAnimation(this, 0, R.anim.launch_screen_animation).toBundle();

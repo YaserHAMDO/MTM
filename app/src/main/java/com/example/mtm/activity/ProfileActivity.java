@@ -1,5 +1,6 @@
 package com.example.mtm.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -8,12 +9,32 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
+import com.example.mtm.network.ApiService;
+import com.example.mtm.network.RetrofitClient;
+import com.example.mtm.response.TokenResponse;
+import com.example.mtm.util.Constants;
+import com.example.mtm.util.DataHolder;
+import com.example.mtm.util.Logger;
+import com.example.mtm.util.PreferenceManager;
 import com.example.mtm.util.ZoomClass;
+import com.google.android.material.button.MaterialButton;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity implements ZoomClass.ZoomClassListener{
 
+    private static final String TAG = "ProfileActivity";
+
+    private PreferenceManager preferenceManager;
+
     private ImageView backIconImageView;
     ZoomClass zoomClass;
+    private MaterialButton logoutMaterialButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +79,62 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
 
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
+        logoutMaterialButton = findViewById(R.id.logoutMaterialButton);
+
+        preferenceManager = new PreferenceManager(getApplicationContext());
     }
 
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+        logoutMaterialButton.setOnClickListener(view -> logoutApi());
     }
+
+    private void logout() {
+        preferenceManager.clear();
+        DataHolder.getInstance().clearDataHolderClass();
+        Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void logoutApi() {
+
+        ApiService apiService = RetrofitClient.getClient(1).create(ApiService.class);
+
+        Map<String, String> fields = new HashMap<>();
+        fields.put("client_id", "account-mobile");
+        fields.put("client_secret", "6323a00d-974f-46b9-974d-37e9a1588c59");
+        fields.put("refresh_token", preferenceManager.getString(Constants.KEY_REFRESH_TOKEN));
+
+        Call<Void> call = apiService.logout(preferenceManager.getString(Constants.KEY_ACCESS_TOKEN), fields);
+
+        Logger.getInstance().logDebug(TAG, "logout", 1, fields);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+                Logger.getInstance().logDebug(TAG, "logout", 2, response.body());
+
+                if (response.isSuccessful()) {
+                    logout();
+                }
+                else {
+
+                    Toast.makeText(ProfileActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+                Toast.makeText(ProfileActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+                Logger.getInstance().logDebug(TAG, "logout", 3, t.getMessage());
+            }
+        });
+    }
+
 
     @Override
     public void onSwipeRight() {

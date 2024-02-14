@@ -35,6 +35,20 @@ public class MyUtils {
         return previousDate.format(formatter);
     }
 
+    public static String getFirstDateOfMonth() {
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Set the day of the month to 1 to get the first date of the month
+        LocalDate firstDateOfMonth = currentDate.withDayOfMonth(1);
+
+        // Define the desired date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Format the first date of the month using the formatter
+        return firstDateOfMonth.format(formatter);
+    }
+
 
     // Method to handle sharing the link
     public static void shareLink(String url, Context context) {

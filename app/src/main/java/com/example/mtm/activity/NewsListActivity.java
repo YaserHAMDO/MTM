@@ -1,11 +1,13 @@
 package com.example.mtm.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +47,8 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
     private TextView internetTextView, tvTextView, menuListTextView;
     private ImageView backIconImageView;
     private RecyclerView recyclerView;
+    private ConstraintLayout menuListConstraintLayout, internetConstraintLayout, tvConstraintLayout;
+    private View menuListView, internetView, tvView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
         init();
         setItemClickListeners();
+        setMenuList();
     }
 
     private void init() {
@@ -61,16 +66,61 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
         menuListTextView = findViewById(R.id.menuListTextView);
         backIconImageView = findViewById(R.id.backIconImageView);
         recyclerView = findViewById(R.id.recyclerView);
+        menuListConstraintLayout = findViewById(R.id.menuListConstraintLayout);
+        internetConstraintLayout = findViewById(R.id.internetConstraintLayout);
+        tvConstraintLayout = findViewById(R.id.tvConstraintLayout);
+        menuListView = findViewById(R.id.menuListView);
+        internetView = findViewById(R.id.internetView);
+        tvView = findViewById(R.id.tvView);
     }
 
     private void setItemClickListeners() {
-        internetTextView.setOnClickListener(view -> setInternetData());
-        tvTextView.setOnClickListener(view -> setVisualData());
-        menuListTextView.setOnClickListener(view -> setMenuList());
+        internetConstraintLayout.setOnClickListener(view -> setInternetData());
+        tvConstraintLayout.setOnClickListener(view -> setVisualData());
+        menuListConstraintLayout.setOnClickListener(view -> setMenuList());
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
     }
 
+    private void updateUI(int i) {
+        switch (i) {
+            case 0:
+                menuListTextView.setTextColor(getColor(R.color.black));
+                internetTextView.setTextColor(getColor(R.color.color1));
+                tvTextView.setTextColor(getColor(R.color.color1));
+
+                menuListView.setVisibility(View.VISIBLE);
+                internetView.setVisibility(View.INVISIBLE);
+                tvView.setVisibility(View.INVISIBLE);
+
+              break;
+
+            case 1:
+                menuListTextView.setTextColor(getColor(R.color.color1));
+                internetTextView.setTextColor(getColor(R.color.black));
+                tvTextView.setTextColor(getColor(R.color.color1));
+
+                menuListView.setVisibility(View.INVISIBLE);
+                internetView.setVisibility(View.VISIBLE);
+                tvView.setVisibility(View.INVISIBLE);
+
+              break;
+
+            case 2:
+                menuListTextView.setTextColor(getColor(R.color.color1));
+                internetTextView.setTextColor(getColor(R.color.color1));
+                tvTextView.setTextColor(getColor(R.color.black));
+
+                menuListView.setVisibility(View.INVISIBLE);
+                internetView.setVisibility(View.INVISIBLE);
+                tvView.setVisibility(View.VISIBLE);
+              break;
+        }
+    }
+
     private void setMenuList() {
+
+        updateUI(0);
+
         MenuListResponse result = DataHolder.getInstance().getMenuListResponse();
 
         List<InternetModel> items = new ArrayList<>();
@@ -101,6 +151,9 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
     }
 
     private void setInternetData() {
+
+        updateUI(1);
+
         InternetResponse result = DataHolder.getInstance().getInternetModel();
 
         List<InternetModel> items = new ArrayList<>();
@@ -131,6 +184,9 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
     }
 
     private void setVisualData() {
+
+        updateUI(2);
+
         VisualMediaResponse result = DataHolder.getInstance().getVisualMediaModel();
 
         List<VisualMediaModel> items = new ArrayList<>();

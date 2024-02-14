@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,9 +21,10 @@ import com.example.mtm.R;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
+import com.example.mtm.util.ZoomClass;
 import com.jsibbold.zoomage.ZoomageView;
 
-public class SubNewspaperActivity extends AppCompatActivity {
+public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass.ZoomClassListener{
 
     int i;
 
@@ -31,7 +33,8 @@ public class SubNewspaperActivity extends AppCompatActivity {
     ProgressBar progressBar;
     String mediaPath;
     int count;
-    ZoomageView zoomageView;
+    ZoomClass zoomClass;
+    int showed = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +43,9 @@ public class SubNewspaperActivity extends AppCompatActivity {
 
         NewsPaperFullPagesResponse result = DataHolder.getInstance().getNewsPaperFullPagesModel();
 
-        zoomageView = findViewById(R.id.imageView);
+        zoomClass = findViewById(R.id.imageView);
+        zoomClass.setZoomClassListener(this);
+
         ImageView leftArrowImageView = findViewById(R.id.leftArrowImageView);
         ImageView rightArrowImageView = findViewById(R.id.rightArrowImageView);
         text = findViewById(R.id.text);
@@ -58,7 +63,12 @@ public class SubNewspaperActivity extends AppCompatActivity {
 //        circularProgressDrawable.setCenterRadius(30f);
 //        circularProgressDrawable.start();
 
+
+
+
         loadImage();
+
+
 
 //        text.setText(i + "/" + count);
 ////        pages = result.getData().get();
@@ -98,7 +108,7 @@ public class SubNewspaperActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         Glide.with(this)
-                .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + i + ".jpg" + "?sz=half")
+                .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + i + ".jpg" + "?sz=full")
 //                    .placeholder(R.drawable.placeholder_image) // Placeholder resource while the image is loading
 //                    .error(R.drawable.error_image) // Error resource if the image fails to load
                 .listener(new RequestListener<Drawable>() {
@@ -111,15 +121,90 @@ public class SubNewspaperActivity extends AppCompatActivity {
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE); // Hide progress bar when image loading is complete
+
+
+                        if (showed < count) {
+
+
+
+                            if (i == 1) {
+                                Glide.with(SubNewspaperActivity.this)
+                                    .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (i + 1) + ".jpg" + "?sz=full")
+                                    .preload();
+
+                                Glide.with(SubNewspaperActivity.this)
+                                    .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (i + 2) + ".jpg" + "?sz=full")
+                                    .preload();
+
+                                System.out.println("Ridvan loaded: " + (i + 1));
+                                System.out.println("Ridvan loaded: " + (i + 2));
+                            }
+
+
+                            if(showed + 3 <= count)
+                                Glide.with(SubNewspaperActivity.this)
+                                    .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 3) + ".jpg" + "?sz=full")
+                                    .preload();
+
+                            if(showed + 4 <= count)
+                                Glide.with(SubNewspaperActivity.this)
+                                    .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 4) + ".jpg" + "?sz=full")
+                                    .preload();
+
+
+                            if(showed + 5 <= count)
+                                Glide.with(SubNewspaperActivity.this)
+                                    .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 5) + ".jpg" + "?sz=full")
+                                    .preload();
+
+
+//                            System.out.println("Ridvan loaded: " + (i + 1));
+                            if(showed + 3 <= count)
+                                System.out.println("Ridvan loaded: " + (showed + 3));
+                            if(showed + 4 <= count)
+                                System.out.println("Ridvan loaded: " + (showed + 4));
+                            if(showed + 5 <= count)
+                                System.out.println("Ridvan loaded: " + (showed + 5));
+//                            System.out.println("Ridvan loaded: ");
+
+
+
+                            showed = showed + 3;
+
+
+                        }
+
+
+
+
+
+
                         return false;
                     }
                 })
-                .into(zoomageView);
+                .into(zoomClass);
 
 
 
         text.setText(i + "/" + count);
 
 
+    }
+
+    @Override
+    public void onSwipeRight() {
+        if (i < count) {
+            i++;
+        }
+        loadImage();
+
+    }
+
+    @Override
+    public void onSwipeLeft() {
+        if (i > 1) {
+            i--;
+            loadImage();
+        }
     }
 }

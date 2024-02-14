@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     int page = 0;
     private final int delay = 2000; //milliseconds
 
+    private int newListIndex = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,13 +81,12 @@ public class MainActivity extends AppCompatActivity {
 
         CircleIndicator indicator = findViewById(R.id.indicator);
 
-        int[] images = {
-                R.drawable.test6,
-                R.drawable.test6,
-                R.drawable.test6
-        };
+        List<String> imageUrls = new ArrayList<>();
+        imageUrls.add("https://app.medyatakip.com/assets/slide/slider1.png");
+        imageUrls.add("https://app.medyatakip.com/assets/slide/slider2.png");
 
-        mViewPagerAdapter = new ViewPagerAdapter(getApplication(), images);
+        mViewPagerAdapter = new ViewPagerAdapter(getApplication(), imageUrls);
+
         mViewPager.setAdapter(mViewPagerAdapter);
         indicator.setViewPager(mViewPager);
 
@@ -177,15 +178,17 @@ public class MainActivity extends AppCompatActivity {
         // Notify the adapter that data has changed
         adapter.notifyDataSetChanged();
 
-        menuList(itemData, true);
+        newListIndex = 0;
 
+        menuList(itemData, true);
+        internet(itemData, true);
+        visualMedia(itemData, true);
 
 
     }
 
 
     private void getMediaAgenda(int position) {
-
 
         MainActivityModel itemData = items.get(position);
 
@@ -208,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 true,
                 true,
-                "2024-01-25"
+                MyUtils.getCurrentDate()
         );
 
         call.enqueue(new Callback<MediaAgendaResponse>() {
@@ -462,6 +465,7 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 "National",
                 "Magazine",
+                MyUtils.getFirstDateOfMonth(),
                 MyUtils.getCurrentDate()
         );
 
@@ -486,7 +490,6 @@ public class MainActivity extends AppCompatActivity {
 
                     MagazineFullPagesResponse result = response.body();
 
-                    Toast.makeText(MainActivity.this, response.body().getData().size() + "", Toast.LENGTH_SHORT).show();
 
                     DataHolder.getInstance().setMagazineFullPagesModel(result);
 
@@ -636,13 +639,17 @@ public class MainActivity extends AppCompatActivity {
 
                 Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
 
-//                if (!newsList) {
+                if (!newsList) {
                     // Show progress bar for the clicked item
                     itemData.setProgressBarVisible(false);
 
                     // Notify the adapter that data has changed
                     adapter.notifyDataSetChanged();
-//                }
+                }
+
+                else {
+                    newListIndex++;
+                }
 
                 if (response.isSuccessful()) {
 
@@ -656,9 +663,21 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                     else {
-                        Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                        startActivity(intent);
+
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            // Show progress bar for the clicked item
+                            itemData.setProgressBarVisible(false);
+
+                            // Notify the adapter that data has changed
+                            adapter.notifyDataSetChanged();
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            startActivity(intent);
+                        }
+
                     }
 
 
@@ -738,6 +757,9 @@ public class MainActivity extends AppCompatActivity {
                     // Notify the adapter that data has changed
                     adapter.notifyDataSetChanged();
                 }
+                else {
+                    newListIndex++;
+                }
 
 
 
@@ -756,7 +778,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else {
 
-                        visualMedia(itemData, true);
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            // Show progress bar for the clicked item
+                            itemData.setProgressBarVisible(false);
+
+                            // Notify the adapter that data has changed
+                            adapter.notifyDataSetChanged();
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            startActivity(intent);
+                        }
+
 
                     }
 
@@ -839,6 +874,10 @@ public class MainActivity extends AppCompatActivity {
                     // Notify the adapter that data has changed
                     adapter.notifyDataSetChanged();
                 }
+                else {
+                    newListIndex++;
+                }
+
 
 
 
@@ -856,8 +895,19 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                     else {
+                        if (newListIndex == 3) {
 
-                        internet(itemData, true);
+                            newListIndex = 0;
+
+                            // Show progress bar for the clicked item
+                            itemData.setProgressBarVisible(false);
+
+                            // Notify the adapter that data has changed
+                            adapter.notifyDataSetChanged();
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            startActivity(intent);
+                        }
 
                     }
 

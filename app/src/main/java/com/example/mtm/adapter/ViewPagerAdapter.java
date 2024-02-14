@@ -7,97 +7,58 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
-
+import com.bumptech.glide.Glide;
 import com.example.mtm.R;
-
+import java.util.List;
 import java.util.Objects;
 
 public class ViewPagerAdapter extends PagerAdapter {
 
-    // Context object
-    Context context;
+    private Context context;
+    private List<String> imageUrls;
 
-    // Array of images
-    int[] images;
-    String[] texts;
-
-    // Layout Inflater
-    LayoutInflater mLayoutInflater;
-
-
-    // Viewpager Constructor
-    public ViewPagerAdapter(Context context, int[] images, String[] texts) {
+    public ViewPagerAdapter(Context context, List<String> imageUrls) {
         this.context = context;
-        this.images = images;
-        this.texts = texts;
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.imageUrls = imageUrls;
     }
-    // Viewpager Constructor
-    public ViewPagerAdapter(Context context, int[] images) {
-        this.context = context;
-        this.images = images;
-//        this.images2 = images2;
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
 
     @Override
     public int getCount() {
-        // return the number of images
-        return images.length;
+        return imageUrls.size();
     }
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == ((LinearLayout) object);
+        return view == object;
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-        // inflating the item.xml
-        View itemView = mLayoutInflater.inflate(R.layout.item_slide, container, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.item_slide, container, false);
+        ImageView imageView = itemView.findViewById(R.id.imageViewMain);
 
-        // referencing the image view from the item.xml file
-        ImageView imageView = (ImageView) itemView.findViewById(R.id.imageViewMain);
-        ImageView imageView2 = (ImageView) itemView.findViewById(R.id.imageViewMain2);
-   //     TextView textView = (TextView) itemView.findViewById(R.id.textView25);
+        // Load image using Glide from the URL
+        Glide.with(context)
+                .load(imageUrls.get(position))
+                .into(imageView);
 
-        // setting the image in the imageView
-        imageView.setImageResource(images[position]);
-//        imageView2.setImageResource(images2[position]);
-     //   textView.setText(texts[position]);
-        // Adding the View
-        Objects.requireNonNull(container).addView(itemView);
+        container.addView(itemView);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Toast.makeText(context, "position: " + position, Toast.LENGTH_SHORT).show();
-
-
-
-
-
-
             }
         });
-
-
-
-
 
         return itemView;
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-
-        container.removeView((LinearLayout) object);
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        container.removeView((View) object);
     }
 }

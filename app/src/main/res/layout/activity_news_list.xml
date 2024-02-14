@@ -30,8 +30,9 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="1"
-            android:textSize="20sp"
-            android:textColor="#4E4B66"
+            android:textSize="23sp"
+            android:textColor="@color/color1"
+            android:textStyle="bold"
             android:text="Haber Listesi"/>
 
         <androidx.cardview.widget.CardView
@@ -59,41 +60,122 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/menuListTextView"
-            android:paddingVertical="10dp"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/menuListConstraintLayout"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:textSize="20sp"
-            android:textColor="#4E4B66"
-            android:text="Basın"/>
+            android:orientation="vertical"
+            android:padding="6dp">
 
 
-        <TextView
-            android:id="@+id/internetTextView"
-            android:layout_marginHorizontal="10dp"
-            android:paddingVertical="10dp"
+            <TextView
+                android:id="@+id/menuListTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Basın"
+                android:textColor="@color/black"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/menuListView"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="#D88030"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/menuListTextView"
+                app:layout_constraintEnd_toEndOf="@+id/menuListTextView"
+                app:layout_constraintStart_toStartOf="@+id/menuListTextView"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/internetConstraintLayout"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:textSize="20sp"
-            android:textColor="#4E4B66"
-            android:text="İnternet"/>
+            android:orientation="vertical"
+            android:padding="6dp">
 
 
-        <TextView
-            android:id="@+id/tvTextView"
-            android:paddingVertical="10dp"
+            <TextView
+                android:id="@+id/internetTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="İnternet"
+                android:textColor="@color/color1"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/internetView"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="#D88030"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/internetTextView"
+                app:layout_constraintEnd_toEndOf="@+id/internetTextView"
+                app:layout_constraintStart_toStartOf="@+id/internetTextView"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tvConstraintLayout"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:textSize="20sp"
-            android:textColor="#4E4B66"
-            android:text="TV"/>
+            android:orientation="vertical"
+            android:padding="6dp">
+
+
+            <TextView
+                android:id="@+id/tvTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="TV+"
+                android:textColor="@color/color1"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/tvView"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="#D88030"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/tvTextView"
+                app:layout_constraintEnd_toEndOf="@+id/tvTextView"
+                app:layout_constraintStart_toStartOf="@+id/tvTextView"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

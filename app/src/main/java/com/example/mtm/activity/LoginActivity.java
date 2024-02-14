@@ -27,7 +27,9 @@ import com.example.mtm.util.ZoomClass;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -73,9 +75,11 @@ public class LoginActivity extends AppCompatActivity {
 
         handler = new Handler(Looper.getMainLooper());
 
-        int[] images = { R.drawable.test1, R.drawable.test1, R.drawable.test1};
+        List<String> imageUrls = new ArrayList<>();
+        imageUrls.add("https://app.medyatakip.com/assets/slide/slider1.png");
+        imageUrls.add("https://app.medyatakip.com/assets/slide/slider2.png");
 
-        mViewPagerAdapter = new ViewPagerAdapter(getApplication(), images);
+        mViewPagerAdapter = new ViewPagerAdapter(getApplication(), imageUrls);
         mViewPager.setAdapter(mViewPagerAdapter);
         indicator.setViewPager(mViewPager);
     }

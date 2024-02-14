@@ -28,6 +28,11 @@ public interface ApiService {
     @POST("auth/realms/medyatakip.com/protocol/openid-connect/token")
     Call<TokenResponse> getToken(@FieldMap Map<String, String> fields);
 
+    @FormUrlEncoded
+    @POST("auth/realms/medyatakip.com/protocol/openid-connect/logout")
+    Call<Void> logout( @Header("Authorization") String authToken, @FieldMap Map<String, String> fields);
+
+
     @GET("api/data/agenda/list")
     Call<MediaAgendaResponse> getMediaAgenda(
             @Header("Authorization") String authToken,
@@ -73,7 +78,8 @@ public interface ApiService {
             @Query("addPages") boolean addPages,
             @Query("distribution") String distribution,
             @Query("mediaType") String mediaType,
-            @Query("dateStart") String date
+            @Query("dateStart") String date,
+            @Query("dateEnd") String dateEnd
     );
 
     @GET("api/data/pm/columnists")

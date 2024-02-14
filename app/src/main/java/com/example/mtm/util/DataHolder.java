@@ -110,4 +110,17 @@ public class DataHolder {
     public void setMenuListResponse(MenuListResponse menuListResponse) {
         this.menuListResponse = menuListResponse;
     }
+
+    public void clearDataHolderClass() {
+        this.mediaAgendaModel = null;
+        this.newspaperFirstPagesModel = null;
+        this.newsPaperFullPagesModel = null;
+        this.magazineFullPagesModel = null;
+        this.columnistsModel = null;
+        this.visualMediaModel = null;
+        this.subMenuVisualMediaModel = null;
+        this.internetModel = null;
+        this.InternetSubModel = null;
+        this.menuListResponse = null;
+    }
 }
