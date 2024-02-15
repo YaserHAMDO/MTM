@@ -39,7 +39,9 @@ public class MediaReportActivity extends AppCompatActivity {
 
         // now define the properties of the
         // materialDateBuilder
-        materialDateBuilder.setTitleText("SELECT A DATE");
+        materialDateBuilder.setTitleText("Tarih Seç");
+// Set custom style to show the dialog in the middle of the screen
+        materialDateBuilder.setTheme(R.style.MaterialDatePicker);
 
         // now create the instance of the material date
         // picker

@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.mtm.R;
 import com.example.mtm.adapter.ViewPagerAdapter;
+import com.example.mtm.model.SliderModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.TokenResponse;
@@ -75,11 +76,12 @@ public class LoginActivity extends AppCompatActivity {
 
         handler = new Handler(Looper.getMainLooper());
 
-        List<String> imageUrls = new ArrayList<>();
-        imageUrls.add("https://app.medyatakip.com/assets/slide/slider1.png");
-        imageUrls.add("https://app.medyatakip.com/assets/slide/slider2.png");
+        List<SliderModel> sliderModels = new ArrayList<>();
+        sliderModels.add(new SliderModel("https://app.medyatakip.com/assets/slide/slider1.png" , "https://www.medyatakip.com/mLink.php?p=1"));
+        sliderModels.add(new SliderModel("https://app.medyatakip.com/assets/slide/slider2.png" , "https://www.medyatakip.com/mLink.php?p=2"));
 
-        mViewPagerAdapter = new ViewPagerAdapter(getApplication(), imageUrls);
+
+        mViewPagerAdapter = new ViewPagerAdapter(this, sliderModels);
         mViewPager.setAdapter(mViewPagerAdapter);
         indicator.setViewPager(mViewPager);
     }

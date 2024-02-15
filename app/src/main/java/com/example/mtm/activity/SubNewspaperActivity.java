@@ -86,20 +86,44 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
 
 
         leftArrowImageView.setOnClickListener(view -> {
-            if (i > 1) {
-                i--;
-                loadImage();
-            }
-
-
+            selectLeft();
         });
 
         rightArrowImageView.setOnClickListener(view -> {
-            if (i < count) {
-                i++;
-            }
-            loadImage();
+            selectRight();
+
+
         });
+
+    }
+
+    private void selectLeft() {
+        if (i > 1) {
+            i--;
+            loadImage();
+        }
+        else {
+            text.animate().
+//                        alpha(0.7f).
+        scaleX(1.2f).
+                    scaleY(1.2f).
+                    setDuration(100).withEndAction(() -> text.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(100));
+        }
+    }
+
+    private void selectRight() {
+        if (i < count) {
+            i++;
+            loadImage();
+        }
+        else {
+            text.animate().
+//                        alpha(0.7f).
+        scaleX(1.2f).
+                    scaleY(1.2f).
+                    setDuration(100).withEndAction(() -> text.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(100));
+        }
+
 
     }
 
@@ -122,10 +146,7 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE); // Hide progress bar when image loading is complete
 
-
                         if (showed < count) {
-
-
 
                             if (i == 1) {
                                 Glide.with(SubNewspaperActivity.this)
@@ -135,49 +156,31 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
                                 Glide.with(SubNewspaperActivity.this)
                                     .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (i + 2) + ".jpg" + "?sz=full")
                                     .preload();
+                            }
 
-                                System.out.println("Ridvan loaded: " + (i + 1));
-                                System.out.println("Ridvan loaded: " + (i + 2));
+                            if(showed + 3 <= count) {
+                                Glide.with(SubNewspaperActivity.this)
+                                        .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 3) + ".jpg" + "?sz=full")
+                                        .preload();
+                            }
+
+                            if(showed + 4 <= count) {
+                                Glide.with(SubNewspaperActivity.this)
+                                        .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 4) + ".jpg" + "?sz=full")
+                                        .preload();
                             }
 
 
-                            if(showed + 3 <= count)
+                            if(showed + 5 <= count) {
                                 Glide.with(SubNewspaperActivity.this)
-                                    .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 3) + ".jpg" + "?sz=full")
-                                    .preload();
+                                        .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 5) + ".jpg" + "?sz=full")
+                                        .preload();
 
-                            if(showed + 4 <= count)
-                                Glide.with(SubNewspaperActivity.this)
-                                    .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 4) + ".jpg" + "?sz=full")
-                                    .preload();
-
-
-                            if(showed + 5 <= count)
-                                Glide.with(SubNewspaperActivity.this)
-                                    .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 5) + ".jpg" + "?sz=full")
-                                    .preload();
-
-
-//                            System.out.println("Ridvan loaded: " + (i + 1));
-                            if(showed + 3 <= count)
-                                System.out.println("Ridvan loaded: " + (showed + 3));
-                            if(showed + 4 <= count)
-                                System.out.println("Ridvan loaded: " + (showed + 4));
-                            if(showed + 5 <= count)
-                                System.out.println("Ridvan loaded: " + (showed + 5));
-//                            System.out.println("Ridvan loaded: ");
-
-
+                            }
 
                             showed = showed + 3;
 
-
                         }
-
-
-
-
-
 
                         return false;
                     }
@@ -193,18 +196,11 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
 
     @Override
     public void onSwipeRight() {
-        if (i < count) {
-            i++;
-        }
-        loadImage();
-
+        selectRight();
     }
 
     @Override
     public void onSwipeLeft() {
-        if (i > 1) {
-            i--;
-            loadImage();
-        }
+      selectLeft();
     }
 }

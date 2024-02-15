@@ -11,22 +11,25 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
+import com.example.mtm.model.SliderModel;
+import com.example.mtm.util.MyUtils;
+
 import java.util.List;
 import java.util.Objects;
 
 public class ViewPagerAdapter extends PagerAdapter {
 
     private Context context;
-    private List<String> imageUrls;
+    private List<SliderModel> sliderModels;
 
-    public ViewPagerAdapter(Context context, List<String> imageUrls) {
+    public ViewPagerAdapter(Context context, List<SliderModel> imageUrls) {
         this.context = context;
-        this.imageUrls = imageUrls;
+        this.sliderModels = imageUrls;
     }
 
     @Override
     public int getCount() {
-        return imageUrls.size();
+        return sliderModels.size();
     }
 
     @Override
@@ -42,16 +45,13 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         // Load image using Glide from the URL
         Glide.with(context)
-                .load(imageUrls.get(position))
+                .load(sliderModels.get(position).getImageUrl())
                 .into(imageView);
 
         container.addView(itemView);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "position: " + position, Toast.LENGTH_SHORT).show();
-            }
+        itemView.setOnClickListener(v -> {
+            MyUtils.openLink(sliderModels.get(position).getLink(), context);
         });
 
         return itemView;
@@ -61,4 +61,6 @@ public class ViewPagerAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
+
+
 }

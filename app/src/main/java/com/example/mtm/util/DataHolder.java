@@ -9,6 +9,7 @@ import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
+import com.example.mtm.response.SummaryListResponse;
 import com.example.mtm.response.VisualMediaResponse;
 
 public class DataHolder {
@@ -24,6 +25,7 @@ public class DataHolder {
     private InternetResponse internetModel;
     private InternetSubResponse InternetSubModel;
     private MenuListResponse menuListResponse;
+    private SummaryListResponse summaryListResponse;
 
     private DataHolder() {}
 
@@ -111,6 +113,14 @@ public class DataHolder {
         this.menuListResponse = menuListResponse;
     }
 
+    public SummaryListResponse getSummaryListResponse() {
+        return summaryListResponse;
+    }
+
+    public void setSummaryListResponse(SummaryListResponse summaryListResponse) {
+        this.summaryListResponse = summaryListResponse;
+    }
+
     public void clearDataHolderClass() {
         this.mediaAgendaModel = null;
         this.newspaperFirstPagesModel = null;
@@ -122,5 +132,6 @@ public class DataHolder {
         this.internetModel = null;
         this.InternetSubModel = null;
         this.menuListResponse = null;
+        this.summaryListResponse = null;
     }
 }

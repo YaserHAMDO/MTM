@@ -8,7 +8,9 @@ import com.example.mtm.response.MediaAgendaResponse;
 import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
+import com.example.mtm.response.RefreshTokenResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
+import com.example.mtm.response.SummaryListResponse;
 import com.example.mtm.response.TokenResponse;
 import com.example.mtm.response.VisualMediaResponse;
 
@@ -29,9 +31,29 @@ public interface ApiService {
     Call<TokenResponse> getToken(@FieldMap Map<String, String> fields);
 
     @FormUrlEncoded
+    @POST("auth/realms/medyatakip.com/protocol/openid-connect/token")
+    Call<RefreshTokenResponse> refreshToken(@Header("Authorization") String authToken, @FieldMap Map<String, String> fields);
+
+    @FormUrlEncoded
     @POST("auth/realms/medyatakip.com/protocol/openid-connect/logout")
     Call<Void> logout( @Header("Authorization") String authToken, @FieldMap Map<String, String> fields);
 
+
+    @GET("api/data/summary/list")
+    Call<SummaryListResponse> summaryList(
+            @Header("Authorization") String authToken,
+            @Query("customerId") int customerId,
+            @Query("dateEnd") String dateEnd,
+            @Query("dateStart") String dateStart,
+            @Query("isAddClip") boolean isAddClip,
+            @Query("isAddContent") boolean isAddContent,
+            @Query("isAddDocs") boolean isAddDocs,
+            @Query("isAddDocsBaseDate") boolean isAddDocsBaseDate,
+            @Query("isAddDsMenu") boolean isAddDsMenu,
+            @Query("isAddDsMenuSplitter") boolean isAddDsMenuSplitter,
+            @Query("isAddTag") boolean isAddTag,
+            @Query("isAddTitle") boolean isAddTitle
+    );
 
     @GET("api/data/agenda/list")
     Call<MediaAgendaResponse> getMediaAgenda(
