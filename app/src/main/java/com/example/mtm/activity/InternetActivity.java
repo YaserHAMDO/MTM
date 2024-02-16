@@ -1,12 +1,10 @@
 package com.example.mtm.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
@@ -18,7 +16,6 @@ import com.example.mtm.adapter.InternetAdapter;
 import com.example.mtm.adapter.InternetSubListAdapter;
 import com.example.mtm.model.InternetModel;
 import com.example.mtm.model.InternetSubListModel;
-import com.example.mtm.model.MainActivityModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.InternetResponse;
@@ -29,7 +26,6 @@ import com.example.mtm.util.Logger;
 import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.PreferenceManager;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,15 +47,40 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
     private MaterialDatePicker materialDatePicker;
 
+    private String startDate, endDate;
+
+    private InternetAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_internet);
 
         init();
+        initValues();
         setItemClickListeners();
         setData();
         confDate();
+    }
+
+    private void init() {
+        backIconImageView = findViewById(R.id.backIconImageView);
+        filterImageView = findViewById(R.id.filterImageView);
+        recyclerView = findViewById(R.id.recyclerView);
+        progressBar = findViewById(R.id.progressBar);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+    }
+
+    private void initValues() {
+        startDate = MyUtils.getPreviousDate(1);
+        endDate = MyUtils.getCurrentDate();
+
+    }
+
+    private void setItemClickListeners() {
+        backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+        filterImageView.setOnClickListener(view -> materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER"));
+
     }
 
     private void confDate() {
@@ -96,25 +117,16 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 //                        Toast.makeText(this, "Start Date: " + formattedStartDate + "\nEnd Date: " + formattedEndDate, Toast.LENGTH_SHORT).show();
                         recyclerView.setAdapter(null);
                         progressBar.setVisibility(View.VISIBLE);
+                        this.startDate = formattedStartDate;
+                        this.endDate = formattedEndDate;
                         internet(formattedStartDate, formattedEndDate);
                     }
                 });
     }
 
-    private void init() {
-        backIconImageView = findViewById(R.id.backIconImageView);
-        filterImageView = findViewById(R.id.filterImageView);
-        recyclerView = findViewById(R.id.recyclerView);
-        progressBar = findViewById(R.id.progressBar);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-    }
 
-    private void setItemClickListeners() {
-        backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
-        filterImageView.setOnClickListener(view -> materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER"));
 
-    }
 
     private void setData() {
 
@@ -124,31 +136,36 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         List<InternetSubListModel> items2;
 
 
-        for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
-            items2 = new ArrayList<>();
+        if(result.getData().getMenu().getMenu() != null) {
+            for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
+                items2 = new ArrayList<>();
 
-            for (int j = 0; j < result.getData().getMenu().getMenu().get(i).getSubMenus().size(); j++) {
-                items2.add(new InternetSubListModel(
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getName(),
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getDocCount(),
-                        result.getData().getMenu().getMenu().get(i).getId() + "",
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getId() + ""
+                for (int j = 0; j < result.getData().getMenu().getMenu().get(i).getSubMenus().size(); j++) {
+                    items2.add(new InternetSubListModel(
+                            result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getName(),
+                            result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getDocCount(),
+                            result.getData().getMenu().getMenu().get(i).getId() + "",
+                            result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getId() + ""
+                    ));
+                }
+
+                items.add(new InternetModel(
+                        result.getData().getMenu().getMenu().get(i).getName(),
+                        result.getData().getMenu().getMenu().get(i).getDocCount(),
+                        items2
                 ));
+
             }
-
-            items.add(new InternetModel(
-                    result.getData().getMenu().getMenu().get(i).getName(),
-                    result.getData().getMenu().getMenu().get(i).getDocCount(),
-                    items2
-            ));
-
         }
 
-        recyclerView.setAdapter(new InternetAdapter(this, items, this));
+
+        adapter = new InternetAdapter(this, items, this) ;
+
+        recyclerView.setAdapter(adapter);
 
     }
 
-    private void SubInternet(String menuId, String subMenuId) {
+    private void SubInternet(String menuId, String subMenuId, String startDate, String endDate) {
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -157,7 +174,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         Call<InternetSubResponse> call = apiService.subInternet(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10000,
+                5,
                 22632,
                 true,
                 true,
@@ -168,8 +185,8 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 true,
                 true,
                 true,
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate(),
+                startDate,
+                endDate,
                 "07:00:00",
                 "23:59:00",
 //                "NEWS",
@@ -194,6 +211,11 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                     DataHolder.getInstance().setInternetSubModel(result);
 
                     Intent intent = new Intent(InternetActivity.this, SubInternetActivity.class);
+
+                    intent.putExtra("menuId", menuId);
+                    intent.putExtra("subMenuId", subMenuId);
+                    intent.putExtra("startDate", startDate);
+                    intent.putExtra("endDate", endDate);
 
                     startActivity(intent);
 
@@ -223,7 +245,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         Call<InternetResponse> call = apiService.internet(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10000,
+                100000,
                 22632,
                 false,
                 false,
@@ -285,6 +307,6 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
     @Override
     public void onItemClickInternetSubList(String menuId, String subMenuId) {
-        SubInternet(menuId, subMenuId);
+        SubInternet(menuId, subMenuId, startDate, endDate);
     }
 }

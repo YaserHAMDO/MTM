@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,27 +39,27 @@ public class InternetSubListAdapter extends RecyclerView.Adapter<InternetSubList
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         InternetSubListModel itemData = mItems.get(position);
 
-
         holder.nameTextView.setText(itemData.getName());
-        holder.countTextView.setText(itemData.getCount() + "");
+        holder.countTextView.setText(String.valueOf(itemData.getCount()));
 
 
 
         holder.itemView.setOnClickListener(view -> {
-//            listener.onItemClick("39096", "113582");
             listener.onItemClickInternetSubList(itemData.getMenuId(), itemData.getSubMenuId());
+
+            holder.progressBar.setVisibility(View.VISIBLE);
+
+            new android.os.Handler().postDelayed(
+                    () -> holder.progressBar.setVisibility(View.GONE),
+                    1000
+            );
         });
 
         if (orange) {
             holder.view.setBackgroundResource(R.drawable.baseline_play_arrow_24_2);
-        }
-        else {
+        } else {
             holder.view.setBackgroundResource(R.drawable.baseline_play_arrow_24);
         }
-
-
-        // Set progress bar visibility
-//        holder.progressView.setVisibility(itemData.isProgressBarVisible() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -70,15 +71,18 @@ public class InternetSubListAdapter extends RecyclerView.Adapter<InternetSubList
         TextView nameTextView;
         TextView countTextView;
         View view;
+        ProgressBar progressBar;
 
         ViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.nameTextView);
             countTextView = itemView.findViewById(R.id.countTextView);
             view = itemView.findViewById(R.id.view);
+            progressBar = itemView.findViewById(R.id.progressBar);
 
         }
     }
+
 
 
     public interface OnItemClickListener {

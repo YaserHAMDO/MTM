@@ -39,20 +39,20 @@ public interface ApiService {
     Call<Void> logout( @Header("Authorization") String authToken, @FieldMap Map<String, String> fields);
 
 
-    @GET("api/data/summary/list")
+    @GET("api/data/email/list")
     Call<SummaryListResponse> summaryList(
             @Header("Authorization") String authToken,
             @Query("customerId") int customerId,
-            @Query("dateEnd") String dateEnd,
-            @Query("dateStart") String dateStart,
-            @Query("isAddClip") boolean isAddClip,
-            @Query("isAddContent") boolean isAddContent,
-            @Query("isAddDocs") boolean isAddDocs,
-            @Query("isAddDocsBaseDate") boolean isAddDocsBaseDate,
-            @Query("isAddDsMenu") boolean isAddDsMenu,
-            @Query("isAddDsMenuSplitter") boolean isAddDsMenuSplitter,
-            @Query("isAddTag") boolean isAddTag,
-            @Query("isAddTitle") boolean isAddTitle
+//            @Query("dateEnd") String dateEnd,
+            @Query("dateStart") String dateStart
+//            @Query("isAddClip") boolean isAddClip,
+//            @Query("isAddContent") boolean isAddContent,
+//            @Query("isAddDocs") boolean isAddDocs,
+//            @Query("isAddDocsBaseDate") boolean isAddDocsBaseDate,
+//            @Query("isAddDsMenu") boolean isAddDsMenu,
+//            @Query("isAddDsMenuSplitter") boolean isAddDsMenuSplitter,
+//            @Query("isAddTag") boolean isAddTag,
+//            @Query("isAddTitle") boolean isAddTitle
     );
 
     @GET("api/data/agenda/list")

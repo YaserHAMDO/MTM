@@ -197,16 +197,16 @@ public class MainActivity extends AppCompatActivity {
         Call<SummaryListResponse> call = apiService.summaryList(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 22632,
-                "2024-02-01",
-                "2024-02-01",
-                true,
-                true,
-                true,
-                true,
-                true,
-                true,
-                true,
-                true
+//                "2024-02-01",
+                MyUtils.getCurrentDate()
+//                true,
+//                true,
+//                true,
+//                true,
+//                true,
+//                true,
+//                true,
+//                true
         );
 
         call.enqueue(new Callback<SummaryListResponse>() {
@@ -602,7 +602,7 @@ public class MainActivity extends AppCompatActivity {
         Call<InternetResponse> call = apiService.internet(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10000,
+                100000,
                 22632,
                 false,
                 false,

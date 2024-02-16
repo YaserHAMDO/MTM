@@ -20,9 +20,11 @@ import java.util.List;
 
 public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.ViewHolder> {
 
+    private List<SubInternetModel> items;
     private Context mContext;
     private List<SubInternetModel> mItems;
     private final OnItemClickListener listener;
+
     public SubInternetAdapter(Context context, List<SubInternetModel> items, OnItemClickListener listener) {
         mContext = context;
         mItems = items;
@@ -46,22 +48,14 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
         holder.mediaNameTextView.setText(itemData.getMediaName());
         holder.journalistNameTextView.setText(itemData.getJournalistName());
         holder.dateTextView.setText(itemData.getDate());
-//        holder.titleTextView.setText(itemData.getTitle());
-
 
         holder.itemView.setOnClickListener(view -> {
-//            listener.onItemClick(itemData.getShareLink());
-            MyUtils.openLink(itemData.getShareLink(), mContext);
+            listener.onItemClick(itemData.getShareLink());
         });
 
         holder.shareCardView.setOnClickListener(view -> {
-
             MyUtils.shareLink(itemData.getShareLink(), mContext);
-
         });
-
-        // Set progress bar visibility
-//        holder.progressView.setVisibility(itemData.isProgressBarVisible() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -73,10 +67,8 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
         ImageView journalistImageView;
         TextView mediaNameTextView;
         TextView journalistNameTextView;
-//        TextView titleTextView;
         TextView dateTextView;
         CardView shareCardView;
-
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -84,14 +76,18 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
             dateTextView = itemView.findViewById(R.id.dateTextView);
             mediaNameTextView = itemView.findViewById(R.id.mediaNameTextView);
             journalistNameTextView = itemView.findViewById(R.id.journalistNameTextView);
-
-//            titleTextView = itemView.findViewById(R.id.titleTextView);
             shareCardView = itemView.findViewById(R.id.shareCardView);
         }
     }
 
-
     public interface OnItemClickListener {
         void onItemClick(String mediaPath);
+    }
+
+    // Method to add more items to the existing list
+    public void addItems(List<SubInternetModel> newItems) {
+        int startPosition = mItems.size(); // Get the current size of the list
+        mItems.addAll(newItems); // Add new items to the existing list
+        notifyItemRangeInserted(startPosition, newItems.size()); // Notify adapter about the newly added items
     }
 }
