@@ -45,7 +45,7 @@ public class InternetSubListAdapter extends RecyclerView.Adapter<InternetSubList
 
 
         holder.itemView.setOnClickListener(view -> {
-            listener.onItemClickInternetSubList(itemData.getMenuId(), itemData.getSubMenuId());
+            listener.onItemClickInternetSubList(itemData.getMenuId(), itemData.getSubMenuId(), itemData.getCount());
 
             holder.progressBar.setVisibility(View.VISIBLE);
 
@@ -86,6 +86,6 @@ public class InternetSubListAdapter extends RecyclerView.Adapter<InternetSubList
 
 
     public interface OnItemClickListener {
-        void onItemClickInternetSubList(String menuId, String subMenuId);
+        void onItemClickInternetSubList(String menuId, String subMenuId, int count);
     }
 }

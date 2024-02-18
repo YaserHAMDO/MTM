@@ -165,7 +165,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
     }
 
-    private void SubInternet(String menuId, String subMenuId, String startDate, String endDate) {
+    private void SubInternet(String menuId, String subMenuId, String startDate, String endDate, int count) {
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -174,7 +174,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         Call<InternetSubResponse> call = apiService.subInternet(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                5,
+                10,
                 22632,
                 true,
                 true,
@@ -216,6 +216,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("subMenuId", subMenuId);
                     intent.putExtra("startDate", startDate);
                     intent.putExtra("endDate", endDate);
+                    intent.putExtra("count", count);
 
                     startActivity(intent);
 
@@ -306,7 +307,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
     }
 
     @Override
-    public void onItemClickInternetSubList(String menuId, String subMenuId) {
-        SubInternet(menuId, subMenuId, startDate, endDate);
+    public void onItemClickInternetSubList(String menuId, String subMenuId, int count) {
+        SubInternet(menuId, subMenuId, startDate, endDate, count);
     }
 }

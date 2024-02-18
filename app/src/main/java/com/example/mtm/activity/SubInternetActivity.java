@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -42,6 +45,14 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     List<SubInternetModel> items;
 
     private SubInternetAdapter adapter;
+    private FrameLayout frameLayout;
+    private Button button;
+    private ProgressBar progressBar;
+
+    private String menuId, subMenuId, startDate, endDate;
+    private int count;
+
+    int x = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,33 +64,44 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         setData();
 
 
-        Intent intent = getIntent();
-        // Get the value passed from FirstActivity
-        String menuId = intent.getStringExtra("menuId");
-        String subMenuId = intent.getStringExtra("subMenuId");
-        String startDate = intent.getStringExtra("startDate");
-        String endDate = intent.getStringExtra("endDate");
 
 
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(view -> {
-            // Increment page number before making the API call
-            pageNumber++;
-            SubInternet(menuId, subMenuId, startDate, endDate);
-        });
+
     }
 
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
         recyclerView = findViewById(R.id.recyclerView);
         webView = findViewById(R.id.webView);
+        frameLayout = findViewById(R.id.frameLayout);
+        button = findViewById(R.id.button);
+        progressBar = findViewById(R.id.progressBar);
+
         items = new ArrayList<>();
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
+        Intent intent = getIntent();
+        // Get the value passed from FirstActivity
+        menuId = intent.getStringExtra("menuId");
+        subMenuId = intent.getStringExtra("subMenuId");
+        startDate = intent.getStringExtra("startDate");
+        endDate = intent.getStringExtra("endDate");
+        count = intent.getIntExtra("count", 0);
     }
 
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+
+
+        button.setOnClickListener(view -> {
+            // Increment page number before making the API call
+
+            button.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            pageNumber++;
+            SubInternet(menuId, subMenuId, startDate, endDate);
+        });
     }
 
 
@@ -100,14 +122,34 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         // If pageNumber is 0, it means it's the first page, so set adapter
         if (pageNumber == 0) {
-            adapter = new SubInternetAdapter(this, items, this);
+            x = items.size();
+            adapter = new SubInternetAdapter(this, items, this, x == count);
             recyclerView.setAdapter(adapter);
         } else {
             // If it's not the first page, append data to the existing adapter
             // Assuming you have a method in your adapter to add more data
+
+            int y = x;
+            x = x + items.size();
+
+//            Toast.makeText(this,  x  + "\n" + y, Toast.LENGTH_SHORT).show();
+
+            if (x >= count) {
+                adapter.setAllList(true);}
+
             adapter.addItems(items);
-//            recyclerView.getAdapter().addItems(items);
+//            recyclerView.scrollToPosition(x - (items.size() - 3));
+
+
+            if (items.size() < 5) {
+                recyclerView.scrollToPosition(x - 1);
+            }
+            else {
+                recyclerView.scrollToPosition(y + 3);
+            }
+
         }
+        
     }
 
     private void SubInternet(String menuId, String subMenuId, String startDate, String endDate) {
@@ -150,9 +192,20 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             @Override
             public void onResponse(Call<InternetSubResponse> call, Response<InternetSubResponse> response) {
                 isLoading = false; // Reset loading flag
+
+                button.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+
+                adapter.getHolder().getFrameLayout().setVisibility(View.GONE);
+
+
+
                 if (response.isSuccessful()) {
                     InternetSubResponse result = response.body();
                     DataHolder.getInstance().setInternetSubModel(result);
+
+
+
                     setData();
                 } else {
                     // Handle unsuccessful response
@@ -162,6 +215,10 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             @Override
             public void onFailure(Call<InternetSubResponse> call, Throwable t) {
                 isLoading = false; // Reset loading flag
+
+                button.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+
                 Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 3, t.getMessage());
             }
         });
@@ -175,5 +232,15 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 //        Intent intent = new Intent(this, VideoActivity.class);
 //        intent.putExtra("videoUrl", mediaPath);
 //        startActivity(intent);
+    }
+
+    @Override
+    public void onShowMore() {
+        pageNumber++;
+        SubInternet(menuId, subMenuId, startDate, endDate);
+    }
+
+    public interface yaser {
+        void onShowMore();
     }
 }

@@ -1,10 +1,15 @@
 package com.example.mtm.adapter;
 
+import static com.example.mtm.activity.SubInternetActivity.*;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
+import com.example.mtm.activity.SubInternetActivity;
 import com.example.mtm.model.SubInternetModel;
 import com.example.mtm.util.MyUtils;
 
@@ -24,11 +30,15 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
     private Context mContext;
     private List<SubInternetModel> mItems;
     private final OnItemClickListener listener;
+    private boolean allList;
 
-    public SubInternetAdapter(Context context, List<SubInternetModel> items, OnItemClickListener listener) {
+    ViewHolder holder1;
+
+    public SubInternetAdapter(Context context, List<SubInternetModel> items, OnItemClickListener listener, boolean allList) {
         mContext = context;
         mItems = items;
         this.listener = listener;
+        this.allList = allList;
     }
 
     @NonNull
@@ -38,8 +48,17 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
         return new ViewHolder(view);
     }
 
+    public void setAllList(boolean allList) {
+        this.allList = allList;
+    }
+
+    public ViewHolder getHolder(){
+        return holder1;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder1 = holder;
         SubInternetModel itemData = mItems.get(position);
 
         // Load image using Glide
@@ -56,6 +75,27 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
         holder.shareCardView.setOnClickListener(view -> {
             MyUtils.shareLink(itemData.getShareLink(), mContext);
         });
+
+
+        if (allList) {
+            holder.frameLayout.setVisibility(View.GONE);
+        }
+        else {
+            if (position == mItems.size() - 1) {
+                holder.frameLayout.setVisibility(View.VISIBLE);
+            }
+            else {
+                holder.frameLayout.setVisibility(View.GONE);
+            }
+        }
+
+
+
+        holder.button.setOnClickListener(view -> {
+            holder.button.setVisibility(View.INVISIBLE);
+            holder.progressBar.setVisibility(View.VISIBLE);
+            listener.onShowMore();
+        });
     }
 
     @Override
@@ -63,12 +103,15 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
         return mItems.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+   public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView journalistImageView;
         TextView mediaNameTextView;
         TextView journalistNameTextView;
         TextView dateTextView;
         CardView shareCardView;
+        FrameLayout frameLayout;
+        Button button;
+        ProgressBar progressBar;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -77,11 +120,19 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
             mediaNameTextView = itemView.findViewById(R.id.mediaNameTextView);
             journalistNameTextView = itemView.findViewById(R.id.journalistNameTextView);
             shareCardView = itemView.findViewById(R.id.shareCardView);
+            frameLayout = itemView.findViewById(R.id.frameLayout);
+            button = itemView.findViewById(R.id.button);
+            progressBar = itemView.findViewById(R.id.progressBar);
+        }
+
+        public FrameLayout getFrameLayout() {
+            return frameLayout;
         }
     }
 
     public interface OnItemClickListener {
         void onItemClick(String mediaPath);
+        void onShowMore();
     }
 
     // Method to add more items to the existing list

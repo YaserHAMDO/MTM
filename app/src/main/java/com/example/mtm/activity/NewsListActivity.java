@@ -359,7 +359,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
     }
 
     @Override
-    public void onItemClickInternetSubList(String menuId, String subMenuId) {
+    public void onItemClickInternetSubList(String menuId, String subMenuId, int count) {
         SubInternet(menuId, subMenuId);
     }
 }

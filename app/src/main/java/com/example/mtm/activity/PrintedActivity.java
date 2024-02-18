@@ -74,7 +74,7 @@ public class PrintedActivity extends AppCompatActivity implements InternetSubLis
 
 
     @Override
-    public void onItemClickInternetSubList(String menuId, String subMenuId) {
+    public void onItemClickInternetSubList(String menuId, String subMenuId, int count) {
 
     }
 }
