@@ -335,7 +335,6 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
     private void SubMenuVisualMedia(String menuId, String subMenuId, String startDate, String endDate, int count) {
 
-        xxxxxxxx
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
