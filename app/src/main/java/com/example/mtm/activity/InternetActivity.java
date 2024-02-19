@@ -153,7 +153,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
 
 
-
+nnn
     private void setData() {
 
         InternetResponse result = DataHolder.getInstance().getInternetModel();
