@@ -304,6 +304,63 @@ public interface ApiService {
             @Query("addSplitter") boolean addSplitter,
             @Query("onlyColmnList") boolean onlyColmnList
     );
+    @GET("/api/data/pm/news-list")
+    Call<InternetResponse> menuList2(
+            @Header("Authorization") String authToken,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("customerId") int customerId,
+            @Query("addDocs") boolean addDocs,
+            @Query("addClipBaseData") boolean addClipBaseData,
+            @Query("addDsMenu") boolean addDsMenu,
+            @Query("addDsMenuSplitter") boolean addDsMenuSplitter,
+            @Query("addDsMenuCount") boolean addDsMenuCount,
+            @Query("addImageInfo") boolean addImageInfo,
+            @Query("cdateStart") String cdateStart,
+            @Query("cdateEnd") String cdateEnd,
+            @Query("ctimeStart") String ctimeStart,
+            @Query("ctimeEnd") String ctimeEnd,
+            @Query("ignoreType") String ignoreType,
+            @Query("groupByParent") boolean groupByParent,
+            @Query("addDataGroup") boolean addDataGroup,
+            @Query("addSplitter") boolean addSplitter,
+            @Query("onlyColmnList") boolean onlyColmnList
+    );
+
+    @GET("/api/data/pm/news-list")
+    Call<InternetSubResponse> subMenuList(
+            @Header("Authorization") String authToken,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("customerId") int customerId,
+            @Query("addDocs") boolean addDocs,
+            @Query("addClipBaseData") boolean addClipBaseData,
+            @Query("addDsMenu") boolean addDsMenu,
+            @Query("addDsMenuSplitter") boolean addDsMenuSplitter,
+            @Query("addDsMenuCount") boolean addDsMenuCount,
+            @Query("addCity") boolean addCity,
+            @Query("addContinues") boolean addContinues,
+            @Query("addImageInfo") boolean addImageInfo,
+            @Query("addHash") boolean addHash,
+            @Query("addMediaData") boolean addMediaData,
+            @Query("addMediaType") boolean addMediaType,
+            @Query("addTagMap") boolean addTagMap,
+            @Query("cdateStart") String cdateStart,
+            @Query("cdateEnd") String cdateEnd,
+            @Query("ctimeStart") String ctimeStart,
+            @Query("ctimeEnd") String ctimeEnd,
+            @Query("clipType") String clipType,
+            @Query("ignoreType") String ignoreType,
+            @Query("groupByParent") boolean groupByParent,
+            @Query("dsMenuId") String dsMenuId,
+            @Query("dsSubMenuIds") String dsSubMenuIds,
+            @Query("addDataGroup") boolean addDataGroup,
+            @Query("addSplitter") boolean addSplitter,
+            @Query("onlyColmnList") boolean onlyColmnList
+    );
+
+
+
 
 
 }

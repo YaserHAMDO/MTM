@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         writeCardView.setOnClickListener(view -> {
-            menuList2(false);
+            menuList3(false);
         });
 
         internetCardView.setOnClickListener(view -> {
@@ -1043,6 +1043,117 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MenuListResponse> call, Throwable t) {
+
+                if (!newsList) {
+                    writeImageView.setVisibility(View.VISIBLE);
+                    writeProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newsImageView.setVisibility(View.VISIBLE);
+                    newsProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                Logger.getInstance().logDebug(TAG, "menuList", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void menuList3(boolean newsList) {
+
+        if (!newsList) {
+            writeImageView.setVisibility(View.INVISIBLE);
+            writeProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<InternetResponse> call = apiService.menuList2(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                10000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true,
+                false
+        );
+
+        call.enqueue(new Callback<InternetResponse>() {
+            @Override
+            public void onResponse(Call<InternetResponse> call, Response<InternetResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "menuList", 2, response.body());
+
+                if (!newsList) {
+                    writeImageView.setVisibility(View.VISIBLE);
+                    writeProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newListIndex++;
+                }
+
+
+
+
+                if (response.isSuccessful()) {
+
+                    InternetResponse result = response.body();
+
+                    DataHolder.getInstance().setInternetModel(result);
+
+                    if (!newsList) {
+                        Intent intent = new Intent(MainActivity.this, InternetActivity.class);
+                        intent.putExtra("index", 1);
+                        startActivity(intent);
+                    }
+
+                    else {
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            newsImageView.setVisibility(View.VISIBLE);
+                            newsProgressBar.setVisibility(View.INVISIBLE);
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+
+                    else {
+                        refreshToken2(3);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InternetResponse> call, Throwable t) {
 
                 if (!newsList) {
                     writeImageView.setVisibility(View.VISIBLE);

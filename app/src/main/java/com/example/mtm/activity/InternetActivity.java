@@ -145,15 +145,24 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                         progressBar.setVisibility(View.VISIBLE);
                         this.startDate = formattedStartDate;
                         this.endDate = formattedEndDate;
-                        internet(formattedStartDate, formattedEndDate);
+                        switch (index) {
+                            case 1:
+                                menuList3(formattedStartDate, formattedEndDate);
+                                break;
+
+                            case 2:
+                                internet(formattedStartDate, formattedEndDate);
+                                break;
+
+                            case 3:
+                                visualMedia3(formattedStartDate, formattedEndDate);
+                                break;
+                        }
+
                     }
                 });
     }
 
-
-
-
-nnn
     private void setData() {
 
         InternetResponse result = DataHolder.getInstance().getInternetModel();
@@ -221,6 +230,82 @@ nnn
 //                "2024010003615660",
                 menuId,
                 subMenuId,
+                false,
+                false
+        );
+        call.enqueue(new Callback<InternetSubResponse>() {
+            @Override
+            public void onResponse(Call<InternetSubResponse> call, Response<InternetSubResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 2, response.body());
+
+                if (response.isSuccessful()) {
+
+                    InternetSubResponse result = response.body();
+
+                    DataHolder.getInstance().setInternetSubModel(result);
+
+                    Intent intent = new Intent(InternetActivity.this, SubInternetActivity.class);
+
+                    intent.putExtra("menuId", menuId);
+                    intent.putExtra("subMenuId", subMenuId);
+                    intent.putExtra("startDate", startDate);
+                    intent.putExtra("endDate", endDate);
+                    intent.putExtra("count", count);
+
+                    startActivity(intent);
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InternetSubResponse> call, Throwable t) {
+
+                Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void subPrinted(String menuId, String subMenuId, String startDate, String endDate, int count) {
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+model calismadi galiba
+        Call<InternetSubResponse> call = apiService.subMenuList(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                100000,
+                22632,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                startDate,
+                endDate,
+                "07:00:00",
+                "23:59:00",
+                "NEWS",
+                "UNIGNORED",
+                true,
+//                "2024010003615660",
+                menuId,
+                subMenuId,
+                false,
                 false,
                 false
         );
@@ -332,6 +417,127 @@ nnn
 
     }
 
+    private void visualMedia3(String startDate, String endDate) {
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<InternetResponse> call = apiService.visualMedia2(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                1000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                startDate,
+                endDate,
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true
+        );
+
+        call.enqueue(new Callback<InternetResponse>() {
+            @Override
+            public void onResponse(Call<InternetResponse> call, Response<InternetResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
+
+                progressBar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+
+                    InternetResponse result = response.body();
+
+                    DataHolder.getInstance().setInternetModel(result);
+
+                    setData();
+
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InternetResponse> call, Throwable t) {
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
+
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+
+    }
+
+    private void menuList3(String startDate, String endDate) {
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<InternetResponse> call = apiService.menuList2(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                10000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                startDate,
+                endDate,
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true,
+                false
+        );
+
+        call.enqueue(new Callback<InternetResponse>() {
+            @Override
+            public void onResponse(Call<InternetResponse> call, Response<InternetResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "menuList", 2, response.body());
+
+                progressBar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+
+                    InternetResponse result = response.body();
+
+                    DataHolder.getInstance().setInternetModel(result);
+
+
+
+                } else {
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InternetResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+
+                Logger.getInstance().logDebug(TAG, "menuList", 3, t.getMessage());
+            }
+        });
+
+
+    }
 
     private void SubMenuVisualMedia(String menuId, String subMenuId, String startDate, String endDate, int count) {
 
@@ -343,7 +549,7 @@ nnn
         Call<SubMenuVisualMediaResponse> call = apiService.subMenuVisualMedia(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                50,
+                10,
                 22632,
                 true,
                 true,
@@ -355,8 +561,8 @@ nnn
                 true,
                 true,
                 true,
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate(),
+                startDate,
+                endDate,
                 "07:00:00",
                 "23:59:00",
                 "NEWS",
@@ -388,6 +594,7 @@ nnn
                     intent.putExtra("startDate", startDate);
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
+                    intent.putExtra("index", index);
 
                     startActivity(intent);
 
@@ -419,7 +626,7 @@ nnn
     public void onItemClickInternetSubList(String menuId, String subMenuId, int count) {
         switch (index) {
             case 1:
-
+                subPrinted(menuId, subMenuId, startDate, endDate, count);
                 break;
 
             case 2:

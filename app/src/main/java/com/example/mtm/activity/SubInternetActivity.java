@@ -65,6 +65,9 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     int x = 0;
 
+    private int index;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,15 +75,85 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         init();
         setItemClickListeners();
+
+
+        switch (index) {
+            case 1:
+//                titleTextView.setText("Basın");
+                break;
+
+            case 2:
+                setData();
+                break;
+
+            case 3:
+                setTypesList2();
+                break;
+        }
+
+
 //        setData();
-        setData2();
-        setTypesList2();
+
+
 //        OnBackPressedDispatcher onBackPressedDispatcher = this.getOnBackPressedDispatcher();
 //        onBackPressedDispatcher.addCallback(this, onBackPressedCallback);
 
 
 
     }
+
+    private void setTypesList2() {
+
+
+        SubMenuVisualMediaResponse result = DataHolder.getInstance().getSubMenuVisualMediaModel();
+
+        List<SubInternetModel> items;
+
+        items = new ArrayList<>();
+
+        for (int i = 0; i < result.getData().getDocs().size(); i++) {
+
+            items.add(new SubInternetModel(
+                    result.getData().getDocs().get(i).getTitle(),
+                    result.getData().getDocs().get(i).getMedia().getName(),
+                    "",
+                    result.getData().getDocs().get(i).getPublishDate(),
+                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
+                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
+            ));
+
+        }
+
+
+
+        if (pageNumber == 0) {
+            x = items.size();
+            adapter = new SubInternetAdapter(this, items, this, x == count);
+            recyclerView.setAdapter(adapter);
+        } else {
+
+            int y = x;
+            x = x + items.size();
+
+            if (x >= count) {
+                adapter.setAllList(true);}
+
+            adapter.addItems(items);
+
+            if (items.size() < 5) {
+                recyclerView.scrollToPosition(x - 1);
+            }
+            else {
+                recyclerView.scrollToPosition(y + 3);
+            }
+
+        }
+
+
+
+    }
+
+
 
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
@@ -101,6 +174,8 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         startDate = intent.getStringExtra("startDate");
         endDate = intent.getStringExtra("endDate");
         count = intent.getIntExtra("count", 0);
+        index = intent.getIntExtra("index", 0);
+
 
         sourceUrl = "";
     }
@@ -154,87 +229,87 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         
     }
 
-    private void setData2() {
-        SubMenuVisualMediaResponse result = DataHolder.getInstance().getSubMenuVisualMediaModel();
-
-        List<SubInternetModel> items = new ArrayList<>();
-
-
-        for (int i = 0; i < result.getData().getDocs().size(); i++) {
-
-            items.add(new SubInternetModel(
-                    result.getData().getDocs().get(i).getTitle(),
-                    result.getData().getDocs().get(i).getMedia().getName(),
-                    "",
-                    result.getData().getDocs().get(i).getPublishDate(),
-                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
-                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
-            ));
-
-        }
-
-
+//    private void setData2() {
+//        SubMenuVisualMediaResponse result = DataHolder.getInstance().getSubMenuVisualMediaModel();
+//
+//        List<SubInternetModel> items = new ArrayList<>();
+//
+//
 //        for (int i = 0; i < result.getData().getDocs().size(); i++) {
+//
 //            items.add(new SubInternetModel(
 //                    result.getData().getDocs().get(i).getTitle(),
-//                    result.getData().getDocs().get(i).getMedia().getType().getName(),
+//                    result.getData().getDocs().get(i).getMedia().getName(),
 //                    "",
 //                    result.getData().getDocs().get(i).getPublishDate(),
-//                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
-//                    result.getData().getDocs().get(i).getUrl()
+//                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
+//                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
 //            ));
+//
 //        }
+//
+//
+////        for (int i = 0; i < result.getData().getDocs().size(); i++) {
+////            items.add(new SubInternetModel(
+////                    result.getData().getDocs().get(i).getTitle(),
+////                    result.getData().getDocs().get(i).getMedia().getType().getName(),
+////                    "",
+////                    result.getData().getDocs().get(i).getPublishDate(),
+////                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
+////                    result.getData().getDocs().get(i).getUrl()
+////            ));
+////        }
+//
+//        if (pageNumber == 0) {
+//            x = items.size();
+//            adapter = new SubInternetAdapter(this, items, this, x == count);
+//            recyclerView.setAdapter(adapter);
+//        } else {
+//
+//            int y = x;
+//            x = x + items.size();
+//
+//            if (x >= count) {
+//                adapter.setAllList(true);}
+//
+//            adapter.addItems(items);
+//
+//            if (items.size() < 5) {
+//                recyclerView.scrollToPosition(x - 1);
+//            }
+//            else {
+//                recyclerView.scrollToPosition(y + 3);
+//            }
+//
+//        }
+//
+//    }
 
-        if (pageNumber == 0) {
-            x = items.size();
-            adapter = new SubInternetAdapter(this, items, this, x == count);
-            recyclerView.setAdapter(adapter);
-        } else {
-
-            int y = x;
-            x = x + items.size();
-
-            if (x >= count) {
-                adapter.setAllList(true);}
-
-            adapter.addItems(items);
-
-            if (items.size() < 5) {
-                recyclerView.scrollToPosition(x - 1);
-            }
-            else {
-                recyclerView.scrollToPosition(y + 3);
-            }
-
-        }
-
-    }
-
-    private void setTypesList2() {
-
-        SubMenuVisualMediaResponse result = DataHolder.getInstance().getSubMenuVisualMediaModel();
-
-        List<SubInternetModel> items;
-
-        items = new ArrayList<>();
-
-        for (int i = 0; i < result.getData().getDocs().size(); i++) {
-
-            items.add(new SubInternetModel(
-                    result.getData().getDocs().get(i).getTitle(),
-                    result.getData().getDocs().get(i).getMedia().getName(),
-                    "",
-                    result.getData().getDocs().get(i).getPublishDate(),
-                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
-                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
-            ));
-
-        }
-
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        adapter = new SubInternetAdapter(this, items, this, x == count);
-        recyclerView.setAdapter(adapter);
-    }
+//    private void setTypesList2() {
+//
+//        SubMenuVisualMediaResponse result = DataHolder.getInstance().getSubMenuVisualMediaModel();
+//
+//        List<SubInternetModel> items;
+//
+//        items = new ArrayList<>();
+//
+//        for (int i = 0; i < result.getData().getDocs().size(); i++) {
+//
+//            items.add(new SubInternetModel(
+//                    result.getData().getDocs().get(i).getTitle(),
+//                    result.getData().getDocs().get(i).getMedia().getName(),
+//                    "",
+//                    result.getData().getDocs().get(i).getPublishDate(),
+//                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
+//                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
+//            ));
+//
+//        }
+//
+//        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+//        adapter = new SubInternetAdapter(this, items, this, x == count);
+//        recyclerView.setAdapter(adapter);
+//    }
 
     private void SubInternet(String menuId, String subMenuId, String startDate, String endDate) {
         // Check if already loading
@@ -302,6 +377,87 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         });
     }
 
+    private void SubMenuVisualMedia(String menuId, String subMenuId, String startDate, String endDate) {
+
+        if (isLoading) {
+            return;
+        }
+
+        isLoading = true;
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<SubMenuVisualMediaResponse> call = apiService.subMenuVisualMedia(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                pageNumber, // Use pageNumber for pagination
+                pageSize,   // Use pageSize for pagination
+                22632,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                true,
+                startDate,
+                endDate,
+                "07:00:00",
+                "23:59:00",
+                "NEWS",
+                "UNIGNORED",
+                true,
+                menuId,
+                subMenuId,
+                false,
+                false
+        );
+        call.enqueue(new Callback<SubMenuVisualMediaResponse>() {
+            @Override
+            public void onResponse(Call<SubMenuVisualMediaResponse> call, Response<SubMenuVisualMediaResponse> response) {
+
+                isLoading = false; // Reset loading flag
+
+                adapter.getHolder().getFrameLayout().setVisibility(View.GONE);
+
+                Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 2, response.body());
+
+                if (response.isSuccessful()) {
+
+
+                    SubMenuVisualMediaResponse result = response.body();
+
+                    DataHolder.getInstance().setSubMenuVisualMediaModel(result);
+
+
+                    setTypesList2();
+
+
+
+                } else {
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SubMenuVisualMediaResponse> call, Throwable t) {
+
+                isLoading = false; // Reset loading flag
+
+                Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 3, t.getMessage());
+            }
+        });
+
+    }
+
+
+
     @Override
     public void onItemClick(String mediaPath) {
         // Show the included layout containing the WebView and ProgressBar
@@ -332,7 +488,22 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     @Override
     public void onShowMore() {
         pageNumber++;
-        SubInternet(menuId, subMenuId, startDate, endDate);
+
+        switch (index) {
+            case 1:
+//                titleTextView.setText("Basın");
+                break;
+
+            case 2:
+                SubInternet(menuId, subMenuId, startDate, endDate);
+                break;
+
+            case 3:
+                SubMenuVisualMedia(menuId, subMenuId, startDate, endDate);
+                break;
+        }
+
+
     }
 
     public interface yaser {
