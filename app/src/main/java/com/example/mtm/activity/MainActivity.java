@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.mtm.R;
@@ -56,6 +59,21 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private List<MainActivityModel> items;
     private MainActivityAdapter adapter;
+
+
+
+    private CardView mediaCardView, newsCardView, media2CardView, writeCardView,
+            internetCardView, visualCardView, newsPaperCardView, magazineCardView,
+            columnistCardView;
+
+    private ImageView mediaImageView, newsImageView, media2ImageView, writeImageView,
+            internetImageView, visualImageView, newsPaperImageView, magazineImageView,
+            columnistImageView;
+
+    private ProgressBar mediaProgressBar, newsProgressBar, media2ProgressBar, writeProgressBar,
+            internetProgressBar, visualProgressBar, newsPaperProgressBar, magazineProgressBar,
+            columnistProgressBar;
+
 
     private Handler handler;
     int page = 0;
@@ -129,6 +147,40 @@ public class MainActivity extends AppCompatActivity {
         gridView = findViewById(R.id.gridView);
 
 
+        // Initialize CardViews
+        mediaCardView = findViewById(R.id.mediaCardView);
+        newsCardView = findViewById(R.id.newsCardView);
+        media2CardView = findViewById(R.id.media2CardView);
+        writeCardView = findViewById(R.id.writeCardView);
+        internetCardView = findViewById(R.id.internetCardView);
+        visualCardView = findViewById(R.id.visualCardView);
+        newsPaperCardView = findViewById(R.id.newsPaperCardView);
+        magazineCardView = findViewById(R.id.magazineCardView);
+        columnistCardView = findViewById(R.id.columnistCardView);
+
+        // Initialize ImageViews
+        mediaImageView = findViewById(R.id.mediaImageView);
+        newsImageView = findViewById(R.id.newsImageView);
+        media2ImageView = findViewById(R.id.media2ImageView);
+        writeImageView = findViewById(R.id.writeImageView);
+        internetImageView = findViewById(R.id.internetImageView);
+        visualImageView = findViewById(R.id.visualImageView);
+        newsPaperImageView = findViewById(R.id.newsPaperImageView);
+        magazineImageView = findViewById(R.id.magazineImageView);
+        columnistImageView = findViewById(R.id.columnistImageView);
+
+        // Initialize ProgressBars
+        mediaProgressBar = findViewById(R.id.mediaProgressBar);
+        newsProgressBar = findViewById(R.id.newsProgressBar);
+        media2ProgressBar = findViewById(R.id.media2ProgressBar);
+        writeProgressBar = findViewById(R.id.writeProgressBar);
+        internetProgressBar = findViewById(R.id.internetProgressBar);
+        visualProgressBar = findViewById(R.id.visualProgressBar);
+        newsPaperProgressBar = findViewById(R.id.newsPaperProgressBar);
+        magazineProgressBar = findViewById(R.id.magazineProgressBar);
+        columnistProgressBar = findViewById(R.id.columnistProgressBar);
+
+
         preferenceManager = new PreferenceManager(getApplicationContext());
         handler = new Handler(Looper.getMainLooper());
         items = new ArrayList<>();
@@ -144,6 +196,44 @@ public class MainActivity extends AppCompatActivity {
 
         notificationImageView.setOnClickListener(view -> {
             Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
+        });
+
+
+        mediaCardView.setOnClickListener(view -> {
+            summaryList2();
+        });
+
+        newsCardView.setOnClickListener(view -> {
+            newsList2();
+        });
+
+        media2CardView.setOnClickListener(view -> {
+            getMediaAgenda2();
+        });
+
+        writeCardView.setOnClickListener(view -> {
+            menuList2(false);
+        });
+
+        internetCardView.setOnClickListener(view -> {
+            internet2(false);
+        });
+
+        visualCardView.setOnClickListener(view -> {
+            visualMedia3(false);
+        });
+
+
+        newsPaperCardView.setOnClickListener(view -> {
+            newspaperFirstPages2();
+        });
+
+        magazineCardView.setOnClickListener(view -> {
+            magazine2();
+        });
+
+        columnistCardView.setOnClickListener(view -> {
+            columnists2();
         });
 
 
@@ -266,6 +356,93 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void summaryList2() {
+
+        mediaImageView.setVisibility(View.INVISIBLE);
+        mediaProgressBar.setVisibility(View.VISIBLE);
+
+        // Notify the adapter that data has changed
+//        adapter.notifyDataSetChanged();
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<SummaryListResponse> call = apiService.summaryList(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                22632,
+//                "2024-02-01",
+                MyUtils.getCurrentDate()
+//                true,
+//                true,
+//                true,
+//                true,
+//                true,
+//                true,
+//                true,
+//                true
+        );
+
+        call.enqueue(new Callback<SummaryListResponse>() {
+            @Override
+            public void onResponse(Call<SummaryListResponse> call, Response<SummaryListResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "summaryList", 2, response.body());
+
+
+                mediaImageView.setVisibility(View.VISIBLE);
+                mediaProgressBar.setVisibility(View.INVISIBLE);
+                // Notify the adapter that data has changed
+//                adapter.notifyDataSetChanged();
+
+
+                if (response.isSuccessful()) {
+
+                    SummaryListResponse result = response.body();
+
+                    DataHolder.getInstance().setSummaryListResponse(result);
+
+                    Intent intent = new Intent(MainActivity.this, MediaReportActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+
+                    else {
+                        refreshToken2(1);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SummaryListResponse> call, Throwable t) {
+
+                mediaImageView.setVisibility(View.VISIBLE);
+                mediaProgressBar.setVisibility(View.INVISIBLE);
+
+
+
+                // Show progress bar for the clicked item
+//                itemData.setProgressBarVisible(false);
+
+                // Notify the adapter that data has changed
+//                adapter.notifyDataSetChanged();
+
+
+                Logger.getInstance().logDebug(TAG, "summaryList", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
     private void newsList(MainActivityModel itemData) {
 
         // Show progress bar for the clicked item
@@ -280,6 +457,19 @@ public class MainActivity extends AppCompatActivity {
         internet(itemData, true);
         visualMedia(itemData, true);
 
+
+    }
+    private void newsList2() {
+
+        newsImageView.setVisibility(View.INVISIBLE);
+        newsProgressBar.setVisibility(View.VISIBLE);
+
+
+        newListIndex = 0;
+
+        menuList2(true);
+        internet2(true);
+        visualMedia2(true);
 
     }
 
@@ -465,6 +655,179 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void getMediaAgenda2() {
+
+
+        media2ImageView.setVisibility(View.INVISIBLE);
+        media2ProgressBar.setVisibility(View.VISIBLE);
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MediaAgendaResponse> call = apiService.getMediaAgenda(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                22632,
+                true,
+                true,
+                true,
+                true,
+                true,
+                MyUtils.getCurrentDate()
+        );
+
+        call.enqueue(new Callback<MediaAgendaResponse>() {
+            @Override
+            public void onResponse(Call<MediaAgendaResponse> call, Response<MediaAgendaResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+
+                media2ImageView.setVisibility(View.VISIBLE);
+                media2ProgressBar.setVisibility(View.INVISIBLE);
+
+                if (response.isSuccessful()) {
+
+
+
+
+                    MediaAgendaResponse result = response.body();
+
+
+                    DataHolder.getInstance().setMediaAgendaModel(result);
+
+//                    ArrayList<String> userMatch2 = new ArrayList<>();
+//                    siyasetModels = new ArrayList<>();
+//                    ekonomiModels = new ArrayList<>();
+//                    dunyaModels = new ArrayList<>();
+//                    kulturModels = new ArrayList<>();
+//                    yasamModels = new ArrayList<>();
+//                    sporModels = new ArrayList<>();
+//                    isModels = new ArrayList<>();
+//
+//                    String genderType = "";
+//
+//                    for (int i = 0; i < result.getData().getDocs().size(); i++) {
+//
+//                        String newGenderType = result.getData().getDocs().get(i).getAgendaType().getName();
+//                        if (!newGenderType.equals(genderType)) {
+//                            userMatch2.add(newGenderType);
+//                            genderType = newGenderType;
+//                        }
+//                    }
+//
+//                    setTypesList(userMatch2);
+//
+//
+//
+//
+//
+//
+//
+//                    for (int i = 0; i < result.getData().getDocs().size() ; i++) {
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Siyaset")) {
+//                            siyasetModels.add(new Models(
+//                                    "Siyaset",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Ekonomi")) {
+//                            ekonomiModels.add(new Models(
+//                                    "Ekonomi",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Dünya")) {
+//                            dunyaModels.add(new Models(
+//                                    "Dünya",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Kültür-Sanat")) {
+//                            kulturModels.add(new Models(
+//                                    "Kültür-Sanat",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Yaşam")) {
+//                            yasamModels.add(new Models(
+//                                    "Yaşam",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Spor")) {
+//                            sporModels.add(new Models(
+//                                    "spor",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("İş Dünyası")) {
+//                            isModels.add(new Models(
+//                                    "İş Dünyası",
+//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
+//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+//                            ));
+//                        }
+//
+//                    }
+//
+//
+//
+//
+//                    setTypesList2(siyasetModels);
+
+
+
+                    Intent intent = new Intent(MainActivity.this, MediaAgendaActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+
+                    else {
+                        refreshToken2(2);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MediaAgendaResponse> call, Throwable t) {
+
+                media2ImageView.setVisibility(View.VISIBLE);
+                media2ProgressBar.setVisibility(View.INVISIBLE);
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
     private void menuList(MainActivityModel itemData, boolean newsList) {
 
         if (!newsList) {
@@ -576,6 +939,118 @@ public class MainActivity extends AppCompatActivity {
 
                     // Notify the adapter that data has changed
                     adapter.notifyDataSetChanged();
+                }
+
+                Logger.getInstance().logDebug(TAG, "menuList", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void menuList2(boolean newsList) {
+
+        if (!newsList) {
+            writeImageView.setVisibility(View.INVISIBLE);
+            writeProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MenuListResponse> call = apiService.menuList(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                10000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true,
+                false
+        );
+
+        call.enqueue(new Callback<MenuListResponse>() {
+            @Override
+            public void onResponse(Call<MenuListResponse> call, Response<MenuListResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "menuList", 2, response.body());
+
+                if (!newsList) {
+                    writeImageView.setVisibility(View.VISIBLE);
+                    writeProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newListIndex++;
+                }
+
+
+
+
+                if (response.isSuccessful()) {
+
+
+
+                    MenuListResponse result = response.body();
+
+                    DataHolder.getInstance().setMenuListResponse(result);
+
+                    if(!newsList) {
+                        Intent intent = new Intent(MainActivity.this, PrintedActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                        startActivity(intent);
+                    }
+                    else {
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            newsImageView.setVisibility(View.VISIBLE);
+                            newsProgressBar.setVisibility(View.INVISIBLE);
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+
+                    else {
+                        refreshToken2(3);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MenuListResponse> call, Throwable t) {
+
+                if (!newsList) {
+                    writeImageView.setVisibility(View.VISIBLE);
+                    writeProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newsImageView.setVisibility(View.VISIBLE);
+                    newsProgressBar.setVisibility(View.INVISIBLE);
                 }
 
                 Logger.getInstance().logDebug(TAG, "menuList", 3, t.getMessage());
@@ -703,6 +1178,116 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void internet2(boolean newsList) {
+
+        if (!newsList) {
+            internetImageView.setVisibility(View.INVISIBLE);
+            internetProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<InternetResponse> call = apiService.internet(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                100000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true
+        );
+
+        call.enqueue(new Callback<InternetResponse>() {
+            @Override
+            public void onResponse(Call<InternetResponse> call, Response<InternetResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
+
+                if (!newsList) {
+                    internetImageView.setVisibility(View.VISIBLE);
+                    internetProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newListIndex++;
+                }
+
+
+
+                if (response.isSuccessful()) {
+
+
+
+                    InternetResponse result = response.body();
+
+                    DataHolder.getInstance().setInternetModel(result);
+
+                    if(!newsList) {
+                        Intent intent = new Intent(MainActivity.this, InternetActivity.class);
+                        intent.putExtra("index", 2);
+                        startActivity(intent);
+                    }
+                    else {
+
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            newsImageView.setVisibility(View.VISIBLE);
+                            newsProgressBar.setVisibility(View.INVISIBLE);
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            startActivity(intent);
+                        }
+
+
+                    }
+
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+
+                    else {
+                        refreshToken2(4);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InternetResponse> call, Throwable t) {
+
+                if (!newsList) {
+                    internetImageView.setVisibility(View.VISIBLE);
+                    internetProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newsImageView.setVisibility(View.VISIBLE);
+                    newsProgressBar.setVisibility(View.INVISIBLE);
+                }
+                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
     private void visualMedia(MainActivityModel itemData, boolean newsList) {
 
         if (!newsList) {
@@ -816,6 +1401,216 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void visualMedia2(boolean newsList) {
+
+        if (!newsList) {
+          visualImageView.setVisibility(View.INVISIBLE);
+          visualProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<VisualMediaResponse> call = apiService.visualMedia(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                1000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true
+        );
+
+        call.enqueue(new Callback<VisualMediaResponse>() {
+            @Override
+            public void onResponse(Call<VisualMediaResponse> call, Response<VisualMediaResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
+
+                if (!newsList) {
+                    visualImageView.setVisibility(View.VISIBLE);
+                    visualProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                else {
+                    newListIndex++;
+                }
+
+                if (response.isSuccessful()) {
+
+                    VisualMediaResponse result = response.body();
+
+                    DataHolder.getInstance().setVisualMediaModel(result);
+
+                    if (!newsList) {
+                        Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                        startActivity(intent);
+                    }
+                    else {
+
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            newsImageView.setVisibility(View.VISIBLE);
+                            newsProgressBar.setVisibility(View.INVISIBLE);
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+                    else {
+                        refreshToken2(5);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VisualMediaResponse> call, Throwable t) {
+
+                if(!newsList) {
+                    visualImageView.setVisibility(View.VISIBLE);
+                    visualProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newsImageView.setVisibility(View.VISIBLE);
+                    newsProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void visualMedia3(boolean newsList) {
+
+        if (!newsList) {
+            visualImageView.setVisibility(View.INVISIBLE);
+            visualProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<InternetResponse> call = apiService.visualMedia2(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                1000,
+                22632,
+                false,
+                false,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true
+        );
+
+        call.enqueue(new Callback<InternetResponse>() {
+            @Override
+            public void onResponse(Call<InternetResponse> call, Response<InternetResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
+
+                if (!newsList) {
+                    visualImageView.setVisibility(View.VISIBLE);
+                    visualProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                else {
+                    newListIndex++;
+                }
+
+                if (response.isSuccessful()) {
+
+                    InternetResponse result = response.body();
+
+                    DataHolder.getInstance().setInternetModel(result);
+
+                    if (!newsList) {
+                        Intent intent = new Intent(MainActivity.this, InternetActivity.class);
+                        intent.putExtra("index", 3);
+                        startActivity(intent);
+                    }
+                    else {
+
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            newsImageView.setVisibility(View.VISIBLE);
+                            newsProgressBar.setVisibility(View.INVISIBLE);
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+                    else {
+                        refreshToken2(5);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InternetResponse> call, Throwable t) {
+
+                if(!newsList) {
+                    visualImageView.setVisibility(View.VISIBLE);
+                    visualProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newsImageView.setVisibility(View.VISIBLE);
+                    newsProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
     private void newspaperFirstPages(MainActivityModel itemData) {
 
         // Show progress bar for the clicked item
@@ -882,6 +1677,71 @@ public class MainActivity extends AppCompatActivity {
 
                 // Notify the adapter that data has changed
                 adapter.notifyDataSetChanged();
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void newspaperFirstPages2() {
+
+        newsPaperImageView.setVisibility(View.INVISIBLE);
+        newsPaperProgressBar.setVisibility(View.VISIBLE);
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<NewspaperFirstPagesResponse> call = apiService.newspaperFirstPages(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                22632,
+                0,
+                50,
+                MyUtils.getCurrentDate()
+        );
+
+        call.enqueue(new Callback<NewspaperFirstPagesResponse>() {
+            @Override
+            public void onResponse(Call<NewspaperFirstPagesResponse> call, Response<NewspaperFirstPagesResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+
+                newsPaperImageView.setVisibility(View.VISIBLE);
+                newsPaperProgressBar.setVisibility(View.INVISIBLE);
+
+                if (response.isSuccessful()) {
+
+
+
+
+                    NewspaperFirstPagesResponse result = response.body();
+
+                    DataHolder.getInstance().setNewspaperFirstPagesModel(result);
+
+                    Intent intent = new Intent(MainActivity.this, NewspaperActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+                    else {
+                        refreshToken2( 6);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewspaperFirstPagesResponse> call, Throwable t) {
+
+                newsPaperImageView.setVisibility(View.VISIBLE);
+                newsPaperProgressBar.setVisibility(View.INVISIBLE);
 
                 Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
             }
@@ -973,6 +1833,81 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void magazine2() {
+
+
+        magazineImageView.setVisibility(View.INVISIBLE);
+        magazineProgressBar.setVisibility(View.VISIBLE);
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MagazineFullPagesResponse> call = apiService.magazines(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                22632,
+                0,
+                50,
+                true,
+                true,
+                "National",
+                "Magazine",
+                MyUtils.getFirstDateOfMonth(),
+                MyUtils.getCurrentDate()
+        );
+
+        call.enqueue(new Callback<MagazineFullPagesResponse>() {
+            @Override
+            public void onResponse(Call<MagazineFullPagesResponse> call, Response<MagazineFullPagesResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "magazines", 2, response.body());
+
+                magazineImageView.setVisibility(View.VISIBLE);
+                magazineProgressBar.setVisibility(View.INVISIBLE);
+
+                if (response.isSuccessful()) {
+
+
+
+
+
+
+                    MagazineFullPagesResponse result = response.body();
+
+
+                    DataHolder.getInstance().setMagazineFullPagesModel(result);
+
+                    Intent intent = new Intent(MainActivity.this, MagazineActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+
+                    else {
+                        refreshToken2( 7);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MagazineFullPagesResponse> call, Throwable t) {
+
+                magazineImageView.setVisibility(View.VISIBLE);
+                magazineProgressBar.setVisibility(View.INVISIBLE);
+
+                Logger.getInstance().logDebug(TAG, "magazines", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
     private void columnists(MainActivityModel itemData) {
 
         // Show progress bar for the clicked item
@@ -1044,6 +1979,76 @@ public class MainActivity extends AppCompatActivity {
 
                 // Notify the adapter that data has changed
                 adapter.notifyDataSetChanged();
+
+                Logger.getInstance().logDebug(TAG, "columnists", 3, t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void columnists2() {
+
+      columnistImageView.setVisibility(View.INVISIBLE);
+      columnistProgressBar.setVisibility(View.VISIBLE);
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<ColumnistsResponse> call = apiService.columnists(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                50,
+                22632,
+                true,
+                MyUtils.getCurrentDate(),
+                MyUtils.getCurrentDate(),
+                "UNIGNORED",
+                true,
+                false
+        );
+
+        call.enqueue(new Callback<ColumnistsResponse>() {
+            @Override
+            public void onResponse(Call<ColumnistsResponse> call, Response<ColumnistsResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "columnists", 2, response.body());
+
+                columnistImageView.setVisibility(View.VISIBLE);
+                columnistProgressBar.setVisibility(View.INVISIBLE);
+
+                if (response.isSuccessful()) {
+
+
+
+                    ColumnistsResponse result = response.body();
+
+                    DataHolder.getInstance().setColumnistsModel(result);
+
+                    Intent intent = new Intent(MainActivity.this, ColumnistsActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                    startActivity(intent);
+
+                } else {
+
+                    if (response.code() == 403) {
+                        forbiddenPopup();
+                    }
+
+                    else {
+                        refreshToken2(8);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ColumnistsResponse> call, Throwable t) {
+
+                columnistImageView.setVisibility(View.VISIBLE);
+                columnistProgressBar.setVisibility(View.INVISIBLE);
 
                 Logger.getInstance().logDebug(TAG, "columnists", 3, t.getMessage());
             }
@@ -1129,6 +2134,85 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void refreshToken2(int index) {
+
+        ApiService apiService = RetrofitClient.getClient(1).create(ApiService.class);
+
+        Map<String, String> fields = new HashMap<>();
+        fields.put("client_id", "account-mobile");
+        fields.put("client_secret", "6323a00d-974f-46b9-974d-37e9a1588c59");
+        fields.put("grant_type", "refresh_token");
+        fields.put("refresh_token", preferenceManager.getString(Constants.KEY_REFRESH_TOKEN));
+
+        Call<RefreshTokenResponse> call = apiService.refreshToken(preferenceManager.getString(Constants.KEY_ACCESS_TOKEN), fields);
+
+        Logger.getInstance().logDebug(TAG, "refreshToken", 1, fields);
+
+        call.enqueue(new Callback<RefreshTokenResponse>() {
+            @Override
+            public void onResponse(Call<RefreshTokenResponse> call, Response<RefreshTokenResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "refreshToken", 2, response.body());
+
+                Logger.getInstance().logDebug(TAG, "refreshToken KEY_ACCESS_TOKEN", 2, preferenceManager.getString(Constants.KEY_ACCESS_TOKEN));
+
+
+                if (response.isSuccessful()) {
+
+                    RefreshTokenResponse tokenModel = response.body();
+                    if (tokenModel != null) {
+
+                        preferenceManager.putString(Constants.KEY_ACCESS_TOKEN, tokenModel.getAccessToken());
+                        preferenceManager.putString(Constants.KEY_REFRESH_TOKEN, tokenModel.getRefreshToken());
+
+                        switch (index) {
+                            case 0:
+                                summaryList2();
+                                break;
+                            case 1:
+                                newsList2();
+                                break;
+                            case 2:
+                                getMediaAgenda2();
+                                break;
+                            case 3:
+                                menuList2(false);
+                                break;
+                            case 4:
+                                internet2(false);
+                                break;
+                            case 5:
+                                visualMedia2(false);
+                                break;
+                            case 6:
+                                newspaperFirstPages2();
+                                break;
+                            case 7:
+                                magazine2();
+                                break;
+                            case 8:
+                                columnists2();
+                                break;
+                        }
+
+
+                    }
+
+                }
+                else {
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RefreshTokenResponse> call, Throwable t) {
+                Logger.getInstance().logDebug(TAG, "refreshToken", 3, t.getMessage());
+            }
+        });
+    }
+
 
     private void forbiddenPopup() {
         Toast.makeText(this, "Forbidden", Toast.LENGTH_SHORT).show();

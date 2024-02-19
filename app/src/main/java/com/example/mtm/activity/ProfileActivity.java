@@ -1,7 +1,10 @@
 package com.example.mtm.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -15,6 +18,7 @@ import com.example.mtm.response.TokenResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;
+import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.PreferenceManager;
 import com.example.mtm.util.ZoomClass;
 import com.google.android.material.button.MaterialButton;
@@ -33,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
     private PreferenceManager preferenceManager;
 
     private ImageView backIconImageView;
+
     ZoomClass zoomClass;
     private MaterialButton logoutMaterialButton;
     @Override
@@ -82,7 +87,60 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
         logoutMaterialButton = findViewById(R.id.logoutMaterialButton);
 
         preferenceManager = new PreferenceManager(getApplicationContext());
+
+
+        // Get references to FrameLayouts
+        FrameLayout facebookFrameLayout = findViewById(R.id.facebookFrameLayout);
+        FrameLayout twitterFrameLayout = findViewById(R.id.twitterFrameLayout);
+        FrameLayout instagramFrameLayout = findViewById(R.id.instagramFrameLayout);
+        FrameLayout youtubeFrameLayout = findViewById(R.id.youtubeFrameLayout);
+        FrameLayout linkedInFrameLayout = findViewById(R.id.linkedInFrameLayout);
+
+
+        // Set onClickListeners for each FrameLayout
+        facebookFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLink("https://www.facebook.com/MTM.MedyaTakipMerkezi");
+            }
+        });
+
+        twitterFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLink("https://twitter.com/MTM_MedyaTakip");
+            }
+        });
+
+        instagramFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLink("https://www.instagram.com/mtmmedyatakipmerkezi");
+            }
+        });
+
+        youtubeFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLink("https://www.youtube.com/channel/UCTw-iMd5MM1BpJYijVdL8JA");
+            }
+        });
+
+        linkedInFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLink( "https://www.linkedin.com/company/mtm-medya-takip-merkezi");
+            }
+        });
+
+
+
+
     }
+    private void openLink(String url) {
+        MyUtils.openLink( url, ProfileActivity.this);
+    }
+
 
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());

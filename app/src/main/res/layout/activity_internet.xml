@@ -26,6 +26,7 @@
             android:src="@drawable/left_arrow_blue" />
 
         <TextView
+            android:id="@+id/titleTextView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"

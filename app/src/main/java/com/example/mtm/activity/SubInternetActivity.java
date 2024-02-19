@@ -1,28 +1,38 @@
 package com.example.mtm.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mtm.R;
 import com.example.mtm.adapter.SubInternetAdapter;
+import com.example.mtm.adapter.SubVisualAdapter;
 import com.example.mtm.model.SubInternetModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.InternetSubResponse;
+import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;
+import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.PreferenceManager;
 
 import java.util.ArrayList;
@@ -45,10 +55,11 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     List<SubInternetModel> items;
 
     private SubInternetAdapter adapter;
-    private FrameLayout frameLayout;
-    private Button button;
-    private ProgressBar progressBar;
-
+    LinearLayout test12;
+    private ProgressBar progressBar2;
+    ViewGroup includedLayout;
+    private TextView sourceTextView;
+    String sourceUrl;
     private String menuId, subMenuId, startDate, endDate;
     private int count;
 
@@ -61,9 +72,11 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         init();
         setItemClickListeners();
-        setData();
-
-
+//        setData();
+        setData2();
+        setTypesList2();
+//        OnBackPressedDispatcher onBackPressedDispatcher = this.getOnBackPressedDispatcher();
+//        onBackPressedDispatcher.addCallback(this, onBackPressedCallback);
 
 
 
@@ -72,11 +85,11 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
         recyclerView = findViewById(R.id.recyclerView);
-        webView = findViewById(R.id.webView);
-        frameLayout = findViewById(R.id.frameLayout);
-        button = findViewById(R.id.button);
-        progressBar = findViewById(R.id.progressBar);
-
+        webView = findViewById(R.id.webView2);
+        test12 = findViewById(R.id.test12);
+        progressBar2 = findViewById(R.id.progressBar2);
+        includedLayout = findViewById(R.id.web_view_layout);
+        sourceTextView = findViewById(R.id.sourceTextView);
         items = new ArrayList<>();
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -88,19 +101,15 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         startDate = intent.getStringExtra("startDate");
         endDate = intent.getStringExtra("endDate");
         count = intent.getIntExtra("count", 0);
+
+        sourceUrl = "";
     }
 
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
 
-
-        button.setOnClickListener(view -> {
-            // Increment page number before making the API call
-
-            button.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            pageNumber++;
-            SubInternet(menuId, subMenuId, startDate, endDate);
+        sourceTextView.setOnClickListener(view -> {
+            MyUtils.openLink(sourceUrl, this);
         });
     }
 
@@ -120,26 +129,19 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             ));
         }
 
-        // If pageNumber is 0, it means it's the first page, so set adapter
         if (pageNumber == 0) {
             x = items.size();
             adapter = new SubInternetAdapter(this, items, this, x == count);
             recyclerView.setAdapter(adapter);
         } else {
-            // If it's not the first page, append data to the existing adapter
-            // Assuming you have a method in your adapter to add more data
 
             int y = x;
             x = x + items.size();
-
-//            Toast.makeText(this,  x  + "\n" + y, Toast.LENGTH_SHORT).show();
 
             if (x >= count) {
                 adapter.setAllList(true);}
 
             adapter.addItems(items);
-//            recyclerView.scrollToPosition(x - (items.size() - 3));
-
 
             if (items.size() < 5) {
                 recyclerView.scrollToPosition(x - 1);
@@ -150,6 +152,88 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         }
         
+    }
+
+    private void setData2() {
+        SubMenuVisualMediaResponse result = DataHolder.getInstance().getSubMenuVisualMediaModel();
+
+        List<SubInternetModel> items = new ArrayList<>();
+
+
+        for (int i = 0; i < result.getData().getDocs().size(); i++) {
+
+            items.add(new SubInternetModel(
+                    result.getData().getDocs().get(i).getTitle(),
+                    result.getData().getDocs().get(i).getMedia().getName(),
+                    "",
+                    result.getData().getDocs().get(i).getPublishDate(),
+                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
+                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
+            ));
+
+        }
+
+
+//        for (int i = 0; i < result.getData().getDocs().size(); i++) {
+//            items.add(new SubInternetModel(
+//                    result.getData().getDocs().get(i).getTitle(),
+//                    result.getData().getDocs().get(i).getMedia().getType().getName(),
+//                    "",
+//                    result.getData().getDocs().get(i).getPublishDate(),
+//                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
+//                    result.getData().getDocs().get(i).getUrl()
+//            ));
+//        }
+
+        if (pageNumber == 0) {
+            x = items.size();
+            adapter = new SubInternetAdapter(this, items, this, x == count);
+            recyclerView.setAdapter(adapter);
+        } else {
+
+            int y = x;
+            x = x + items.size();
+
+            if (x >= count) {
+                adapter.setAllList(true);}
+
+            adapter.addItems(items);
+
+            if (items.size() < 5) {
+                recyclerView.scrollToPosition(x - 1);
+            }
+            else {
+                recyclerView.scrollToPosition(y + 3);
+            }
+
+        }
+
+    }
+
+    private void setTypesList2() {
+
+        SubMenuVisualMediaResponse result = DataHolder.getInstance().getSubMenuVisualMediaModel();
+
+        List<SubInternetModel> items;
+
+        items = new ArrayList<>();
+
+        for (int i = 0; i < result.getData().getDocs().size(); i++) {
+
+            items.add(new SubInternetModel(
+                    result.getData().getDocs().get(i).getTitle(),
+                    result.getData().getDocs().get(i).getMedia().getName(),
+                    "",
+                    result.getData().getDocs().get(i).getPublishDate(),
+                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
+                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
+            ));
+
+        }
+
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        adapter = new SubInternetAdapter(this, items, this, x == count);
+        recyclerView.setAdapter(adapter);
     }
 
     private void SubInternet(String menuId, String subMenuId, String startDate, String endDate) {
@@ -193,9 +277,6 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             public void onResponse(Call<InternetSubResponse> call, Response<InternetSubResponse> response) {
                 isLoading = false; // Reset loading flag
 
-                button.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.INVISIBLE);
-
                 adapter.getHolder().getFrameLayout().setVisibility(View.GONE);
 
 
@@ -216,9 +297,6 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             public void onFailure(Call<InternetSubResponse> call, Throwable t) {
                 isLoading = false; // Reset loading flag
 
-                button.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.INVISIBLE);
-
                 Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 3, t.getMessage());
             }
         });
@@ -226,12 +304,29 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     @Override
     public void onItemClick(String mediaPath) {
-
+        // Show the included layout containing the WebView and ProgressBar
+        includedLayout.setVisibility(View.VISIBLE);
+        test12.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+        // Load the URL in the WebView
         webView.loadUrl(mediaPath);
-        webView.setVisibility(View.VISIBLE);
-//        Intent intent = new Intent(this, VideoActivity.class);
-//        intent.putExtra("videoUrl", mediaPath);
-//        startActivity(intent);
+
+        // Set up a WebViewClient to handle page loading events
+        webView.setWebViewClient(new WebViewClient() {
+            // Show ProgressBar when page starts loading
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progressBar2.setVisibility(View.VISIBLE);
+            }
+
+            // Hide ProgressBar when page finishes loading
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressBar2.setVisibility(View.GONE);
+            }
+        });
+
+        sourceUrl = mediaPath;
     }
 
     @Override
@@ -243,4 +338,26 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     public interface yaser {
         void onShowMore();
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if (includedLayout.getVisibility() == View.VISIBLE) {
+            includedLayout.setVisibility(View.INVISIBLE);
+            test12.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        else {
+            super.onBackPressed();
+        }
+
+    }
+
+//    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+//        @Override
+//        public void handleOnBackPressed() {
+//
+//        }
+//    };
+//
 }

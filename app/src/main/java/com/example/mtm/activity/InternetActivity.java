@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
@@ -20,6 +21,7 @@ import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
+import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;
@@ -51,6 +53,10 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
     private InternetAdapter adapter;
 
+    private TextView titleTextView;
+
+    private int index;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +67,25 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         setItemClickListeners();
         setData();
         confDate();
+
+
+        Intent intent = getIntent();
+        index = intent.getIntExtra("index", 0);
+
+        switch (index) {
+            case 1:
+                titleTextView.setText("Basın");
+                break;
+
+            case 2:
+                titleTextView.setText("Internet");
+                break;
+
+            case 3:
+                titleTextView.setText(R.string.visual_media);
+                break;
+        }
+
     }
 
     private void init() {
@@ -68,6 +93,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         filterImageView = findViewById(R.id.filterImageView);
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = findViewById(R.id.progressBar);
+        titleTextView = findViewById(R.id.titleTextView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
     }
 
@@ -306,8 +332,106 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
     }
 
+
+    private void SubMenuVisualMedia(String menuId, String subMenuId, String startDate, String endDate, int count) {
+
+        xxxxxxxx
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<SubMenuVisualMediaResponse> call = apiService.subMenuVisualMedia(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                50,
+                22632,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "NEWS",
+                "UNIGNORED",
+                true,
+                menuId,
+                subMenuId,
+                false,
+                false
+        );
+        call.enqueue(new Callback<SubMenuVisualMediaResponse>() {
+            @Override
+            public void onResponse(Call<SubMenuVisualMediaResponse> call, Response<SubMenuVisualMediaResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 2, response.body());
+
+                if (response.isSuccessful()) {
+
+                    SubMenuVisualMediaResponse result = response.body();
+
+                    DataHolder.getInstance().setSubMenuVisualMediaModel(result);
+
+//                    DataHolder.getInstance().setInternetSubModel(result);
+
+                    Intent intent = new Intent(InternetActivity.this, SubInternetActivity.class);
+
+                    intent.putExtra("menuId", menuId);
+                    intent.putExtra("subMenuId", subMenuId);
+                    intent.putExtra("startDate", startDate);
+                    intent.putExtra("endDate", endDate);
+                    intent.putExtra("count", count);
+
+                    startActivity(intent);
+
+
+
+
+
+
+
+
+                } else {
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SubMenuVisualMediaResponse> call, Throwable t) {
+
+
+                Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 3, t.getMessage());
+            }
+        });
+
+    }
+
+
     @Override
     public void onItemClickInternetSubList(String menuId, String subMenuId, int count) {
-        SubInternet(menuId, subMenuId, startDate, endDate, count);
+        switch (index) {
+            case 1:
+
+                break;
+
+            case 2:
+                SubInternet(menuId, subMenuId, startDate, endDate, count);
+                break;
+
+            case 3:
+                SubMenuVisualMedia(menuId, subMenuId, startDate, endDate, count);
+                break;
+        }
+
+
     }
 }
