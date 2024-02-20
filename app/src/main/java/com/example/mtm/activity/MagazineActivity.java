@@ -2,7 +2,6 @@ package com.example.mtm.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,7 +66,8 @@ public class MagazineActivity extends AppCompatActivity implements MagazineAdapt
                     result.getData().get(i).getName(),
                     result.getData().get(i).getImageInfo().getMediaPath(),
                     result.getData().get(i).getImageInfo().getPageFile(),
-                    result.getData().get(i).getGno() + ""
+                    result.getData().get(i).getGno() + "",
+                    result.getData().get(i).getPages().size()
 
             ));
         }
@@ -77,21 +77,22 @@ public class MagazineActivity extends AppCompatActivity implements MagazineAdapt
 
     }
 
-    private void newspaperFirstPages(String mediaPath, String pageFile, String gno) {
+    private void newspaperFirstPages(String mediaPath, String pageFile, String gno, int count) {
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
         ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
 
-        Call<NewsPaperFullPagesResponse> call = apiService.newspaperFullPages(
+        Call<NewsPaperFullPagesResponse> call = apiService.newspaperFullPages2(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 0,
                 50,
                 true,
                 true,
                 "National",
-                "Newspaper",
+                "Magazine",
+                MyUtils.getPreviousDate(1),
                 MyUtils.getCurrentDate()
         );
 
@@ -107,19 +108,39 @@ public class MagazineActivity extends AppCompatActivity implements MagazineAdapt
 
                     DataHolder.getInstance().setNewsPaperFullPagesModel(result);
 
-                    int count = 0;
-                    String gno2;
-                    for (int i = 0; i < result.getData().size(); i++) {
-                        gno2 = result.getData().get(i).getGno() + "";
-                        if(gno2.equals(gno)) {
-                            count = result.getData().get(i).getPages().size();
-                        }
-                    }
+//                    int count = 10;
+//                    String gno2;
+//                    for (int i = 0; i < result.getData().size(); i++) {
+//                        gno2 = result.getData().get(i).getGno() + "";
+//                        if(gno2.equals(gno)) {
+//                            count = result.getData().get(i).getPages().size();
+//                        }
+//                    }
 
                     Intent intent = new Intent(MagazineActivity.this, SubNewspaperActivity.class);
                     intent.putExtra("mediaPath", mediaPath + "page/" + pageFile + "-");
                     intent.putExtra("count", count);
                     startActivity(intent);
+
+
+
+//                    NewsPaperFullPagesResponse result = response.body();
+//
+//                    DataHolder.getInstance().setNewsPaperFullPagesModel(result);
+//
+//                    int count = 0;
+//                    String gno2;
+//                    for (int i = 0; i < result.getData().size(); i++) {
+//                        gno2 = result.getData().get(i).getGno() + "";
+//                        if(gno2.equals(gno)) {
+//                            count = result.getData().get(i).getPages().size();
+//                        }
+//                    }
+//
+//                    Intent intent = new Intent(MagazineActivity.this, SubNewspaperActivity.class);
+//                    intent.putExtra("mediaPath", mediaPath + "page/" + pageFile + "-");
+//                    intent.putExtra("count", count);
+//                    startActivity(intent);
 
                 } else {
 
@@ -141,7 +162,8 @@ public class MagazineActivity extends AppCompatActivity implements MagazineAdapt
 
 
     @Override
-    public void onItemClick(String mediaPath, String pageFile, String gno) {
-        newspaperFirstPages(mediaPath, pageFile, gno);
+    public void onItemClick(String mediaPath, String pageFile, String gno, int count) {
+        newspaperFirstPages(mediaPath, pageFile, gno, count);
+        System.out.println("hasan yaserHamdo  "+ mediaPath + " " + pageFile + " " + gno);
     }
 }

@@ -1,11 +1,11 @@
 package com.example.mtm.activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,7 +29,6 @@ import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
 import com.example.mtm.response.RefreshTokenResponse;
 import com.example.mtm.response.SummaryListResponse;
-import com.example.mtm.response.TokenResponse;
 import com.example.mtm.response.VisualMediaResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
 
     private ImageView profileImageView, notificationImageView;
-    private GridView gridView;
+//    private GridView gridView;
     private ViewPagerAdapter mViewPagerAdapter;
     private ViewPager mViewPager;
     private List<MainActivityModel> items;
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainActivityModel(R.drawable.opinion_writers_icon, R.drawable.test15, "Köşe Yazarları"));
 
         adapter = new MainActivityAdapter(this, items);
-        gridView.setAdapter(adapter);
+//        gridView.setAdapter(adapter);
 
         CircleIndicator indicator = findViewById(R.id.indicator);
 
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.viewPagerMaina);
         profileImageView = findViewById(R.id.profileImageView);
         notificationImageView = findViewById(R.id.notificationImageView);
-        gridView = findViewById(R.id.gridView);
+//        gridView = findViewById(R.id.gridView);
 
 
         // Initialize CardViews
@@ -191,11 +190,17 @@ public class MainActivity extends AppCompatActivity {
         profileImageView.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             intent.putExtra("itemData", "test");
-            startActivity(intent);
+            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
         });
 
         notificationImageView.setOnClickListener(view -> {
-            Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            intent.putExtra("itemData", "test");
+            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+            startActivity(intent, options);
+
         });
 
 
@@ -237,38 +242,38 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        gridView.setOnItemClickListener((parent, view, position, id) -> {
-            switch (position) {
-                case 0:
-                    summaryList(items.get(position));
-                    break;
-                case 1:
-                    newsList(items.get(position));
-                    break;
-                case 2:
-                    getMediaAgenda(items.get(position));
-                    break;
-                case 3:
-                    menuList(items.get(position), false);
-                    break;
-                case 4:
-                    internet(items.get(position), false);
-                    break;
-                case 5:
-                    visualMedia(items.get(position), false);
-                    break;
-                case 6:
-                    newspaperFirstPages(items.get(position));
-                    break;
-                case 7:
-                    magazine(items.get(position));
-                    break;
-                case 8:
-                    columnists(items.get(position));
-                    break;
-            }
-
-        });
+//        gridView.setOnItemClickListener((parent, view, position, id) -> {
+//            switch (position) {
+//                case 0:
+//                    summaryList(items.get(position));
+//                    break;
+//                case 1:
+//                    newsList(items.get(position));
+//                    break;
+//                case 2:
+//                    getMediaAgenda(items.get(position));
+//                    break;
+//                case 3:
+//                    menuList(items.get(position), false);
+//                    break;
+//                case 4:
+//                    internet(items.get(position), false);
+//                    break;
+//                case 5:
+//                    visualMedia(items.get(position), false);
+//                    break;
+//                case 6:
+//                    newspaperFirstPages(items.get(position));
+//                    break;
+//                case 7:
+//                    magazine(items.get(position));
+//                    break;
+//                case 8:
+//                    columnists(items.get(position));
+//                    break;
+//            }
+//
+//        });
 
     }
 
@@ -286,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<SummaryListResponse> call = apiService.summaryList(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
 //                "2024-02-01",
                 MyUtils.getCurrentDate()
 //                true,
@@ -321,7 +326,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, MediaReportActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
 
                 } else {
@@ -370,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<SummaryListResponse> call = apiService.summaryList(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
 //                "2024-02-01",
                 MyUtils.getCurrentDate()
 //                true,
@@ -404,7 +410,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, MediaReportActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
 
                 } else {
@@ -489,7 +496,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<MediaAgendaResponse> call = apiService.getMediaAgenda(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
                 true,
@@ -624,7 +631,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, MediaAgendaActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -668,7 +676,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<MediaAgendaResponse> call = apiService.getMediaAgenda(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
                 true,
@@ -800,7 +808,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, MediaAgendaActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -846,7 +855,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 10000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -895,7 +904,8 @@ public class MainActivity extends AppCompatActivity {
                     if(!newsList) {
                         Intent intent = new Intent(MainActivity.this, PrintedActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                        startActivity(intent);
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                     }
                     else {
                         if (newListIndex == 3) {
@@ -909,7 +919,8 @@ public class MainActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
 
                             Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            startActivity(intent);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                         }
 
                     }
@@ -963,7 +974,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 10000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -1009,7 +1020,8 @@ public class MainActivity extends AppCompatActivity {
                     if(!newsList) {
                         Intent intent = new Intent(MainActivity.this, PrintedActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                        startActivity(intent);
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                     }
                     else {
                         if (newListIndex == 3) {
@@ -1020,7 +1032,8 @@ public class MainActivity extends AppCompatActivity {
                             newsProgressBar.setVisibility(View.INVISIBLE);
 
                             Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            startActivity(intent);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                         }
 
                     }
@@ -1075,7 +1088,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 10000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -1119,7 +1132,8 @@ public class MainActivity extends AppCompatActivity {
                     if (!newsList) {
                         Intent intent = new Intent(MainActivity.this, InternetActivity.class);
                         intent.putExtra("index", 1);
-                        startActivity(intent);
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                     }
 
                     else {
@@ -1131,7 +1145,8 @@ public class MainActivity extends AppCompatActivity {
                             newsProgressBar.setVisibility(View.INVISIBLE);
 
                             Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            startActivity(intent);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                         }
 
                     }
@@ -1189,7 +1204,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 100000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -1235,7 +1250,8 @@ public class MainActivity extends AppCompatActivity {
                     if(!newsList) {
                         Intent intent = new Intent(MainActivity.this, InternetActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                        startActivity(intent);
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                     }
                     else {
 
@@ -1250,7 +1266,8 @@ public class MainActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
 
                             Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            startActivity(intent);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                         }
 
 
@@ -1304,7 +1321,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 100000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -1347,7 +1364,8 @@ public class MainActivity extends AppCompatActivity {
                     if(!newsList) {
                         Intent intent = new Intent(MainActivity.this, InternetActivity.class);
                         intent.putExtra("index", 2);
-                        startActivity(intent);
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                     }
                     else {
 
@@ -1359,7 +1377,8 @@ public class MainActivity extends AppCompatActivity {
                             newsProgressBar.setVisibility(View.INVISIBLE);
 
                             Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            startActivity(intent);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                         }
 
 
@@ -1417,7 +1436,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 1000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -1460,7 +1479,8 @@ public class MainActivity extends AppCompatActivity {
                     if (!newsList) {
                         Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                        startActivity(intent);
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                     }
                     else {
 
@@ -1475,7 +1495,8 @@ public class MainActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
 
                             Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            startActivity(intent);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                         }
 
                     }
@@ -1527,7 +1548,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 1000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -1567,7 +1588,8 @@ public class MainActivity extends AppCompatActivity {
                     if (!newsList) {
                         Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                        startActivity(intent);
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                     }
                     else {
 
@@ -1579,7 +1601,8 @@ public class MainActivity extends AppCompatActivity {
                             newsProgressBar.setVisibility(View.INVISIBLE);
 
                             Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            startActivity(intent);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                         }
 
                     }
@@ -1632,7 +1655,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 1000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -1672,7 +1695,8 @@ public class MainActivity extends AppCompatActivity {
                     if (!newsList) {
                         Intent intent = new Intent(MainActivity.this, InternetActivity.class);
                         intent.putExtra("index", 3);
-                        startActivity(intent);
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                     }
                     else {
 
@@ -1684,7 +1708,8 @@ public class MainActivity extends AppCompatActivity {
                             newsProgressBar.setVisibility(View.INVISIBLE);
 
                             Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            startActivity(intent);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
                         }
 
                     }
@@ -1737,7 +1762,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<NewspaperFirstPagesResponse> call = apiService.newspaperFirstPages(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 0,
                 50,
                 MyUtils.getCurrentDate()
@@ -1766,7 +1791,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, NewspaperActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -1808,7 +1834,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<NewspaperFirstPagesResponse> call = apiService.newspaperFirstPages(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 0,
                 50,
                 MyUtils.getCurrentDate()
@@ -1834,7 +1860,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, NewspaperActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -1876,7 +1903,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<MagazineFullPagesResponse> call = apiService.magazines(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 0,
                 50,
                 true,
@@ -1913,7 +1940,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, MagazineActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -1957,7 +1985,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<MagazineFullPagesResponse> call = apiService.magazines(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 0,
                 50,
                 true,
@@ -1991,7 +2019,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, MagazineActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -2036,7 +2065,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 50,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 MyUtils.getCurrentDate(),
                 MyUtils.getCurrentDate(),
@@ -2067,7 +2096,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, ColumnistsActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -2112,7 +2142,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 50,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 MyUtils.getCurrentDate(),
                 MyUtils.getCurrentDate(),
@@ -2140,7 +2170,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, ColumnistsActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 

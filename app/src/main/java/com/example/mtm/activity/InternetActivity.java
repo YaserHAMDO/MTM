@@ -1,5 +1,6 @@
 package com.example.mtm.activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
+import com.example.mtm.response.PrintedMediaSubResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
@@ -54,6 +56,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
     private InternetAdapter adapter;
 
     private TextView titleTextView;
+    private TextView filteredDateTextView;
 
     private int index;
 
@@ -74,11 +77,11 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
         switch (index) {
             case 1:
-                titleTextView.setText("Basın");
+                titleTextView.setText("Yazılı Basın");
                 break;
 
             case 2:
-                titleTextView.setText("Internet");
+                titleTextView.setText("Digital Basın");
                 break;
 
             case 3:
@@ -94,6 +97,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = findViewById(R.id.progressBar);
         titleTextView = findViewById(R.id.titleTextView);
+        filteredDateTextView = findViewById(R.id.filteredDateTextView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
     }
 
@@ -101,6 +105,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         startDate = MyUtils.getPreviousDate(1);
         endDate = MyUtils.getCurrentDate();
 
+//        filteredDateTextView.setText(startDate + " ile " + endDate + " arasında tarihi kayıtlar gösterilmektedir.");
     }
 
     private void setItemClickListeners() {
@@ -143,6 +148,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 //                        Toast.makeText(this, "Start Date: " + formattedStartDate + "\nEnd Date: " + formattedEndDate, Toast.LENGTH_SHORT).show();
                         recyclerView.setAdapter(null);
                         progressBar.setVisibility(View.VISIBLE);
+                        filteredDateTextView.setText("");
                         this.startDate = formattedStartDate;
                         this.endDate = formattedEndDate;
                         switch (index) {
@@ -198,6 +204,8 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
         recyclerView.setAdapter(adapter);
 
+        filteredDateTextView.setText(startDate + " ile " + endDate + " arasında tarihi kayıtlar gösterilmektedir.");
+
     }
 
     private void SubInternet(String menuId, String subMenuId, String startDate, String endDate, int count) {
@@ -210,7 +218,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 10,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
                 false,
@@ -252,8 +260,10 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("startDate", startDate);
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
+                    intent.putExtra("index", index);
 
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(InternetActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -277,12 +287,12 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
         ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-model calismadi galiba
-        Call<InternetSubResponse> call = apiService.subMenuList(
+
+        Call<PrintedMediaSubResponse> call = apiService.subMenuList(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                100000,
-                22632,
+                10,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
                 false,
@@ -309,17 +319,17 @@ model calismadi galiba
                 false,
                 false
         );
-        call.enqueue(new Callback<InternetSubResponse>() {
+        call.enqueue(new Callback<PrintedMediaSubResponse>() {
             @Override
-            public void onResponse(Call<InternetSubResponse> call, Response<InternetSubResponse> response) {
+            public void onResponse(Call<PrintedMediaSubResponse> call, Response<PrintedMediaSubResponse> response) {
 
-                Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 2, response.body());
+                Logger.getInstance().logDebug(TAG, "subMenuList", 2, response.body());
 
                 if (response.isSuccessful()) {
 
-                    InternetSubResponse result = response.body();
+                    PrintedMediaSubResponse result = response.body();
 
-                    DataHolder.getInstance().setInternetSubModel(result);
+                    DataHolder.getInstance().setPrintedMediaSubResponse(result);
 
                     Intent intent = new Intent(InternetActivity.this, SubInternetActivity.class);
 
@@ -328,8 +338,10 @@ model calismadi galiba
                     intent.putExtra("startDate", startDate);
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
+                    intent.putExtra("index", 1);
 
-                    startActivity(intent);
+                    Bundle options = ActivityOptions.makeCustomAnimation(InternetActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
                 } else {
 
@@ -339,9 +351,9 @@ model calismadi galiba
             }
 
             @Override
-            public void onFailure(Call<InternetSubResponse> call, Throwable t) {
+            public void onFailure(Call<PrintedMediaSubResponse> call, Throwable t) {
 
-                Logger.getInstance().logDebug(TAG, "SubMenuVisualMedia", 3, t.getMessage());
+                Logger.getInstance().logDebug(TAG, "subMenuList", 3, t.getMessage());
             }
         });
 
@@ -358,7 +370,7 @@ model calismadi galiba
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 100000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -427,7 +439,7 @@ model calismadi galiba
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 1000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -487,7 +499,7 @@ model calismadi galiba
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 10000,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 false,
                 false,
                 true,
@@ -519,6 +531,7 @@ model calismadi galiba
 
                     DataHolder.getInstance().setInternetModel(result);
 
+                    setData();
 
 
                 } else {
@@ -550,7 +563,7 @@ model calismadi galiba
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 10,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
                 false,
@@ -596,10 +609,8 @@ model calismadi galiba
                     intent.putExtra("count", count);
                     intent.putExtra("index", index);
 
-                    startActivity(intent);
-
-
-
+                    Bundle options = ActivityOptions.makeCustomAnimation(InternetActivity.this, R.anim.left, R.anim.right).toBundle();
+                    startActivity(intent, options);
 
 
 
@@ -639,5 +650,11 @@ model calismadi galiba
         }
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 }

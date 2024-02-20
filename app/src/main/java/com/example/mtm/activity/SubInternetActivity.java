@@ -7,33 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.mtm.R;
 import com.example.mtm.adapter.SubInternetAdapter;
-import com.example.mtm.adapter.SubVisualAdapter;
 import com.example.mtm.model.SubInternetModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.InternetSubResponse;
+import com.example.mtm.response.PrintedMediaSubResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;
 import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.PreferenceManager;
+import com.jsibbold.zoomage.ZoomageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +46,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     private int pageNumber = 0;
     private int pageSize = 10;
     private boolean isLoading = false;
-    private ImageView backIconImageView;
+    private ImageView backIconImageView, backIconImageView2;
     private RecyclerView recyclerView;
     private WebView webView;
     List<SubInternetModel> items;
@@ -58,10 +55,13 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     LinearLayout test12;
     private ProgressBar progressBar2;
     ViewGroup includedLayout;
-    private TextView sourceTextView;
+    private TextView sourceTextView, titleTextView, tumSayfa;
     String sourceUrl;
     private String menuId, subMenuId, startDate, endDate;
     private int count;
+
+    ZoomageView zoomageView;
+    LinearLayout mesut;
 
     int x = 0;
 
@@ -79,17 +79,22 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         switch (index) {
             case 1:
-//                titleTextView.setText("Basın");
+                titleTextView.setText("Yazılı Basın");
+                setPrintedMediaData();
                 break;
 
             case 2:
+                titleTextView.setText("Digital Basın");
                 setData();
                 break;
 
             case 3:
+                titleTextView.setText(R.string.visual_media);
                 setTypesList2();
                 break;
         }
+
+
 
 
 //        setData();
@@ -119,7 +124,8 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                     "",
                     result.getData().getDocs().get(i).getPublishDate(),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
-                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo()
+                    Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo(),
+                    ""
             ));
 
         }
@@ -157,12 +163,17 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
+        backIconImageView2 = findViewById(R.id.backIconImageView2);
         recyclerView = findViewById(R.id.recyclerView);
         webView = findViewById(R.id.webView2);
         test12 = findViewById(R.id.test12);
         progressBar2 = findViewById(R.id.progressBar2);
         includedLayout = findViewById(R.id.web_view_layout);
+        zoomageView = findViewById(R.id.imageView);
+        mesut = findViewById(R.id.mesut);
+        tumSayfa = findViewById(R.id.tumSayfa);
         sourceTextView = findViewById(R.id.sourceTextView);
+        titleTextView = findViewById(R.id.titleTextView);
         items = new ArrayList<>();
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -182,6 +193,8 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+        backIconImageView2.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+        titleTextView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
 
         sourceTextView.setOnClickListener(view -> {
             MyUtils.openLink(sourceUrl, this);
@@ -196,11 +209,12 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         for (int i = 0; i < result.getData().getDocs().size(); i++) {
             items.add(new SubInternetModel(
                     result.getData().getDocs().get(i).getTitle(),
-                    result.getData().getDocs().get(i).getMedia().getType().getName(),
+                    result.getData().getDocs().get(i).getMedia().getName(),
                     "",
                     result.getData().getDocs().get(i).getPublishDate(),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
-                    result.getData().getDocs().get(i).getUrl()
+                    result.getData().getDocs().get(i).getUrl(),
+                    ""
             ));
         }
 
@@ -227,6 +241,47 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         }
         
+    }
+
+    private void setPrintedMediaData() {
+        PrintedMediaSubResponse result = DataHolder.getInstance().getPrintedMediaSubResponse();
+        List<SubInternetModel> items = new ArrayList<>(); // Initialize or clear items list if needed
+
+        for (int i = 0; i < result.getData().getDocs().size(); i++) {
+            items.add(new SubInternetModel(
+                    result.getData().getDocs().get(i).getTitle(),
+                    result.getData().getDocs().get(i).getMedia().getName(),
+                    "",
+                    result.getData().getDocs().get(i).getPublishDate(),
+                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
+                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
+                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getPage().getFullImagePath()
+            ));
+        }
+
+        if (pageNumber == 0) {
+            x = items.size();
+            adapter = new SubInternetAdapter(this, items, this, x == count);
+            recyclerView.setAdapter(adapter);
+        } else {
+
+            int y = x;
+            x = x + items.size();
+
+            if (x >= count) {
+                adapter.setAllList(true);}
+
+            adapter.addItems(items);
+
+            if (items.size() < 5) {
+                recyclerView.scrollToPosition(x - 1);
+            }
+            else {
+                recyclerView.scrollToPosition(y + 3);
+            }
+
+        }
+
     }
 
 //    private void setData2() {
@@ -326,7 +381,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 pageNumber, // Use pageNumber for pagination
                 pageSize,   // Use pageSize for pagination
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
                 false,
@@ -394,7 +449,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 pageNumber, // Use pageNumber for pagination
                 pageSize,   // Use pageSize for pagination
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
                 false,
@@ -456,33 +511,145 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     }
 
+    private void subPrinted(String menuId, String subMenuId, String startDate, String endDate) {
 
+        if (isLoading) {
+            return;
+        }
 
-    @Override
-    public void onItemClick(String mediaPath) {
-        // Show the included layout containing the WebView and ProgressBar
-        includedLayout.setVisibility(View.VISIBLE);
-        test12.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
-        // Load the URL in the WebView
-        webView.loadUrl(mediaPath);
+        isLoading = true;
 
-        // Set up a WebViewClient to handle page loading events
-        webView.setWebViewClient(new WebViewClient() {
-            // Show ProgressBar when page starts loading
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<PrintedMediaSubResponse> call = apiService.subMenuList(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                pageNumber, // Use pageNumber for pagination
+                pageSize,   // Use pageSize for pagination
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                startDate,
+                endDate,
+                "07:00:00",
+                "23:59:00",
+                "NEWS",
+                "UNIGNORED",
+                true,
+//                "2024010003615660",
+                menuId,
+                subMenuId,
+                false,
+                false,
+                false
+        );
+        call.enqueue(new Callback<PrintedMediaSubResponse>() {
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                progressBar2.setVisibility(View.VISIBLE);
+            public void onResponse(Call<PrintedMediaSubResponse> call, Response<PrintedMediaSubResponse> response) {
+
+                isLoading = false; // Reset loading flag
+
+                adapter.getHolder().getFrameLayout().setVisibility(View.GONE);
+
+
+                Logger.getInstance().logDebug(TAG, "subMenuList", 2, response.body());
+
+                if (response.isSuccessful()) {
+
+                    PrintedMediaSubResponse result = response.body();
+
+                    DataHolder.getInstance().setPrintedMediaSubResponse(result);
+
+                    setPrintedMediaData();
+
+                } else {
+
+
+
+                }
             }
 
-            // Hide ProgressBar when page finishes loading
             @Override
-            public void onPageFinished(WebView view, String url) {
-                progressBar2.setVisibility(View.GONE);
+            public void onFailure(Call<PrintedMediaSubResponse> call, Throwable t) {
+
+                isLoading = false; // Reset loading flag
+
+
+                Logger.getInstance().logDebug(TAG, "subMenuList", 3, t.getMessage());
             }
         });
 
+
+    }
+
+
+
+
+    @Override
+    public void onItemClick(String mediaPath, String mediaPath2) {
+
+
+        test12.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+
+
+
+        switch (index) {
+            case 1:
+                mesut.setVisibility(View.VISIBLE);
+                Glide.with(this).load(mediaPath).into(zoomageView);
+
+                tumSayfa.setOnClickListener(view -> {
+                    Glide.with(this).load(mediaPath2).into(zoomageView);
+                });
+
+
+                break;
+
+            case 2:
+
+            case 3:
+                // Show the included layout containing the WebView and ProgressBar
+                includedLayout.setVisibility(View.VISIBLE);
+
+                // Load the URL in the WebView
+                webView.loadUrl(mediaPath);
+
+                // Set up a WebViewClient to handle page loading events
+                webView.setWebViewClient(new WebViewClient() {
+                    // Show ProgressBar when page starts loading
+                    @Override
+                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                        progressBar2.setVisibility(View.VISIBLE);
+                    }
+
+                    // Hide ProgressBar when page finishes loading
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        progressBar2.setVisibility(View.GONE);
+                    }
+                });
+                break;
+        }
+
+
         sourceUrl = mediaPath;
+
+
+
+
+
     }
 
     @Override
@@ -491,7 +658,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         switch (index) {
             case 1:
-//                titleTextView.setText("Basın");
+                subPrinted(menuId, subMenuId, startDate, endDate);
                 break;
 
             case 2:
@@ -518,11 +685,19 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             test12.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
         }
+        else if (mesut.getVisibility() == View.VISIBLE) {
+            mesut.setVisibility(View.INVISIBLE);
+            test12.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
         else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
         }
 
     }
+
+
 
 //    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
 //        @Override

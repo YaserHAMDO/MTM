@@ -103,7 +103,7 @@ public class VisualMediaActivity extends AppCompatActivity implements SubVisualM
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 50,
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
                 false,

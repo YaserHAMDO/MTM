@@ -20,13 +20,12 @@ import com.example.mtm.adapter.ViewPagerAdapter;
 import com.example.mtm.model.SliderModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
+import com.example.mtm.response.AccountResponse;
 import com.example.mtm.response.TokenResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.Logger;
 import com.example.mtm.util.PreferenceManager;
-import com.example.mtm.util.ZoomClass;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
         fields.put("client_id", "account-mobile");
         fields.put("client_secret", "6323a00d-974f-46b9-974d-37e9a1588c59");
         fields.put("grant_type", "password");
+        fields.put("scope", "offline_access");
         fields.put("username", userName);
         fields.put("password", password);
 
@@ -195,13 +195,16 @@ public class LoginActivity extends AppCompatActivity {
                     TokenResponse tokenModel = response.body();
                     if (tokenModel != null) {
 
+
+
+
                         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
                         preferenceManager.putString(Constants.KEY_ACCESS_TOKEN, tokenModel.getAccessToken());
                         preferenceManager.putString(Constants.KEY_REFRESH_TOKEN, tokenModel.getRefreshToken());
 
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(i);
-                        finish();
+                        getAccount(tokenModel.getAccessToken());
+
+
 
                     }
 
@@ -221,6 +224,80 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void getAccount(String token) {
+
+//        String userName = usernameEditText.getText().toString();
+//        String password = passwordEditText.getText().toString();
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+//        Map<String, String> fields = new HashMap<>();
+//        fields.put("client_id", "account-mobile");
+//        fields.put("client_secret", "6323a00d-974f-46b9-974d-37e9a1588c59");
+//        fields.put("grant_type", "password");
+//        fields.put("scope", "offline_access");
+//        fields.put("username", userName);
+//        fields.put("password", password);
+
+        Call<AccountResponse> call = apiService.getAccount(
+                "Bearer " + token);
+
+
+//        Logger.getInstance().logDebug(TAG, "getToken", 1, fields);
+
+        call.enqueue(new Callback<AccountResponse>() {
+            @Override
+            public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "getAccount", 2, response.body());
+
+                if (response.isSuccessful()) {
+
+                    AccountResponse tokenModel = response.body();
+                    if (tokenModel != null) {
+
+
+                        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+
+                        preferenceManager.putInt(Constants.KEY_CURRENT_COSTUMER_ID, tokenModel.getData().get(0).getId());
+
+                        int [] ids = new int[tokenModel.getData().size()];
+                        String [] names = new String[tokenModel.getData().size()];
+
+                        for (int i = 0; i < tokenModel.getData().size(); i++) {
+                            ids[i] = tokenModel.getData().get(i).getId();
+                            names[i] = tokenModel.getData().get(i).getName();
+                        }
+
+                        preferenceManager.putIntArray(Constants.KEY_COSTUMER_ID_ARRAY, ids);
+                        preferenceManager.putStringArray(Constants.KEY_COSTUMER_NAME_ARRAY, names);
+
+
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+
+                    }
+
+                } else {
+
+                    Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccountResponse> call, Throwable t) {
+
+                Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+                Logger.getInstance().logDebug(TAG, "getAccount", 3, t.getMessage());
+            }
+        });
+
+    }
+
 
     @Override
     protected void onResume() {

@@ -8,6 +8,8 @@ import com.example.mtm.response.MediaAgendaResponse;
 import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
+import com.example.mtm.response.NotificationsResponse;
+import com.example.mtm.response.PrintedMediaSubResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.response.SummaryListResponse;
 import com.example.mtm.response.VisualMediaResponse;
@@ -24,8 +26,10 @@ public class DataHolder {
     private SubMenuVisualMediaResponse subMenuVisualMediaModel;
     private InternetResponse internetModel;
     private InternetSubResponse InternetSubModel;
+    private PrintedMediaSubResponse printedMediaSubResponse;
     private MenuListResponse menuListResponse;
     private SummaryListResponse summaryListResponse;
+    private NotificationsResponse notificationsResponse;
 
     private DataHolder() {}
 
@@ -121,6 +125,22 @@ public class DataHolder {
         this.summaryListResponse = summaryListResponse;
     }
 
+    public PrintedMediaSubResponse getPrintedMediaSubResponse() {
+        return printedMediaSubResponse;
+    }
+
+    public void setPrintedMediaSubResponse(PrintedMediaSubResponse printedMediaSubResponse) {
+        this.printedMediaSubResponse = printedMediaSubResponse;
+    }
+
+    public NotificationsResponse getNotificationsResponse() {
+        return notificationsResponse;
+    }
+
+    public void setNotificationsResponse(NotificationsResponse notificationsResponse) {
+        this.notificationsResponse = notificationsResponse;
+    }
+
     public void clearDataHolderClass() {
         this.mediaAgendaModel = null;
         this.newspaperFirstPagesModel = null;
@@ -133,5 +153,7 @@ public class DataHolder {
         this.InternetSubModel = null;
         this.menuListResponse = null;
         this.summaryListResponse = null;
+        this.printedMediaSubResponse = null;
+        this.notificationsResponse = null;
     }
 }

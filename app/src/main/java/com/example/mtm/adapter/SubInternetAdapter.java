@@ -69,7 +69,7 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
         holder.dateTextView.setText(itemData.getDate());
 
         holder.itemView.setOnClickListener(view -> {
-            listener.onItemClick(itemData.getShareLink());
+            listener.onItemClick(itemData.getShareLink(), itemData.getShareLink2());
         });
 
         holder.shareCardView.setOnClickListener(view -> {
@@ -131,7 +131,7 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String mediaPath);
+        void onItemClick(String mediaPath, String mediaPath2);
         void onShowMore();
     }
 

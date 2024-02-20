@@ -6,13 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
+    android:layoutDirection="ltr"
     tools:context=".activity.LoginActivity">
 
     <ImageView
         android:id="@+id/test"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_weight="2"
+        android:layout_height="0dp"
         android:src="@drawable/yas"
         android:contentDescription="@string/todo" />
 
@@ -23,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textSize="13sp"
         android:textColor="@color/color1"
         android:text="@string/for_more"/>
 
@@ -47,7 +50,7 @@
         android:text="@string/required_field"
         android:textColor="@color/red"
         android:layout_gravity="end"
-        android:textSize="8sp"
+        android:textSize="7sp"
         android:layout_marginTop="20dp"
         tools:ignore="SmallSp" />
 
@@ -61,14 +64,17 @@
 
 
         <EditText
+            android:gravity="center_vertical"
+            android:textSize="15sp"
             android:id="@+id/edit_username"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:inputType="text|textCapWords"
             android:maxLines="1"
             android:textColor="@color/color2"
             android:backgroundTint="@android:color/transparent"
-            android:autofillHints="" />
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +87,7 @@
         android:textColor="@color/red"
         android:layout_gravity="end"
         android:visibility="invisible"
-        android:textSize="8sp"
+        android:textSize="7sp"
         android:layout_marginTop="15dp"
         tools:ignore="SmallSp" />
 
@@ -96,9 +102,11 @@
 
 
         <EditText
+            android:gravity="center_vertical"
+            android:textSize="15sp"
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:inputType="text|textCapWords"
             android:maxLines="1"
             android:textColor="@color/color2"
@@ -122,16 +130,17 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="10dp"
+        android:layout_weight="0"/>
 
     <LinearLayout
-        android:paddingVertical="20dp"
-        android:layout_marginTop="15dp"
+        android:paddingVertical="7dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/bottom_sheet_background"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="270dp">
+        android:layout_weight="2"
+        android:layout_height="0dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -139,7 +148,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_marginTop="0dp"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:text="Gündemde Öne Çıkan Haberler"/>
 
 
@@ -151,8 +160,7 @@
 
             <ImageView
                 android:id="@+id/leftArrowImageView"
-                android:paddingVertical="5dp"
-                android:paddingStart="5dp"
+                android:padding="7dp"
                 android:layout_gravity="center_vertical"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -169,8 +177,7 @@
 
             <ImageView
                 android:id="@+id/rightArrowImageView"
-                android:paddingVertical="5dp"
-                android:paddingStart="5dp"
+                android:padding="7dp"
                 android:layout_gravity="center_vertical"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -182,7 +189,7 @@
         <me.relex.circleindicator.CircleIndicator
             android:id="@+id/indicator"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             app:ci_drawable="@drawable/white_radius"
             app:ci_height="7dp"
             app:ci_width="7dp"/>

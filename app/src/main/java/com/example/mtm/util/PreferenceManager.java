@@ -50,6 +50,19 @@ public class PreferenceManager {
         return array;
     }
 
+    public void putIntArray(String key, int[] value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String jsonText = gson.toJson(value);
+        editor.putString(key, jsonText);
+        editor.apply();
+    }
+
+    public int[] getIntArray(String key) {
+        Gson gson = new Gson();
+        String jsonText = sharedPreferences.getString(key, null);
+        return gson.fromJson(jsonText, int[].class);
+    }
 
     public void putInt(String key,int value){
         SharedPreferences.Editor editor = sharedPreferences.edit();

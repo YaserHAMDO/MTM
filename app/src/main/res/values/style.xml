@@ -51,5 +51,10 @@
     </style>
 
 
+    <style name="AppButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
 
 </resources>

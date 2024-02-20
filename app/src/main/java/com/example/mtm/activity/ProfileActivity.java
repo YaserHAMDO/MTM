@@ -37,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
     private PreferenceManager preferenceManager;
 
     private ImageView backIconImageView;
+    private ImageView notificationImageView;
 
     ZoomClass zoomClass;
     private MaterialButton logoutMaterialButton;
@@ -84,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
 
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
+        notificationImageView = findViewById(R.id.notificationImageView);
         logoutMaterialButton = findViewById(R.id.logoutMaterialButton);
 
         preferenceManager = new PreferenceManager(getApplicationContext());
@@ -145,6 +147,12 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
         logoutMaterialButton.setOnClickListener(view -> logoutApi());
+
+        notificationImageView.setOnClickListener(view -> {
+            Intent i = new Intent(ProfileActivity.this, AccountActivity.class);
+            startActivity(i);
+            finish();
+        });
     }
 
     private void logout() {

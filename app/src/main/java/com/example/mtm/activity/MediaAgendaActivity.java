@@ -1,9 +1,13 @@
 package com.example.mtm.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,9 +22,13 @@ import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;
 import com.example.mtm.util.PreferenceManager;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,12 +36,18 @@ import retrofit2.Response;
 
 public class MediaAgendaActivity extends AppCompatActivity implements MediaAgendaTitleAdapter.OnItemClickListener {
 
+    private static final String TAG = "InternetActivity";
+
     private RecyclerView recyclerView;
     private RecyclerView recyclerView2;
     private MediaAgendaTitleAdapter adapter;
     private MediaAgendaBodyAdapter adapter2;
-    private ImageView backIconImageView;
-    private ArrayList<MediaAgendaModel> politicsModels, economyModels, worldModels, cultureModels, lifeModels, sportsModels, isModels;
+    private ImageView backIconImageView, filterImageView;
+    private TextView seeAll;
+    private ArrayList<MediaAgendaModel> all, politicsModels, economyModels, worldModels, cultureModels, lifeModels, sportsModels, isModels;
+    private ProgressBar progressBar;
+
+    private MaterialDatePicker materialDatePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +57,7 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
         init();
         setItemClickListeners();
         setData();
+        confDate();
 
     }
 
@@ -51,11 +66,61 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
         recyclerView2 = findViewById(R.id.recyclerView2);
         backIconImageView = findViewById(R.id.backIconImageView);
         recyclerView = findViewById(R.id.recyclerView);
+        filterImageView = findViewById(R.id.filterImageView);
+        progressBar = findViewById(R.id.progressBar);
+        seeAll = findViewById(R.id.seeAll);
     }
 
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+        seeAll.setOnClickListener(view -> {
+            adapter.clearSelection();
+            setTypesList2(all);
+        });
+        filterImageView.setOnClickListener(view -> materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER"));
     }
+    private void confDate() {
+        MaterialDatePicker.Builder<Pair<Long, Long>> materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
+        materialDateBuilder.setTitleText("Tarih Seç");
+        materialDateBuilder.setTheme(R.style.MaterialDatePicker);
+        materialDatePicker = materialDateBuilder.build();
+
+//        materialDatePicker.addOnPositiveButtonClickListener(
+//                new MaterialPickerOnPositiveButtonClickListener() {
+//                    @SuppressLint("SetTextI18n")
+//                    @Override
+//                    public void onPositiveButtonClick(Object selection) {
+//
+//                        // if the user clicks on the positive
+//                        // button that is ok button update the
+//                        // selected date
+////                        mShowSelectedDateText.setText("Selected Date is : " + materialDatePicker.getHeaderText());
+//                        // in the above statement, getHeaderText
+//                        // will return selected date preview from the
+//                        // dialog
+//                    }
+//                });
+
+        materialDatePicker.addOnPositiveButtonClickListener(
+                selection -> {
+                    Pair<Long, Long> selectionPair = (Pair<Long, Long>) materialDatePicker.getSelection();
+                    if (selectionPair != null) {
+                        long startDate = selectionPair.first;
+                        long endDate = selectionPair.second;
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        String formattedStartDate = sdf.format(new Date(startDate));
+                        String formattedEndDate = sdf.format(new Date(endDate));
+//                        Toast.makeText(this, "Start Date: " + formattedStartDate + "\nEnd Date: " + formattedEndDate, Toast.LENGTH_SHORT).show();
+                        recyclerView.setAdapter(null);
+                        recyclerView2.setAdapter(null);
+                        progressBar.setVisibility(View.VISIBLE);
+                        getMediaAgenda2(formattedStartDate, formattedEndDate);
+
+
+                    }
+                });
+    }
+
 
     private void setData() {
 
@@ -66,6 +131,7 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
 
         if (result != null) {
             ArrayList<String> userMatch2 = new ArrayList<>();
+            all = new ArrayList<>();
             politicsModels = new ArrayList<>();
             economyModels = new ArrayList<>();
             worldModels = new ArrayList<>();
@@ -101,86 +167,99 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                     magazineUrl =  Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getImageStoragePath();
                 }
 
-                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Siyaset")) {
+                String type = result.getData().getDocs().get(i).getAgendaType().getName();
 
-                    politicsModels.add(new MediaAgendaModel(
-                            "Siyaset",
-                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-                            magazineUrl,
-                            videoUrl,
-                            result.getData().getDocs().get(i).getAgendaType().getName(),
-                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-                    ));
+                switch (type) {
+                    case "Siyaset":
+                        politicsModels.add(new MediaAgendaModel(
+                                type,
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                magazineUrl,
+                                videoUrl,
+                                result.getData().getDocs().get(i).getAgendaType().getName(),
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                        ));
+                        break;
+
+                    case "Ekonomi":
+                        economyModels.add(new MediaAgendaModel(
+                                type,
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                magazineUrl,
+                                videoUrl,
+                                result.getData().getDocs().get(i).getAgendaType().getName(),
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                        ));
+                        break;
+
+                    case "Dünya":
+                        worldModels.add(new MediaAgendaModel(
+                                type,
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                magazineUrl,
+                                videoUrl,
+                                result.getData().getDocs().get(i).getAgendaType().getName(),
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                        ));
+                        break;
+
+                    case "Kültür-Sanat":
+                        cultureModels.add(new MediaAgendaModel(
+                                type,
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                magazineUrl,
+                                videoUrl,
+                                result.getData().getDocs().get(i).getAgendaType().getName(),
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                        ));
+                        break;
+
+                    case "Yaşam":
+                        lifeModels.add(new MediaAgendaModel(
+                                type,
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                magazineUrl,
+                                videoUrl,
+                                result.getData().getDocs().get(i).getAgendaType().getName(),
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                        ));
+                        break;
+
+                    case "Spor":
+                        sportsModels.add(new MediaAgendaModel(
+                                type,
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                magazineUrl,
+                                videoUrl,
+                                result.getData().getDocs().get(i).getAgendaType().getName(),
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                        ));
+                        break;
+
+                    case "İş Dünyası":
+                        isModels.add(new MediaAgendaModel(
+                                type,
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                                magazineUrl,
+                                videoUrl,
+                                result.getData().getDocs().get(i).getAgendaType().getName(),
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                        ));
+                        break;
                 }
 
-                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Ekonomi")) {
-                    economyModels.add(new MediaAgendaModel(
-                            "Ekonomi",
-                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-                            magazineUrl,
-                            videoUrl,
-                            result.getData().getDocs().get(i).getAgendaType().getName(),
-                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-                    ));
-                }
+                all.add(new MediaAgendaModel(
+                        type,
+                        Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
+                        magazineUrl,
+                        videoUrl,
+                        result.getData().getDocs().get(i).getAgendaType().getName(),
+                        result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                ));
 
-                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Dünya")) {
-                    worldModels.add(new MediaAgendaModel(
-                            "Dünya",
-                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-                            magazineUrl,
-                            videoUrl,
-                            result.getData().getDocs().get(i).getAgendaType().getName(),
-                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-                    ));
-                }
-
-                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Kültür-Sanat")) {
-                    cultureModels.add(new MediaAgendaModel(
-                            "Kültür-Sanat",
-                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-                            magazineUrl,
-                            videoUrl,
-                            result.getData().getDocs().get(i).getAgendaType().getName(),
-                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-                    ));
-                }
-
-                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Yaşam")) {
-                    lifeModels.add(new MediaAgendaModel(
-                            "Yaşam",
-                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-                            magazineUrl,
-                            videoUrl,
-                            result.getData().getDocs().get(i).getAgendaType().getName(),
-                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-                    ));
-                }
-
-                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Spor")) {
-                    sportsModels.add(new MediaAgendaModel(
-                            "spor",
-                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-                            magazineUrl,
-                            videoUrl,
-                            result.getData().getDocs().get(i).getAgendaType().getName(),
-                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-                    ));
-                }
-
-                if (result.getData().getDocs().get(i).getAgendaType().getName().equals("İş Dünyası")) {
-                    isModels.add(new MediaAgendaModel(
-                            "İş Dünyası",
-                            Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-                            magazineUrl,
-                            videoUrl,
-                            result.getData().getDocs().get(i).getAgendaType().getName(),
-                            result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-                    ));
-                }
             }
 
-            setTypesList2(politicsModels);
+            setTypesList2(all);
         } else {
             // Handle case where no data is available
         }
@@ -197,6 +276,71 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
         recyclerView2.setAdapter(null);
         adapter2 = new MediaAgendaBodyAdapter(this, dataList);
         recyclerView2.setAdapter(adapter2);
+    }
+
+    private void getMediaAgenda2(String startDate, String endDate) {
+
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MediaAgendaResponse> call = apiService.getMediaAgenda2(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
+                true,
+                true,
+                true,
+                true,
+                true,
+                startDate,
+                endDate
+        );
+
+        call.enqueue(new Callback<MediaAgendaResponse>() {
+            @Override
+            public void onResponse(Call<MediaAgendaResponse> call, Response<MediaAgendaResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
+
+                progressBar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+
+
+
+
+
+
+                    MediaAgendaResponse result = response.body();
+
+
+                    DataHolder.getInstance().setMediaAgendaModel(result);
+
+
+
+                    setData();
+
+
+                } else {
+
+                    if (response.code() == 403) {
+//                        forbiddenPopup();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MediaAgendaResponse> call, Throwable t) {
+
+                progressBar.setVisibility(View.GONE);
+
+                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
+            }
+        });
+
+
     }
 
     @Override

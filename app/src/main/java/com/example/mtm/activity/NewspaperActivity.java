@@ -2,7 +2,6 @@ package com.example.mtm.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import com.example.mtm.adapter.NewspaperAdapter;
 import com.example.mtm.model.NewspaperModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
-import com.example.mtm.response.MagazineFullPagesResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
 import com.example.mtm.util.Constants;
@@ -87,7 +85,7 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
         Call<NewsPaperFullPagesResponse> call = apiService.newspaperFullPages(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 0,
                 50,
                 true,

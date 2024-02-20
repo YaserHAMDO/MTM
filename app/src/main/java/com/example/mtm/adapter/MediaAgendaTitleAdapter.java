@@ -17,7 +17,7 @@ public class MediaAgendaTitleAdapter extends RecyclerView.Adapter<MediaAgendaTit
 
     private final Context context;
     private final List<String> dataList;
-    private int selectedItem = 0;
+    private int selectedItem = -1;
     private final OnItemClickListener listener;
 
     public MediaAgendaTitleAdapter(Context context, List<String> dataList, OnItemClickListener listener) {
@@ -57,7 +57,7 @@ public class MediaAgendaTitleAdapter extends RecyclerView.Adapter<MediaAgendaTit
             public void onClick(View v) {
                 // Toggle visibility of the view
                 if (selectedItem == pos) {
-                    selectedItem = -1; // Deselect item
+//                    selectedItem = -1; // Deselect item
                 } else {
                     selectedItem = pos; // Select item
                 }
@@ -85,6 +85,11 @@ public class MediaAgendaTitleAdapter extends RecyclerView.Adapter<MediaAgendaTit
             textView = itemView.findViewById(R.id.greeting_tv1);
             view = itemView.findViewById(R.id.viewxx);
         }
+    }
+
+    public void clearSelection() {
+        selectedItem = -1; // Deselect all items
+        notifyDataSetChanged(); // Notify adapter that data has changed
     }
 
     public interface OnItemClickListener {

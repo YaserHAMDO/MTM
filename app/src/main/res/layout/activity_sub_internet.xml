@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:layoutDirection="ltr"
     tools:context=".activity.SubInternetActivity">
 
     <LinearLayout
@@ -26,20 +27,21 @@
             android:src="@drawable/left_arrow_blue" />
 
         <TextView
+            android:visibility="visible"
             android:id="@+id/titleTextView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="start|center_vertical"
             android:text="İnternet"
-            android:textColor="#4E4B66"
+            android:textColor="#16456F"
             android:textSize="20sp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
 
@@ -67,5 +69,41 @@
         android:visibility="gone"
         android:id="@+id/web_view_layout"
         layout="@layout/web_view_layout" />
+
+    <LinearLayout
+        android:id="@+id/mesut"
+        android:background="@color/black"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" >
+
+        <TextView
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            android:background="@color/white"
+            android:id="@+id/tumSayfa"
+            android:gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tüm sayfa"
+            android:textColor="@color/color3"
+            android:textSize="20sp" />
+
+        <com.jsibbold.zoomage.ZoomageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.mtm.network;
 
+import com.example.mtm.response.AccountResponse;
 import com.example.mtm.response.ColumnistsResponse;
 import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
@@ -8,6 +9,8 @@ import com.example.mtm.response.MediaAgendaResponse;
 import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
+import com.example.mtm.response.NotificationsResponse;
+import com.example.mtm.response.PrintedMediaSubResponse;
 import com.example.mtm.response.RefreshTokenResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.response.SummaryListResponse;
@@ -39,6 +42,20 @@ public interface ApiService {
     Call<Void> logout( @Header("Authorization") String authToken, @FieldMap Map<String, String> fields);
 
 
+    @GET("api/customer/accounts")
+    Call<AccountResponse> getAccount(
+            @Header("Authorization") String authToken
+//            ,
+//            @Query("customerId") int customerId,
+//            @Query("addHash") boolean addHash,
+//            @Query("addClip") boolean addClip,
+//            @Query("addContent") boolean addContent,
+//            @Query("addDocs") boolean addDocs,
+//            @Query("addTitle") boolean addTitle,
+//            @Query("date") String date
+    );
+
+
     @GET("api/data/email/list")
     Call<SummaryListResponse> summaryList(
             @Header("Authorization") String authToken,
@@ -67,6 +84,27 @@ public interface ApiService {
             @Query("date") String date
     );
 
+    @GET("api/data/agenda/list")
+    Call<MediaAgendaResponse> getMediaAgenda2(
+            @Header("Authorization") String authToken,
+            @Query("customerId") int customerId,
+            @Query("addHash") boolean addHash,
+            @Query("addClip") boolean addClip,
+            @Query("addContent") boolean addContent,
+            @Query("addDocs") boolean addDocs,
+            @Query("addTitle") boolean addTitle,
+            @Query("dateStart") String dateStart,
+            @Query("dateEnd") String dateEnd
+    );
+
+    @GET("api/customer/notifier/")
+    Call<NotificationsResponse> getNotifications(
+            @Header("Authorization") String authToken,
+            @Query("customerId") int customerId,
+            @Query("page") int page,
+            @Query("perPage") int perPage
+    );
+
     @GET("api/data/pm/first-pages")
     Call<NewspaperFirstPagesResponse> newspaperFirstPages(
             @Header("Authorization") String authToken,
@@ -88,6 +126,20 @@ public interface ApiService {
             @Query("distribution") String distribution,
             @Query("mediaType") String mediaType,
             @Query("date") String date
+    );
+
+    @GET("api/data/pm/newspaper")
+    Call<NewsPaperFullPagesResponse> newspaperFullPages2(
+            @Header("Authorization") String authToken,
+            @Query("customerId") int customerId,
+            @Query("page") int page,
+            @Query("perPage") int perPage,
+            @Query("addImageInfo") boolean addImageInfo,
+            @Query("addPages") boolean addPages,
+            @Query("distribution") String distribution,
+            @Query("mediaType") String mediaType,
+            @Query("dateStart") String dateStart,
+            @Query("dateEnd") String dateEnd
     );
 
     @GET("api/data/pm/newspaper")
@@ -328,7 +380,7 @@ public interface ApiService {
     );
 
     @GET("/api/data/pm/news-list")
-    Call<InternetSubResponse> subMenuList(
+    Call<PrintedMediaSubResponse> subMenuList(
             @Header("Authorization") String authToken,
             @Query("page") int page,
             @Query("perPage") int perPage,
