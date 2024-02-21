@@ -9,14 +9,16 @@ public class ColumnistModel {
     private final String title;
     private final String date;
     private final String imageStoragePath;
+    private final String gnoHash;
 
-    public ColumnistModel(String journalistImageUrl, String journalistName, String mediaName, String title, String date, String imageStoragePath) {
+    public ColumnistModel(String journalistImageUrl, String journalistName, String mediaName, String title, String date, String imageStoragePath, String gnoHash) {
         this.journalistImageUrl = journalistImageUrl;
         this.journalistName = journalistName;
         this.mediaName = mediaName;
         this.title = title;
         this.date = date;
         this.imageStoragePath = imageStoragePath;
+        this.gnoHash = gnoHash;
     }
 
     public String getImageStoragePath() {
@@ -41,5 +43,9 @@ public class ColumnistModel {
 
     public String getDate() {
         return date;
+    }
+
+    public String getGnoHash() {
+        return gnoHash;
     }
 }

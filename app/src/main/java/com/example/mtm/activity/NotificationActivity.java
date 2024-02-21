@@ -1,6 +1,8 @@
 package com.example.mtm.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -8,12 +10,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.mtm.R;
+import com.example.mtm.adapter.ColumnistAdapter;
+import com.example.mtm.adapter.NotificationsAdapter;
+import com.example.mtm.adapter.SubInternetAdapter;
+import com.example.mtm.model.ColumnistModel;
+import com.example.mtm.model.NotificationsModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
+import com.example.mtm.request.MarkAsReadRequestBody;
 import com.example.mtm.response.ColumnistsResponse;
+import com.example.mtm.response.MarkAsReadResponse;
 import com.example.mtm.response.NotificationsResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
@@ -28,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity implements NotificationsAdapter.OnItemClickListener{
 
     private static final String TAG = "NotificationActivity";
 
@@ -37,16 +49,103 @@ public class NotificationActivity extends AppCompatActivity {
     private LinearLayout buttonContainer;
     private Button selectedButton;
 
+    private RecyclerView recyclerView;
+
+    private FrameLayout frameLayout;
+    private Button button;
+    private ProgressBar progressBar;
+    private NotificationsAdapter adapter;
+
+    private int pageNumber = 0;
+    private int pageSize = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
+        init();
+//        setData2();
+        setItemClickListeners();
         getNotifications();
     }
 
+    private void init() {
+//        backIconImageView = findViewById(R.id.backIconImageView);
+        recyclerView = findViewById(R.id.recyclerView);
+        frameLayout = findViewById(R.id.frameLayout);
+        button = findViewById(R.id.button);
+        progressBar = findViewById(R.id.progressBar);
+
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
+
+    }
+    private void setItemClickListeners() {
+//        backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+        button.setOnClickListener(view -> {
+            pageNumber++;
+            getNotifications();
+        });
+
+    }
+
+
+    private void setData2() {
+
+//        columnistsShowArray.clear();
+
+        NotificationsResponse result = DataHolder.getInstance().getNotificationsResponse();
+
+        List<NotificationsModel> items = new ArrayList<>();
+
+        for (int i = 0; i < result.getData().size(); i++) {
+
+            String url = "";
+            boolean read = true;
+
+            if (result.getData().get(i).getData().getUrl() != null) {
+                url = result.getData().get(i).getData().getUrl();
+            }
+
+
+            items.add(new NotificationsModel(
+                    result.getData().get(i).getTitle(),
+                    result.getData().get(i).getBody(),
+                    url,
+                    result.getData().get(i).getId(),
+                    result.getData().get(i).getRtime() != null
+            ));
+
+//            columnistsShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
+
+        }
+//        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+//        recyclerView.setAdapter(new NotificationsAdapter(this, items, this));
+
+//        filteredDateTextView.setText(startDate + " ile " + endDate + " arasında tarihi kayıtlar gösterilmektedir.");
+
+
+
+        if (pageNumber == 0) {
+            adapter = new NotificationsAdapter(this, items, this);
+            recyclerView.setAdapter(adapter);
+        } else {
+
+            adapter.addItems(items);
+
+        }
+
+        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+
+
+    }
+
+
     private void getNotifications() {
+
+        progressBar.setVisibility(View.VISIBLE);
+        button.setVisibility(View.INVISIBLE);
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -54,16 +153,20 @@ public class NotificationActivity extends AppCompatActivity {
 
         Call<NotificationsResponse> call = apiService.getNotifications(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                22632,
-                0,
-                5
-        );
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
+                pageNumber, // Use pageNumber for pagination
+                pageSize
+                );
 
         call.enqueue(new Callback<NotificationsResponse>() {
             @Override
             public void onResponse(Call<NotificationsResponse> call, Response<NotificationsResponse> response) {
 
                 Logger.getInstance().logDebug(TAG, "getNotifications", 2, response.body());
+
+
+                progressBar.setVisibility(View.INVISIBLE);
+                button.setVisibility(View.VISIBLE);
 
 
                 if (response.isSuccessful()) {
@@ -75,7 +178,7 @@ public class NotificationActivity extends AppCompatActivity {
                     DataHolder.getInstance().setNotificationsResponse(result);
 
 
-                    setData();
+                    setData2();
 
                 } else {
 
@@ -92,6 +195,9 @@ public class NotificationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<NotificationsResponse> call, Throwable t) {
+
+                progressBar.setVisibility(View.INVISIBLE);
+                button.setVisibility(View.VISIBLE);
 
                 Logger.getInstance().logDebug(TAG, "getNotifications", 3, t.getMessage());
                 Logger.getInstance().logDebug(TAG, "getNotifications", 3, t.getCause());
@@ -166,4 +272,60 @@ public class NotificationActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onItemClick(int index) {
+        setRead(index);
+    }
+
+    private void setRead(int index) {
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        MarkAsReadRequestBody requestBody = new MarkAsReadRequestBody(preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID));
+
+        Call<MarkAsReadResponse> call = apiService.markAllNotificationAsRead(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                requestBody
+        );
+
+        call.enqueue(new Callback<MarkAsReadResponse>() {
+            @Override
+            public void onResponse(Call<MarkAsReadResponse> call, Response<MarkAsReadResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "getNotifications", 2, response.body());
+
+
+                progressBar.setVisibility(View.INVISIBLE);
+                button.setVisibility(View.VISIBLE);
+
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(NotificationActivity.this, "Okundu.", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    if (response.code() == 403) {
+//                        forbiddenPopup();
+                    }
+
+                    else {
+//                        refreshToken2(8);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MarkAsReadResponse> call, Throwable t) {
+
+                Logger.getInstance().logDebug(TAG, "getNotifications", 3, t.getMessage());
+                Logger.getInstance().logDebug(TAG, "getNotifications", 3, t.getCause());
+
+            }
+        });
+
+    }
 }

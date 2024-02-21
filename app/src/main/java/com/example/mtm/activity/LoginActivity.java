@@ -201,6 +201,7 @@ public class LoginActivity extends AppCompatActivity {
                         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
                         preferenceManager.putString(Constants.KEY_ACCESS_TOKEN, tokenModel.getAccessToken());
                         preferenceManager.putString(Constants.KEY_REFRESH_TOKEN, tokenModel.getRefreshToken());
+                        preferenceManager.putString(Constants.KEY_CURRENT_COSTUMER_EMAIL, userName);
 
                         getAccount(tokenModel.getAccessToken());
 
@@ -262,6 +263,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                         preferenceManager.putInt(Constants.KEY_CURRENT_COSTUMER_ID, tokenModel.getData().get(0).getId());
+                        preferenceManager.putString(Constants.KEY_CURRENT_COSTUMER_NAME, tokenModel.getData().get(0).getName());
 
                         int [] ids = new int[tokenModel.getData().size()];
                         String [] names = new String[tokenModel.getData().size()];

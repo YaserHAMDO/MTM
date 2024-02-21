@@ -81,8 +81,8 @@
             <FrameLayout
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/dorduncuLayoutfgd"
-                android:layout_width="170dp"
-                android:layout_height="170dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:animateLayoutChanges="true"
                 android:background="@drawable/test16"
                 app:layout_constraintBottom_toBottomOf="@+id/asdfasdfasdf"
@@ -91,8 +91,8 @@
 
                 <ImageView
                     android:layout_gravity="center"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:src="@drawable/profile_icon2" />
 
             </FrameLayout>

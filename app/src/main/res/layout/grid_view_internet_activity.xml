@@ -27,41 +27,36 @@
 
             <View
                 android:id="@+id/view"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
                 android:background="@drawable/orange_circule"/>
 
             <TextView
+                android:layout_weight="1"
                 android:id="@+id/nameTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
+                android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="10dp"
                 android:ellipsize="end"
-                android:maxLines="3"
+                android:maxLines="1"
                 android:textStyle="bold"
                 android:text="Test"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/countTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
+                android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="10dp"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:textStyle="bold"
                 android:text="25"
                 android:textColor="@color/color3"
-                android:textSize="20sp" />
+                android:textSize="17sp" />
 
 
             <View

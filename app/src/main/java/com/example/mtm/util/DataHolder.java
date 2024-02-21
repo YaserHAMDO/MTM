@@ -14,6 +14,8 @@ import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.response.SummaryListResponse;
 import com.example.mtm.response.VisualMediaResponse;
 
+import java.util.ArrayList;
+
 public class DataHolder {
     private static final DataHolder instance = new DataHolder();
 
@@ -30,6 +32,8 @@ public class DataHolder {
     private MenuListResponse menuListResponse;
     private SummaryListResponse summaryListResponse;
     private NotificationsResponse notificationsResponse;
+
+    private ArrayList<String> columnistsShowArray;
 
     private DataHolder() {}
 
@@ -141,6 +145,14 @@ public class DataHolder {
         this.notificationsResponse = notificationsResponse;
     }
 
+    public ArrayList<String> getColumnistsShowArray() {
+        return columnistsShowArray;
+    }
+
+    public void setColumnistsShowArray(ArrayList<String> columnistsShowArray) {
+        this.columnistsShowArray = columnistsShowArray;
+    }
+
     public void clearDataHolderClass() {
         this.mediaAgendaModel = null;
         this.newspaperFirstPagesModel = null;
@@ -155,5 +167,6 @@ public class DataHolder {
         this.summaryListResponse = null;
         this.printedMediaSubResponse = null;
         this.notificationsResponse = null;
+        this.columnistsShowArray = null;
     }
 }

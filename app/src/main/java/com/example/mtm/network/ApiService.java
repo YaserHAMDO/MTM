@@ -1,10 +1,12 @@
 package com.example.mtm.network;
 
+import com.example.mtm.request.MarkAsReadRequestBody;
 import com.example.mtm.response.AccountResponse;
 import com.example.mtm.response.ColumnistsResponse;
 import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
 import com.example.mtm.response.MagazineFullPagesResponse;
+import com.example.mtm.response.MarkAsReadResponse;
 import com.example.mtm.response.MediaAgendaResponse;
 import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
@@ -20,11 +22,14 @@ import com.example.mtm.response.VisualMediaResponse;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -104,6 +109,19 @@ public interface ApiService {
             @Query("page") int page,
             @Query("perPage") int perPage
     );
+
+    @PUT("api/customer/notifier/{id}/mark-as-read")
+    Call<MarkAsReadResponse> markNotificationAsRead(
+            @Path("id") int id,
+            @Header("Authorization") String authToken,
+            @Body MarkAsReadRequestBody request);
+
+    @PUT("api/customer/notifier/mark-all-read")
+    Call<MarkAsReadResponse> markAllNotificationAsRead(
+            @Header("Authorization") String authToken,
+            @Body MarkAsReadRequestBody request);
+
+
 
     @GET("api/data/pm/first-pages")
     Call<NewspaperFirstPagesResponse> newspaperFirstPages(

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
 
     private ImageView backIconImageView;
     private ImageView notificationImageView;
+    private EditText usernameEditText, passwordEditText;
 
     ZoomClass zoomClass;
     private MaterialButton logoutMaterialButton;
@@ -82,11 +84,20 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        usernameEditText.setText(preferenceManager.getString(Constants.KEY_CURRENT_COSTUMER_NAME));
+        passwordEditText.setText(preferenceManager.getString(Constants.KEY_CURRENT_COSTUMER_EMAIL));
+
+    }
 
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
         notificationImageView = findViewById(R.id.notificationImageView);
         logoutMaterialButton = findViewById(R.id.logoutMaterialButton);
+        usernameEditText = findViewById(R.id.edit_username);
+        passwordEditText = findViewById(R.id.passwordEditText);
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -151,7 +162,6 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
         notificationImageView.setOnClickListener(view -> {
             Intent i = new Intent(ProfileActivity.this, AccountActivity.class);
             startActivity(i);
-            finish();
         });
     }
 

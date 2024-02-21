@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
 import com.example.mtm.model.ColumnistModel;
+import com.example.mtm.util.Constants;
 import com.example.mtm.util.MyUtils;
 
 import java.util.List;
@@ -50,12 +51,12 @@ public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.View
 
 
         holder.itemView.setOnClickListener(view -> {
-            listener.onItemClick(itemData.getImageStoragePath());
+            listener.onItemClick(position);
         });
 
         holder.shareCardView.setOnClickListener(view -> {
 
-            MyUtils.shareLink("Test link", mContext);
+            MyUtils.shareLink(itemData.getGnoHash(), mContext);
 
         });
 
@@ -90,6 +91,6 @@ public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.View
 
 
     public interface OnItemClickListener {
-        void onItemClick(String mediaPath);
+        void onItemClick(int index);
     }
 }

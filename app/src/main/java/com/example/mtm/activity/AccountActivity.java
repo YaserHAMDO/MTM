@@ -62,6 +62,7 @@ public class AccountActivity extends AppCompatActivity {
                     selectedButton = (Button) v;
                     selectedButton.setSelected(true); // Select clicked button
                     preferenceManager.putInt(Constants.KEY_CURRENT_COSTUMER_ID, (Integer) v.getTag());
+                    preferenceManager.putString(Constants.KEY_CURRENT_COSTUMER_NAME, ((Button) v).getText().toString());
                     selectedButton.setTextColor(getColor(R.color.white));
                 }
             });
