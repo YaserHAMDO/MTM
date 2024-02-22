@@ -72,7 +72,6 @@
 
     <LinearLayout
         android:id="@+id/mesut"
-        android:background="@color/black"
         android:orientation="vertical"
         android:visibility="gone"
         android:layout_width="match_parent"
@@ -92,15 +91,15 @@
             android:gravity="end"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tüm sayfa"
+            android:text="Sayfayı Gör"
             android:textColor="@color/color3"
             android:textSize="20sp" />
 
-        <com.jsibbold.zoomage.ZoomageView
+        <com.example.mtm.util.ZoomClass
+            android:layout_gravity="center"
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 

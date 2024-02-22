@@ -24,6 +24,7 @@ import com.example.mtm.response.AccountResponse;
 import com.example.mtm.response.TokenResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.Logger;
+import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
 
@@ -44,12 +45,12 @@ public class LoginActivity extends AppCompatActivity {
     private ViewPagerAdapter mViewPagerAdapter;
 
     private MaterialButton loginMaterialButton;
-    private TextView requiredUserNameTextView, requiredPasswordTextView;
+    private TextView requiredUserNameTextView, requiredPasswordTextView, resetPasswordTextView, registerTextView;
     private EditText usernameEditText, passwordEditText;
     private ViewPager mViewPager;
     private ImageView test;
     private CircleIndicator indicator;
-
+    PreferenceManager preferenceManager;
     private Handler handler;
     private int page = 0;
     private final int delay = 2000;
@@ -69,6 +70,10 @@ public class LoginActivity extends AppCompatActivity {
         requiredPasswordTextView = findViewById(R.id.requiredPasswordTextView);
         usernameEditText = findViewById(R.id.edit_username);
         passwordEditText = findViewById(R.id.passwordEditText);
+
+        resetPasswordTextView = findViewById(R.id.resetPasswordTextView);
+        registerTextView = findViewById(R.id.registerTextView);
+
         mViewPager = findViewById(R.id.viewPagerMaina);
         test = findViewById(R.id.test);
         indicator = findViewById(R.id.indicator);
@@ -83,6 +88,8 @@ public class LoginActivity extends AppCompatActivity {
         mViewPagerAdapter = new ViewPagerAdapter(this, sliderModels);
         mViewPager.setAdapter(mViewPagerAdapter);
         indicator.setViewPager(mViewPager);
+
+        preferenceManager = new PreferenceManager(getApplicationContext());
     }
 
     private void setItemClickListeners() {
@@ -158,10 +165,19 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         test.setOnClickListener(view -> {
-            usernameEditText.setText("yasershareef1995@gmail.com");
-            passwordEditText.setText("yas12345");
+//            usernameEditText.setText("yasershareef1995@gmail.com");
+//            passwordEditText.setText("yas12345");
 //            usernameEditText.setText("mesutaygun35@icloud.com");
 //            passwordEditText.setText("Picasso1881");
+        });
+
+        resetPasswordTextView.setOnClickListener(view -> {
+
+            MyUtils.openLink(Constants.KEY_FORGET_PASSWORD_URL, this);
+        });
+
+        registerTextView.setOnClickListener(view -> {
+            MyUtils.openLink(Constants.KEY_REGISTER_URL, this);
         });
     }
 

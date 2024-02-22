@@ -1,5 +1,6 @@
 package com.example.mtm.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MediaAgendaActivity extends AppCompatActivity implements MediaAgendaTitleAdapter.OnItemClickListener {
+public class MediaAgendaActivity extends AppCompatActivity implements MediaAgendaTitleAdapter.OnItemClickListener,  MediaAgendaBodyAdapter.OnItemClickListener{
 
     private static final String TAG = "InternetActivity";
 
@@ -48,6 +49,8 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
     private ProgressBar progressBar;
 
     private MaterialDatePicker materialDatePicker;
+
+    private ArrayList<String> columnistsShowArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,8 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
         filterImageView = findViewById(R.id.filterImageView);
         progressBar = findViewById(R.id.progressBar);
         seeAll = findViewById(R.id.seeAll);
+
+        columnistsShowArray = new ArrayList<>();
     }
 
     private void setItemClickListeners() {
@@ -274,8 +279,13 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
 
     private void setTypesList2(List<MediaAgendaModel> dataList) {
         recyclerView2.setAdapter(null);
-        adapter2 = new MediaAgendaBodyAdapter(this, dataList);
+        columnistsShowArray.clear();
+        adapter2 = new MediaAgendaBodyAdapter(this, dataList, this);
         recyclerView2.setAdapter(adapter2);
+
+        for (int i = 0; i < dataList.size(); i++) {
+            columnistsShowArray.add(dataList.get(i).getMagazineImageUrl());
+        }
     }
 
     private void getMediaAgenda2(String startDate, String endDate) {
@@ -377,6 +387,19 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                 setTypesList2(isModels);
                 break;
         }
+
+
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
+        DataHolder.getInstance().setColumnistsShowArray(columnistsShowArray);
+
+        Intent intent = new Intent(this, ColumnistsShowActivity.class);
+        intent.putExtra("index", position);
+        startActivity(intent);
+
 
 
     }

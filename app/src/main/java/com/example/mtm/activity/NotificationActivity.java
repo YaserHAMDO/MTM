@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -53,11 +54,14 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
     private FrameLayout frameLayout;
     private Button button;
+    private Button okundu;
     private ProgressBar progressBar;
     private NotificationsAdapter adapter;
 
+    private ImageView backIconImageView;
+
     private int pageNumber = 0;
-    private int pageSize = 5;
+    private int pageSize = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +75,11 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     }
 
     private void init() {
-//        backIconImageView = findViewById(R.id.backIconImageView);
+        backIconImageView = findViewById(R.id.backIconImageView);
         recyclerView = findViewById(R.id.recyclerView);
         frameLayout = findViewById(R.id.frameLayout);
         button = findViewById(R.id.button);
+        okundu = findViewById(R.id.okundu);
         progressBar = findViewById(R.id.progressBar);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -82,7 +87,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
     }
     private void setItemClickListeners() {
-//        backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+        backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+        okundu.setOnClickListener(view -> setRead(1));
         button.setOnClickListener(view -> {
             pageNumber++;
             getNotifications();
@@ -273,11 +279,24 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     }
 
     @Override
-    public void onItemClick(int index) {
-        setRead(index);
+    public void onItemClick(String title, String body, String link, int id) {
+
+        Intent intent = new Intent(this, NotificationContentActivity.class);
+
+        intent.putExtra("title", title);
+        intent.putExtra("body", body);
+        intent.putExtra("link", link);
+        intent.putExtra("id", id);
+
+        Bundle options = ActivityOptions.makeCustomAnimation(this, R.anim.left, R.anim.right).toBundle();
+        startActivity(intent, options);
+        finish();
+//        setRead(index);
     }
 
     private void setRead(int index) {
+
+        pageNumber = 0;
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -287,7 +306,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
         Call<MarkAsReadResponse> call = apiService.markAllNotificationAsRead(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                requestBody
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID)
         );
 
         call.enqueue(new Callback<MarkAsReadResponse>() {
@@ -303,8 +322,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
                 if (response.isSuccessful()) {
 
-                    Toast.makeText(NotificationActivity.this, "Okundu.", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(NotificationActivity.this, "Hepsi okundu.", Toast.LENGTH_SHORT).show();
+                    getNotifications();
                 } else {
 
                     if (response.code() == 403) {
@@ -327,5 +346,11 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 }

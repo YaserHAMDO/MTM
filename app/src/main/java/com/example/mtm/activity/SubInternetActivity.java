@@ -1,5 +1,6 @@
 package com.example.mtm.activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;
 import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.PreferenceManager;
+import com.example.mtm.util.ZoomClass;
 import com.jsibbold.zoomage.ZoomageView;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SubInternetActivity extends AppCompatActivity implements SubInternetAdapter.OnItemClickListener {
+public class SubInternetActivity extends AppCompatActivity implements SubInternetAdapter.OnItemClickListener, ZoomClass.ZoomClassListener {
 
     private static final String TAG = "SubInternetActivity";
 
@@ -60,12 +62,16 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     private String menuId, subMenuId, startDate, endDate;
     private int count;
 
-    ZoomageView zoomageView;
+    ZoomClass zoomClass;
     LinearLayout mesut;
 
     int x = 0;
 
     private int index;
+
+    private ArrayList<String> printedMediaFullPageShowArray;
+    private ArrayList<String> printedMediaSubPageShowArray;
+    private ArrayList<String> printedMediaDateShowArray, printedMediaNamesShowArray;
 
 
     @Override
@@ -169,7 +175,6 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         test12 = findViewById(R.id.test12);
         progressBar2 = findViewById(R.id.progressBar2);
         includedLayout = findViewById(R.id.web_view_layout);
-        zoomageView = findViewById(R.id.imageView);
         mesut = findViewById(R.id.mesut);
         tumSayfa = findViewById(R.id.tumSayfa);
         sourceTextView = findViewById(R.id.sourceTextView);
@@ -189,6 +194,15 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
 
         sourceUrl = "";
+
+
+        zoomClass = findViewById(R.id.imageView);
+        zoomClass.setZoomClassListener(this);
+
+        printedMediaFullPageShowArray = new ArrayList<>();
+        printedMediaSubPageShowArray = new ArrayList<>();
+        printedMediaDateShowArray = new ArrayList<>();
+        printedMediaNamesShowArray = new ArrayList<>();
     }
 
     private void setItemClickListeners() {
@@ -257,6 +271,12 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getPage().getFullImagePath()
             ));
+
+            printedMediaFullPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getPage().getFullImagePath());
+            printedMediaSubPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
+            printedMediaDateShowArray.add(result.getData().getDocs().get(i).getPublishDate());
+            printedMediaNamesShowArray.add(result.getData().getDocs().get(i).getMedia().getName());
+
         }
 
         if (pageNumber == 0) {
@@ -406,6 +426,8 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             @Override
             public void onResponse(Call<InternetSubResponse> call, Response<InternetSubResponse> response) {
                 isLoading = false; // Reset loading flag
+
+                Logger.getInstance().logDebug(TAG, "SubInternet", 2, response.body());
 
                 adapter.getHolder().getFrameLayout().setVisibility(View.GONE);
 
@@ -594,10 +616,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     }
 
 
-
-
-    @Override
-    public void onItemClick(String mediaPath, String mediaPath2) {
+    public void onItemClick2(String mediaPath, String mediaPath2) {
 
 
         test12.setVisibility(View.INVISIBLE);
@@ -608,12 +627,82 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         switch (index) {
             case 1:
                 mesut.setVisibility(View.VISIBLE);
-                Glide.with(this).load(mediaPath).into(zoomageView);
+                Glide.with(this).load(mediaPath).into(zoomClass);
 
                 tumSayfa.setOnClickListener(view -> {
-                    Glide.with(this).load(mediaPath2).into(zoomageView);
+                    Glide.with(this).load(mediaPath2).into(zoomClass);
                 });
 
+
+                break;
+
+            case 2:
+
+            case 3:
+                // Show the included layout containing the WebView and ProgressBar
+                includedLayout.setVisibility(View.VISIBLE);
+
+                // Load the URL in the WebView
+                webView.loadUrl(mediaPath);
+
+                // Set up a WebViewClient to handle page loading events
+                webView.setWebViewClient(new WebViewClient() {
+                    // Show ProgressBar when page starts loading
+                    @Override
+                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                        progressBar2.setVisibility(View.VISIBLE);
+                    }
+
+                    // Hide ProgressBar when page finishes loading
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        progressBar2.setVisibility(View.GONE);
+                    }
+                });
+                break;
+        }
+
+
+        sourceUrl = mediaPath;
+
+
+
+
+
+    }
+
+    @Override
+    public void onItemClick(String mediaPath, String mediaPath2, int position) {
+
+
+//        Intent intent = new Intent(SubInternetActivity.this, MesutActivity.class);
+//
+//        intent.putExtra("menuId", menuId);
+//        intent.putExtra("subMenuId", subMenuId);
+//        intent.putExtra("startDate", startDate);
+//        intent.putExtra("endDate", endDate);
+//        intent.putExtra("count", count);
+//
+//
+//        intent.putExtra("index", index);
+//
+//        Bundle options = ActivityOptions.makeCustomAnimation(SubInternetActivity.this, R.anim.left, R.anim.right).toBundle();
+//        startActivity(intent, options);
+
+
+        switch (index) {
+            case 1:
+
+                DataHolder.getInstance().setPrintedMediaFullPageShowArray(printedMediaFullPageShowArray);
+                DataHolder.getInstance().setPrintedMediaSubPageShowArray(printedMediaSubPageShowArray);
+                DataHolder.getInstance().setPrintedMediaDateShowArray(printedMediaDateShowArray);
+                DataHolder.getInstance().setPrintedMediaNamesShowArray(printedMediaNamesShowArray);
+
+                Intent intent = new Intent(this, MesutActivity.class);
+
+
+                intent.putExtra("index", position);
+                startActivity(intent);
 
                 break;
 
@@ -670,6 +759,31 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 break;
         }
 
+
+    }
+
+    @Override
+    public void onSwipeRight() {
+
+    }
+
+    @Override
+    public void onSwipeLeft() {
+
+    }
+
+    @Override
+    public void onSwipeDown() {
+
+    }
+
+    @Override
+    public void onSwipeUp() {
+
+    }
+
+    @Override
+    public void onSingleTapUp() {
 
     }
 

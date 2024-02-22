@@ -8,9 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -18,41 +18,61 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.mtm.R;
-import com.example.mtm.util.Constants;
+import com.example.mtm.adapter.SubInternetAdapter;
 import com.example.mtm.util.DataHolder;
+import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.ZoomClass;
 
 import java.util.ArrayList;
 
-public class ColumnistsShowActivity extends AppCompatActivity implements ZoomClass.ZoomClassListener {
+public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomClassListener{
 
     private ProgressBar progressBar;
-    private ArrayList<String> columnistsShowArray;
+    private ArrayList<String> printedMediaFullPageShowArray;
+    private ArrayList<String> printedMediaSubPageShowArray, printedMediaDateShowArray, printedMediaNamesShowArray;
     private int index, count;
     private ZoomClass zoomClass;
-    private TextView text;
+    private LinearLayout hamdo;
+    private TextView text, tumSayfa, paylas, name, tarih;
+    private boolean fullPage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_columnists_show);
+        setContentView(R.layout.activity_mesut);
+
         initValues();
         loadImage();
-
     }
-
-
     private void initValues() {
 
         progressBar = findViewById(R.id.progressBar);
         zoomClass = findViewById(R.id.imageView);
         text = findViewById(R.id.text);
+        tumSayfa = findViewById(R.id.tumSayfa);
+        paylas = findViewById(R.id.paylas);
+        hamdo = findViewById(R.id.hamdo);
+        name = findViewById(R.id.name);
+        tarih = findViewById(R.id.tarih);
 
         zoomClass.setZoomClassListener(this);
 
         Intent intent = getIntent();
         index = intent.getIntExtra("index", 0);
-        columnistsShowArray = DataHolder.getInstance().getColumnistsShowArray();
-        count = columnistsShowArray.size();
+
+        String name2 = intent.getStringExtra("name");
+        String date2 = intent.getStringExtra("date");
+
+
+
+        printedMediaFullPageShowArray = DataHolder.getInstance().getPrintedMediaFullPageShowArray();
+        printedMediaSubPageShowArray = DataHolder.getInstance().getPrintedMediaSubPageShowArray();
+        printedMediaDateShowArray = DataHolder.getInstance().getPrintedMediaDateShowArray();
+        printedMediaNamesShowArray = DataHolder.getInstance().getPrintedMediaNamesShowArray();
+
+        count = printedMediaSubPageShowArray.size();
+        fullPage = false;
+
 
 
         ImageView leftArrowImageView = findViewById(R.id.leftArrowImageView);
@@ -64,9 +84,33 @@ public class ColumnistsShowActivity extends AppCompatActivity implements ZoomCla
 
         rightArrowImageView.setOnClickListener(view -> {
             selectRight();
+        });
 
+
+        tumSayfa.setOnClickListener(view -> {
+            if(fullPage) {
+                tumSayfa.setText("Sayfayı Gör");
+            }
+            else {
+                tumSayfa.setText("Haberi Gör");
+            }
+            fullPage = !fullPage;
+
+            loadImage();
 
         });
+
+        paylas.setOnClickListener(view -> {
+            if(fullPage) {
+                MyUtils.shareLink(printedMediaFullPageShowArray.get(index), this);
+            }
+            else {
+                MyUtils.shareLink(printedMediaSubPageShowArray.get(index), this);
+            }
+
+        });
+
+
 
 
     }
@@ -74,10 +118,29 @@ public class ColumnistsShowActivity extends AppCompatActivity implements ZoomCla
 
     private void loadImage() {
 
+        tarih.setText(printedMediaDateShowArray.get(index));
+        name.setText(printedMediaNamesShowArray.get(index));
+
+
+
+        hamdo.setVisibility(View.GONE);
+
         progressBar.setVisibility(View.VISIBLE);
 
+        String imageUrl = "";
+
+        if (fullPage) {
+            imageUrl = printedMediaFullPageShowArray.get(index);
+        }
+        else {
+            imageUrl = printedMediaSubPageShowArray.get(index);
+        }
+
+
+
+
         Glide.with(this)
-                .load(columnistsShowArray.get(index))
+                .load(imageUrl)
 //                    .placeholder(R.drawable.placeholder_image) // Placeholder resource while the image is loading
 //                    .error(R.drawable.error_image) // Error resource if the image fails to load
                 .listener(new RequestListener<Drawable>() {
@@ -196,6 +259,7 @@ public class ColumnistsShowActivity extends AppCompatActivity implements ZoomCla
 
     @Override
     public void onSingleTapUp() {
-
+        hamdo.setVisibility(hamdo.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
     }
+
 }

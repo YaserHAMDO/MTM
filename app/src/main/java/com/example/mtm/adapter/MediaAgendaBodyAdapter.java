@@ -25,11 +25,12 @@ public class MediaAgendaBodyAdapter extends RecyclerView.Adapter<MediaAgendaBody
     private final Context context;
     private final List<MediaAgendaModel> dataList;
     private int selectedItem = 0;
+    private final OnItemClickListener listener;
 
-
-    public MediaAgendaBodyAdapter(Context context, List<MediaAgendaModel> dataList) {
+    public MediaAgendaBodyAdapter(Context context, List<MediaAgendaModel> dataList, OnItemClickListener listener) {
         this.context = context;
         this.dataList = dataList;
+        this.listener = listener;
 
     }
 
@@ -92,9 +93,12 @@ public class MediaAgendaBodyAdapter extends RecyclerView.Adapter<MediaAgendaBody
         });
 
         holder.readMoreLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(context, ImageShowActivity.class);
-            intent.putExtra("imageUrl", item.getMagazineImageUrl());
-            context.startActivity(intent);
+
+            listener.onItemClick(position);
+
+//            Intent intent = new Intent(context, ImageShowActivity.class);
+//            intent.putExtra("imageUrl", item.getMagazineImageUrl());
+//            context.startActivity(intent);
         });
     }
 
@@ -121,6 +125,10 @@ public class MediaAgendaBodyAdapter extends RecyclerView.Adapter<MediaAgendaBody
             readMoreLinearLayout = itemView.findViewById(R.id.readMoreLinearLayout);
 
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 
 }

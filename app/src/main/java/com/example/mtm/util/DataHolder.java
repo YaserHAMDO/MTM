@@ -34,6 +34,10 @@ public class DataHolder {
     private NotificationsResponse notificationsResponse;
 
     private ArrayList<String> columnistsShowArray;
+    private ArrayList<String> printedMediaFullPageShowArray;
+    private ArrayList<String> printedMediaSubPageShowArray;
+    private ArrayList<String> printedMediaDateShowArray;
+    private ArrayList<String> printedMediaNamesShowArray;
 
     private DataHolder() {}
 
@@ -153,6 +157,38 @@ public class DataHolder {
         this.columnistsShowArray = columnistsShowArray;
     }
 
+    public ArrayList<String> getPrintedMediaFullPageShowArray() {
+        return printedMediaFullPageShowArray;
+    }
+
+    public void setPrintedMediaFullPageShowArray(ArrayList<String> printedMediaFullPageShowArray) {
+        this.printedMediaFullPageShowArray = printedMediaFullPageShowArray;
+    }
+
+    public ArrayList<String> getPrintedMediaSubPageShowArray() {
+        return printedMediaSubPageShowArray;
+    }
+
+    public void setPrintedMediaSubPageShowArray(ArrayList<String> printedMediaSubPageShowArray) {
+        this.printedMediaSubPageShowArray = printedMediaSubPageShowArray;
+    }
+
+    public ArrayList<String> getPrintedMediaDateShowArray() {
+        return printedMediaDateShowArray;
+    }
+
+    public void setPrintedMediaDateShowArray(ArrayList<String> printedMediaDateShowArray) {
+        this.printedMediaDateShowArray = printedMediaDateShowArray;
+    }
+
+    public ArrayList<String> getPrintedMediaNamesShowArray() {
+        return printedMediaNamesShowArray;
+    }
+
+    public void setPrintedMediaNamesShowArray(ArrayList<String> printedMediaNamesShowArray) {
+        this.printedMediaNamesShowArray = printedMediaNamesShowArray;
+    }
+
     public void clearDataHolderClass() {
         this.mediaAgendaModel = null;
         this.newspaperFirstPagesModel = null;
@@ -168,5 +204,9 @@ public class DataHolder {
         this.printedMediaSubResponse = null;
         this.notificationsResponse = null;
         this.columnistsShowArray = null;
+        this.printedMediaFullPageShowArray = null;
+        this.printedMediaSubPageShowArray = null;
+        this.printedMediaDateShowArray = null;
+        this.printedMediaNamesShowArray = null;
     }
 }

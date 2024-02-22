@@ -203,4 +203,19 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
     public void onSwipeLeft() {
       selectLeft();
     }
+
+    @Override
+    public void onSwipeDown() {
+        getOnBackPressedDispatcher().onBackPressed();
+    }
+
+    @Override
+    public void onSwipeUp() {
+
+    }
+
+    @Override
+    public void onSingleTapUp() {
+
+    }
 }

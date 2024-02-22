@@ -209,7 +209,18 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
                     // Check for swipe gestures
                     float deltaX = currentPoint.x - mStart.x;
                     float deltaY = currentPoint.y - mStart.y;
-                    if (Math.abs(deltaX) > Math.abs(deltaY) + 100) {
+                    if (Math.abs(deltaY) > Math.abs(deltaX) + 100) {
+                        // Vertical swipe
+                        if (deltaY > 0) {
+                            if (mListener != null) {
+                                mListener.onSwipeDown();
+                            }
+                        } else {
+                            if (mListener != null) {
+                                mListener.onSwipeUp();
+                            }
+                        }
+                    } else if (Math.abs(deltaX) > Math.abs(deltaY) + 100) {
                         // Horizontal swipe
                         if (deltaX > 0) {
                             if (mListener != null) {
@@ -239,8 +250,12 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
 
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
+
+
+
         return false;
     }
+
 
     @Override
     public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
@@ -257,6 +272,9 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+        if (mListener != null) {
+            mListener.onSingleTapUp();
+        }
         return false;
     }
 
@@ -291,5 +309,8 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
     public interface ZoomClassListener {
         void onSwipeRight();
         void onSwipeLeft();
+        void onSwipeDown();
+        void onSwipeUp();
+        void onSingleTapUp();
     }
 }

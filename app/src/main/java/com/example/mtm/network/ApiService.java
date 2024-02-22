@@ -23,6 +23,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -66,7 +67,8 @@ public interface ApiService {
             @Header("Authorization") String authToken,
             @Query("customerId") int customerId,
 //            @Query("dateEnd") String dateEnd,
-            @Query("dateStart") String dateStart
+            @Query("cdateStart") String cdateStart,
+            @Query("cdateEnd") String cdateEnd
 //            @Query("isAddClip") boolean isAddClip,
 //            @Query("isAddContent") boolean isAddContent,
 //            @Query("isAddDocs") boolean isAddDocs,
@@ -110,16 +112,29 @@ public interface ApiService {
             @Query("perPage") int perPage
     );
 
+
+
     @PUT("api/customer/notifier/{id}/mark-as-read")
-    Call<MarkAsReadResponse> markNotificationAsRead(
+    Call<MarkAsReadResponse> markNotificationAsRead2(
             @Path("id") int id,
             @Header("Authorization") String authToken,
             @Body MarkAsReadRequestBody request);
 
+    @FormUrlEncoded
+    @PUT("api/customer/notifier/{id}/mark-as-read")
+    Call<MarkAsReadResponse> markNotificationAsRead(
+            @Path("id") int id,
+            @Header("Authorization") String authToken,
+            @Field("customerId") int customerId
+    );
+
+
+
+    @FormUrlEncoded
     @PUT("api/customer/notifier/mark-all-read")
     Call<MarkAsReadResponse> markAllNotificationAsRead(
             @Header("Authorization") String authToken,
-            @Body MarkAsReadRequestBody request);
+            @Field("customerId") int customerId);
 
 
 

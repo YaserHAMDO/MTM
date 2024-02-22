@@ -221,4 +221,19 @@ public class ProfileActivity extends AppCompatActivity implements ZoomClass.Zoom
     public void onSwipeLeft() {
         Glide.with(this).load("https://drbanuaksoy.com/wp-content/uploads/2022/02/banu_ccexpress-1024x1024.png").into(zoomClass);
     }
+
+    @Override
+    public void onSwipeDown() {
+        getOnBackPressedDispatcher().onBackPressed();
+    }
+
+    @Override
+    public void onSwipeUp() {
+
+    }
+
+    @Override
+    public void onSingleTapUp() {
+
+    }
 }

@@ -1,6 +1,9 @@
 package com.example.mtm.adapter;
 
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
+import com.example.mtm.activity.NewsListActivity;
+import com.example.mtm.activity.NotificationContentActivity;
+import com.example.mtm.activity.SubInternetActivity;
 import com.example.mtm.model.ColumnistModel;
 import com.example.mtm.model.NotificationsModel;
 import com.example.mtm.model.SubInternetModel;
@@ -55,14 +61,18 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 //            }
 //
 //        });
+//        holder.itemView.setOnClickListener(view -> {
+//            if (!itemData.getUrl().equals("")) {
+//                showPopupDialog(itemData.getUrl(), position);
+//            }
+//            else {
+//                showPopupDialog2(position);
+//            }
+//
+//        });
         holder.itemView.setOnClickListener(view -> {
-            if (!itemData.getUrl().equals("")) {
-                showPopupDialog(itemData.getUrl(), position);
-            }
-            else {
-                showPopupDialog2(position);
-            }
-
+//            openNotificationActivity(itemData.getTitle(), itemData.getBody(), itemData.getUrl(), itemData.getId());
+            listener.onItemClick(itemData.getTitle(), itemData.getBody(), itemData.getUrl(), itemData.getId());
         });
     }
 
@@ -102,7 +112,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     mItems.get(position).setRead(true);
                     // Notify adapter about the change
                     notifyItemChanged(position);
-                    listener.onItemClick(mItems.get(position).getId());
+//                    listener.onItemClick(mItems.get(position).getId());
                 })
                 .setCancelable(true)
                 .show();
@@ -117,13 +127,25 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     mItems.get(position).setRead(true);
                     // Notify adapter about the change
                     notifyItemChanged(position);
-                    listener.onItemClick(mItems.get(position).getId());
+//                    listener.onItemClick(mItems.get(position).getId());
                 })
                 .setCancelable(true)
                 .show();
     }
 
+    private void openNotificationActivity(String title, String body, String link, int id) {
+        Intent intent = new Intent(mContext, NotificationContentActivity.class);
+
+        intent.putExtra("title", title);
+        intent.putExtra("body", body);
+        intent.putExtra("link", link);
+        intent.putExtra("id", id);
+
+        Bundle options = ActivityOptions.makeCustomAnimation(mContext, R.anim.left, R.anim.right).toBundle();
+        mContext.startActivity(intent, options);
+    }
+
     public interface OnItemClickListener {
-        void onItemClick(int index);
+        void onItemClick(String title, String body, String link, int id);
     }
 }

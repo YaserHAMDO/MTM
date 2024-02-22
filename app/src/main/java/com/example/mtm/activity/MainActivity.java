@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
 //                "2024-02-01",
+                MyUtils.getPreviousDate(1),
                 MyUtils.getCurrentDate()
 //                true,
 //                true,
@@ -378,6 +379,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
 //                "2024-02-01",
+                MyUtils.getPreviousDate(1),
                 MyUtils.getCurrentDate()
 //                true,
 //                true,

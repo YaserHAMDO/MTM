@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layoutDirection="ltr"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="2dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="5dp">
+
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:background="#F2F3F4"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_marginStart="20dp"
+            android:textSize="13sp"
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12.01.2024"
+            android:layout_gravity="center_vertical"
+            android:textColor="#16456F"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:layout_marginVertical="10dp"
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textStyle="bold"
+            android:text="Title"
+            android:textColor="#16456F"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:visibility="gone"
+            android:textSize="13sp"
+            android:id="@+id/program"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="12.01.2024"
+            android:layout_gravity="start"
+            android:textColor="#16456F"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
