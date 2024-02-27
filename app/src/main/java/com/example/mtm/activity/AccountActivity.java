@@ -2,6 +2,7 @@ package com.example.mtm.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -64,6 +65,10 @@ public class AccountActivity extends AppCompatActivity {
                     preferenceManager.putInt(Constants.KEY_CURRENT_COSTUMER_ID, (Integer) v.getTag());
                     preferenceManager.putString(Constants.KEY_CURRENT_COSTUMER_NAME, ((Button) v).getText().toString());
                     selectedButton.setTextColor(getColor(R.color.white));
+
+
+                    Intent i = new Intent(AccountActivity.this, MainActivity.class);
+                    startActivity(i);
                 }
             });
 

@@ -1,5 +1,7 @@
 package com.example.mtm.activity;
 
+import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
+
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,8 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -90,7 +94,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 break;
 
             case 2:
-                titleTextView.setText("Digital Basın");
+                titleTextView.setText("İnternet");
                 setData();
                 break;
 
@@ -213,6 +217,43 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         sourceTextView.setOnClickListener(view -> {
             MyUtils.openLink(sourceUrl, this);
         });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                // Step 2: Detect when the user has scrolled to the end of the list
+                if (!isLoading && !(x >= count)) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && totalItemCount >= PAGE_SIZE) {
+
+                        pageNumber++;
+
+                        switch (index) {
+                            case 1:
+                                subPrinted(menuId, subMenuId, startDate, endDate);
+                                break;
+
+                            case 2:
+                                SubInternet(menuId, subMenuId, startDate, endDate);
+                                break;
+
+                            case 3:
+                                SubMenuVisualMedia(menuId, subMenuId, startDate, endDate);
+                                break;
+                        }
+
+                    }
+                }
+            }
+        });
+
     }
 
 
@@ -743,21 +784,21 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     @Override
     public void onShowMore() {
-        pageNumber++;
-
-        switch (index) {
-            case 1:
-                subPrinted(menuId, subMenuId, startDate, endDate);
-                break;
-
-            case 2:
-                SubInternet(menuId, subMenuId, startDate, endDate);
-                break;
-
-            case 3:
-                SubMenuVisualMedia(menuId, subMenuId, startDate, endDate);
-                break;
-        }
+//        pageNumber++;
+//
+//        switch (index) {
+//            case 1:
+//                subPrinted(menuId, subMenuId, startDate, endDate);
+//                break;
+//
+//            case 2:
+//                SubInternet(menuId, subMenuId, startDate, endDate);
+//                break;
+//
+//            case 3:
+//                SubMenuVisualMedia(menuId, subMenuId, startDate, endDate);
+//                break;
+//        }
 
 
     }

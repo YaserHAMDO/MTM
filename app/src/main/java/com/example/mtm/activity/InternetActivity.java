@@ -81,7 +81,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 break;
 
             case 2:
-                titleTextView.setText("Digital Basın");
+                titleTextView.setText("İnternet");
                 break;
 
             case 3:
@@ -204,7 +204,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
         recyclerView.setAdapter(adapter);
 
-        filteredDateTextView.setText(startDate + " ile " + endDate + " arasında tarihi kayıtlar gösterilmektedir.");
+        filteredDateTextView.setText(MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(endDate) + " arasında tarihi\nkayıtlar gösterilmektedir.");
 
     }
 

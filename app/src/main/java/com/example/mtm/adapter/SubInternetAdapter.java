@@ -83,7 +83,7 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
         else {
             if (position == mItems.size() - 1) {
                 holder.frameLayout.setVisibility(View.VISIBLE);
-                holder.button.setVisibility(View.VISIBLE);
+//                holder.button.setVisibility(View.VISIBLE);
                 holder.progressBar.setVisibility(View.INVISIBLE);
             }
             else {
@@ -93,11 +93,11 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
 
 
 
-        holder.button.setOnClickListener(view -> {
-            holder.button.setVisibility(View.INVISIBLE);
-            holder.progressBar.setVisibility(View.VISIBLE);
-            listener.onShowMore();
-        });
+//        holder.button.setOnClickListener(view -> {
+//            holder.button.setVisibility(View.INVISIBLE);
+//            holder.progressBar.setVisibility(View.VISIBLE);
+//            listener.onShowMore();
+//        });
     }
 
     @Override

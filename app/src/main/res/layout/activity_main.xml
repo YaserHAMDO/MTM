@@ -334,7 +334,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="11sp"
-                            android:text="Yazılı"/>
+                            android:text="Yazılı Basın"/>
 
                     </LinearLayout>
 
@@ -448,7 +448,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="11sp"
-                            android:text="@string/visual_media"/>
+                            android:text="TV+"/>
 
                     </LinearLayout>
 

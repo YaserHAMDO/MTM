@@ -15,25 +15,26 @@
     </style>
 
 
-    <style name="MaterialDatePicker2" parent="@style/Widget.MaterialComponents.MaterialCalendar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:gravity">bottom</item>
-
-    </style>
 
     <style name="MaterialDatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+
+
 
         <!-- Header panel -->
         <item name="materialCalendarHeaderLayout">@style/MaterialCalendar.HeaderLayout1</item>
         <!-- Buttons -->
         <item name="buttonBarPositiveButtonStyle">@style/TextButton.Dialog1</item>
         <item name="buttonBarNegativeButtonStyle">@style/TextButton.Dialog1</item>
+
+        <item name="materialCalendarHeaderTitle">@style/date_text_appearance</item>
+        <item name="materialCalendarHeaderSelection">@style/date_text_appearance2</item>
+
+
+
         <item name="materialCalendarHeaderToggleButton">@style/Widget.AppTheme.MaterialCalendar.HeaderToggleButton</item>
 
 
     </style>
-
 
     <style name="Widget.AppTheme.MaterialCalendar.HeaderToggleButton" parent="Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton">
         <item name="android:visibility">gone</item>
@@ -42,7 +43,12 @@
     <style name="MaterialCalendar.HeaderLayout1" parent="Widget.MaterialComponents.MaterialCalendar.HeaderLayout">
         <!--<item name="android:background">?attr/colorPrimary</item>-->
         <item name="android:background">@color/color3</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingVertical">7dp</item>
+
+
     </style>
+
     <style name="TextButton.Dialog1" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/white</item>
         <item name="android:paddingHorizontal">5dp</item>
@@ -50,11 +56,25 @@
 
     </style>
 
-
     <style name="AppButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
+    <style name="date_text_appearance" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+
+    </style>
+
+    <style name="date_text_appearance2" parent="@style/TextAppearance.AppCompat">
+        <item name="android:visibility">gone</item>
+    </style>
+
+
+    <style name="LoginDialog" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
 </resources>

@@ -58,7 +58,7 @@
     </LinearLayout>
 
     <TextView
-        android:textSize="9sp"
+        android:textSize="14sp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/test12"
         android:id="@+id/filteredDateTextView"

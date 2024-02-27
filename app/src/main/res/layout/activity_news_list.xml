@@ -79,7 +79,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Basın"
+                android:text="Yazılı Basın"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"

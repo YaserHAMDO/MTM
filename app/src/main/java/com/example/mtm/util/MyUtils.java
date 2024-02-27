@@ -1,8 +1,19 @@
 package com.example.mtm.util;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.text.method.LinkMovementMethod;
+import android.view.Gravity;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+
+import com.example.mtm.R;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +60,68 @@ public class MyUtils {
         return firstDateOfMonth.format(formatter);
     }
 
+
+    public static String changeDateFormat(String inputDate) {
+        // Parse the input string into a LocalDate object
+        LocalDate date = LocalDate.parse(inputDate);
+
+        // Define the desired date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        // Format the date using the formatter
+        return date.format(formatter);
+    }
+
+
+    public static void showPopupDialog(Context context) {
+
+
+        Dialog loginDialog = new Dialog(context, R.style.LoginDialog);
+        loginDialog.setContentView(R.layout.report_pop_up_layout);
+        loginDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        loginDialog.getWindow().setGravity(Gravity.CENTER);
+
+        TextView continue_privacy = loginDialog.findViewById(R.id.hyperlink);
+        continue_privacy.setMovementMethod(LinkMovementMethod.getInstance());
+
+        continue_privacy.setOnClickListener(view -> {
+            loginDialog.cancel();
+        });
+
+//        close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                loginDialog.cancel();
+//            }
+//        });
+
+        loginDialog.setOnDismissListener(dialogInterface -> {
+
+
+        });
+
+        loginDialog.setCancelable(true);
+
+        //   loginDialog.setCanceledOnTouchOutside(false);
+        loginDialog.setCanceledOnTouchOutside(true);
+
+        loginDialog.show();
+
+
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setTitle("Not:")
+//                .setMessage("")
+////                .setPositiveButton("Okundu", (dialog, which) -> {
+//////                    // Update item as read
+//////                    mItems.get(position).setRead(true);
+//////                    // Notify adapter about the change
+//////                    notifyItemChanged(position);
+////////                    listener.onItemClick(mItems.get(position).getId());
+////                })
+//                .setCancelable(true)
+//                .show();
+    }
 
     // Method to handle sharing the link
     public static void shareLink(String url, Context context) {

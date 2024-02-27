@@ -119,6 +119,7 @@
         android:layout_height="wrap_content">
 
     <Button
+        android:visibility="gone"
         android:layout_gravity="center"
         android:id="@+id/button"
         android:text="Daha fazla yükle"

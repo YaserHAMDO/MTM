@@ -92,7 +92,7 @@ public class MediaAgendaBodyAdapter extends RecyclerView.Adapter<MediaAgendaBody
 
         });
 
-        holder.readMoreLinearLayout.setOnClickListener(view -> {
+        holder.itemView.setOnClickListener(view -> {
 
             listener.onItemClick(position);
 

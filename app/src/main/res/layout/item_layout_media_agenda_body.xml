@@ -97,6 +97,7 @@
                 android:layout_weight="1"/>
 
             <LinearLayout
+                android:visibility="invisible"
                 android:id="@+id/readMoreLinearLayout"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="2dp"

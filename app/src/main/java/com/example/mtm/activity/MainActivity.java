@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.ViewPager;
@@ -2359,8 +2360,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void forbiddenPopup() {
-        Toast.makeText(this, "Forbidden", Toast.LENGTH_SHORT).show();
+
+        MyUtils.showPopupDialog(this);
+
+//        Toast.makeText(this, "Forbidden", Toast.LENGTH_SHORT).show();
     }
+
+
 
     @Override
     protected void onResume() {

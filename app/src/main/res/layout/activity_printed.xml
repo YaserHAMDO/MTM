@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:textColor="#4E4B66"
-            android:text="Basın"/>
+            android:text="Yazılı Basın"/>
 
         <androidx.cardview.widget.CardView
             android:visibility="invisible"

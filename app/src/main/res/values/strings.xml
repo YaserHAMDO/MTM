@@ -6,5 +6,6 @@
     <string name="required_field">Gerekli Alan*</string>
     <string name="login">Giriş Yap</string>
     <string name="password">Şifre</string>
-    <string name="visual_media"><![CDATA[Görsel & İşitsel]]></string>
+    <string name="visual_media">TV+</string>
+    <string name="hyperlink">Bu servise abone değilsiniz,\nlütfen müşteri temsilciniz ile <a href="https://medyatakip.com.tr/iletisim.html">iletişime</a> geçiniz.</string>
 </resources>
