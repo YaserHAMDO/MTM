@@ -8,9 +8,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.ViewPager;
@@ -277,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
     }
-
+/*
     private void summaryList(MainActivityModel itemData) {
 
         // Show progress bar for the clicked item
@@ -335,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -363,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
     private void summaryList2() {
 
         mediaImageView.setVisibility(View.INVISIBLE);
@@ -420,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -452,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private void newsList(MainActivityModel itemData) {
 
         // Show progress bar for the clicked item
@@ -469,11 +467,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    */
     private void newsList2() {
 
         newsImageView.setVisibility(View.INVISIBLE);
         newsProgressBar.setVisibility(View.VISIBLE);
-
 
         newListIndex = 0;
 
@@ -482,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
         visualMedia2(true);
 
     }
-
+/*
     private void getMediaAgenda(MainActivityModel itemData) {
 
 
@@ -640,7 +638,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -665,7 +663,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
     private void getMediaAgenda2() {
 
 
@@ -817,7 +815,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -839,7 +837,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private void menuList(MainActivityModel itemData, boolean newsList) {
 
         if (!newsList) {
@@ -933,7 +931,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -961,6 +959,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+*/
+
 
     private void menuList2(boolean newsList) {
 
@@ -1046,7 +1046,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -1159,7 +1159,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -1188,7 +1188,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private void internet(MainActivityModel itemData, boolean newsList) {
 
         if (!newsList) {
@@ -1281,7 +1281,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -1308,7 +1308,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
     private void internet2(boolean newsList) {
 
         if (!newsList) {
@@ -1392,7 +1392,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -1420,7 +1420,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private void visualMedia(MainActivityModel itemData, boolean newsList) {
 
         if (!newsList) {
@@ -1509,7 +1509,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
                     else {
                         refreshToken(itemData, 5);
@@ -1535,7 +1535,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
     private void visualMedia2(boolean newsList) {
 
         if (!newsList) {
@@ -1615,7 +1615,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
                     else {
                         refreshToken2(5);
@@ -1722,7 +1722,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
                     else {
                         refreshToken2(5);
@@ -1749,7 +1749,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private void newspaperFirstPages(MainActivityModel itemData) {
 
         // Show progress bar for the clicked item
@@ -1800,7 +1800,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
                     else {
                         refreshToken(itemData, 6);
@@ -1824,7 +1824,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
     private void newspaperFirstPages2() {
 
         newsPaperImageView.setVisibility(View.INVISIBLE);
@@ -1862,14 +1862,14 @@ public class MainActivity extends AppCompatActivity {
                     DataHolder.getInstance().setNewspaperFirstPagesModel(result);
 
                     Intent intent = new Intent(MainActivity.this, NewspaperActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
+                    intent.putExtra("index", 1);
                     Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);
 
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
                     else {
                         refreshToken2( 6);
@@ -1890,7 +1890,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private void magazine(MainActivityModel itemData) {
 
         // Show progress bar for the clicked item
@@ -1949,7 +1949,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -1974,7 +1974,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
     private void magazine2() {
 
 
@@ -2020,15 +2020,20 @@ public class MainActivity extends AppCompatActivity {
 
                     DataHolder.getInstance().setMagazineFullPagesModel(result);
 
-                    Intent intent = new Intent(MainActivity.this, MagazineActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
+//                    Intent intent = new Intent(MainActivity.this, MagazineActivity.class);
+////                    intent.putExtra("itemData", itemData.getText());
+//                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+//                    startActivity(intent, options);
+
+                    Intent intent = new Intent(MainActivity.this, NewspaperActivity.class);
+                    intent.putExtra("index", 2);
                     Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);
 
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -2050,7 +2055,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private void columnists(MainActivityModel itemData) {
 
         // Show progress bar for the clicked item
@@ -2105,7 +2110,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -2130,7 +2135,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
     private void columnists2() {
 
       columnistImageView.setVisibility(View.INVISIBLE);
@@ -2179,7 +2184,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     if (response.code() == 403) {
-                        forbiddenPopup();
+                        showSubscriptionDialog();
                     }
 
                     else {
@@ -2202,6 +2207,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
     private void refreshToken(MainActivityModel itemData, int index) {
 
         ApiService apiService = RetrofitClient.getClient(1).create(ApiService.class);
@@ -2279,7 +2285,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+*/
     private void refreshToken2(int index) {
 
         ApiService apiService = RetrofitClient.getClient(1).create(ApiService.class);
@@ -2358,15 +2364,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    private void forbiddenPopup() {
-
-        MyUtils.showPopupDialog(this);
-
-//        Toast.makeText(this, "Forbidden", Toast.LENGTH_SHORT).show();
+    private void showSubscriptionDialog() {
+        MyUtils.showSubscriptionDialog(this);
     }
-
-
 
     @Override
     protected void onResume() {

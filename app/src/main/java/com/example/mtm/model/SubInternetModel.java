@@ -9,8 +9,9 @@ public class SubInternetModel {
     private final String imageStoragePath;
     private final String shareLink;
     private final String shareLink2;
+    private final String programName;
 
-    public SubInternetModel(String journalistName, String mediaName, String title, String date, String imageStoragePath, String shareLink, String shareLink2) {
+    public SubInternetModel(String journalistName, String mediaName, String title, String date, String imageStoragePath, String shareLink, String shareLink2, String programName) {
         this.journalistName = journalistName;
         this.mediaName = mediaName;
         this.title = title;
@@ -18,6 +19,11 @@ public class SubInternetModel {
         this.imageStoragePath = imageStoragePath;
         this.shareLink = shareLink;
         this.shareLink2 = shareLink2;
+        this.programName = programName;
+    }
+
+    public String getProgramName() {
+        return programName;
     }
 
     public String getImageStoragePath() {
@@ -32,7 +38,7 @@ public class SubInternetModel {
         return mediaName;
     }
 
-    public String getTitle() {
+    public String getHariciShareLink() {
         return title;
     }
 

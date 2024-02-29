@@ -29,11 +29,13 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
 
     private ProgressBar progressBar;
     private ArrayList<String> printedMediaFullPageShowArray;
+    private ArrayList<String> printedMediaShareLinkArray;
     private ArrayList<String> printedMediaSubPageShowArray, printedMediaDateShowArray, printedMediaNamesShowArray;
     private int index, count;
     private ZoomClass zoomClass;
     private LinearLayout hamdo;
-    private TextView text, tumSayfa, paylas, name, tarih;
+    private TextView text, tumSayfa, name;
+    private ImageView paylas, cancel;
     private boolean fullPage;
 
     @Override
@@ -51,9 +53,10 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
         text = findViewById(R.id.text);
         tumSayfa = findViewById(R.id.tumSayfa);
         paylas = findViewById(R.id.paylas);
+        cancel = findViewById(R.id.cancel);
         hamdo = findViewById(R.id.hamdo);
         name = findViewById(R.id.name);
-        tarih = findViewById(R.id.tarih);
+//        tarih = findViewById(R.id.tarih);
 
         zoomClass.setZoomClassListener(this);
 
@@ -66,6 +69,7 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
 
 
         printedMediaFullPageShowArray = DataHolder.getInstance().getPrintedMediaFullPageShowArray();
+        printedMediaShareLinkArray = DataHolder.getInstance().getPrintedMediaShareLinkArray();
         printedMediaSubPageShowArray = DataHolder.getInstance().getPrintedMediaSubPageShowArray();
         printedMediaDateShowArray = DataHolder.getInstance().getPrintedMediaDateShowArray();
         printedMediaNamesShowArray = DataHolder.getInstance().getPrintedMediaNamesShowArray();
@@ -74,6 +78,10 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
         fullPage = false;
 
 
+        if (printedMediaFullPageShowArray.get(index).equals("")) {
+            tumSayfa.setVisibility(View.GONE);
+            cancel.setVisibility(View.VISIBLE);
+        }
 
         ImageView leftArrowImageView = findViewById(R.id.leftArrowImageView);
         ImageView rightArrowImageView = findViewById(R.id.rightArrowImageView);
@@ -101,12 +109,23 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
         });
 
         paylas.setOnClickListener(view -> {
-            if(fullPage) {
-                MyUtils.shareLink(printedMediaFullPageShowArray.get(index), this);
-            }
-            else {
-                MyUtils.shareLink(printedMediaSubPageShowArray.get(index), this);
-            }
+
+            MyUtils.shareLink(printedMediaShareLinkArray.get(index), this);
+//            if(fullPage) {
+//                MyUtils.shareLink(printedMediaFullPageShowArray.get(index), this);
+//            }
+//            else {
+//                MyUtils.shareLink(printedMediaSubPageShowArray.get(index), this);
+//            }
+
+        });
+
+        cancel.setOnClickListener(view -> {
+            getOnBackPressedDispatcher().onBackPressed();
+
+        });
+
+        hamdo.setOnClickListener(view -> {
 
         });
 
@@ -118,8 +137,7 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
 
     private void loadImage() {
 
-        tarih.setText(printedMediaDateShowArray.get(index));
-        name.setText(printedMediaNamesShowArray.get(index));
+        name.setText(printedMediaNamesShowArray.get(index) + "\n" + printedMediaDateShowArray.get(index));
 
 
 
@@ -200,6 +218,9 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
                 .into(zoomClass);
 
 
+        if (count == 0) {
+            count++;
+        }
 
         text.setText((index + 1) + "/" + count);
 

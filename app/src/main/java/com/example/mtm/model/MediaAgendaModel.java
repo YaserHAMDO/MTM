@@ -8,14 +8,18 @@ public class MediaAgendaModel {
     private final String videoUrl;
     private final String title;
     private final String body;
+    private final String gnoHash;
+    private final String date;
 
-    public MediaAgendaModel(String type, String imageUrl, String magazineImageUrl, String videoUrl, String title, String body) {
+    public MediaAgendaModel(String type, String imageUrl, String magazineImageUrl, String videoUrl, String title, String body, String gnoHash, String date) {
         this.type = type;
         this.imageUrl = imageUrl;
         this.magazineImageUrl = magazineImageUrl;
         this.videoUrl = videoUrl;
         this.title = title;
         this.body = body;
+        this.gnoHash = gnoHash;
+        this.date = date;
     }
 
     public String getVideoUrl() {
@@ -40,5 +44,13 @@ public class MediaAgendaModel {
 
     public String getBody() {
         return body;
+    }
+
+    public String getGnoHash() {
+        return gnoHash;
+    }
+
+    public String getDate() {
+        return date;
     }
 }

@@ -188,6 +188,9 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
                 .into(zoomClass);
 
 
+        if (count == 0) {
+            count++;
+        }
 
         text.setText(i + "/" + count);
 

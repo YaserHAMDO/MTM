@@ -58,16 +58,37 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:textSize="12sp"
-                            android:id="@+id/mediaNameTextView"
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Test"
-                            android:layout_gravity="start"
-                            android:textColor="#D88030"
-                            android:maxLines="1"
-                            android:ellipsize="end" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:textSize="12sp"
+                                android:id="@+id/mediaNameTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Test"
+                                android:layout_gravity="start"
+                                android:textColor="#D88030"
+                                android:maxLines="1"
+                                android:ellipsize="end" />
+
+                            <TextView
+                                android:visibility="gone"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginBottom="0dp"
+                                android:textSize="9sp"
+                                android:id="@+id/positionTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="/sf.1"
+                                android:layout_gravity="bottom"
+                                android:textColor="#000000"/>
+
+                        </LinearLayout>
+
 
                         <TextView
                             android:id="@+id/journalistNameTextView"

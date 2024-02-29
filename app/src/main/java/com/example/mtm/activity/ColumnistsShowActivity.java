@@ -138,6 +138,11 @@ public class ColumnistsShowActivity extends AppCompatActivity implements ZoomCla
 
 
 
+
+        if (count == 0) {
+            count++;
+        }
+
         text.setText((index + 1) + "/" + count);
 
 

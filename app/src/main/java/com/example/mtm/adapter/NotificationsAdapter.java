@@ -63,7 +63,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 //        });
 //        holder.itemView.setOnClickListener(view -> {
 //            if (!itemData.getUrl().equals("")) {
-//                showPopupDialog(itemData.getUrl(), position);
+//                showSubscriptionDialog(itemData.getUrl(), position);
 //            }
 //            else {
 //                showPopupDialog2(position);

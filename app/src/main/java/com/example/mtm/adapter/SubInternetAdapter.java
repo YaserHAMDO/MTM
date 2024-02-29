@@ -31,14 +31,16 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
     private List<SubInternetModel> mItems;
     private final OnItemClickListener listener;
     private boolean allList;
+    private int index;
 
     ViewHolder holder1;
 
-    public SubInternetAdapter(Context context, List<SubInternetModel> items, OnItemClickListener listener, boolean allList) {
+    public SubInternetAdapter(Context context, List<SubInternetModel> items, OnItemClickListener listener, boolean allList, int index) {
         mContext = context;
         mItems = items;
         this.listener = listener;
         this.allList = allList;
+        this.index = index;
     }
 
     @NonNull
@@ -68,12 +70,28 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
         holder.journalistNameTextView.setText(itemData.getJournalistName());
         holder.dateTextView.setText(itemData.getDate());
 
+        switch (index) {
+            case 1:
+                holder.positionTextView.setVisibility(View.VISIBLE);
+                holder.positionTextView.setText("/sf." + (position + 1));
+                break;
+
+            case 3:
+                holder.positionTextView.setVisibility(View.VISIBLE);
+                holder.positionTextView.setText("(" + itemData.getProgramName() + ")");
+                break;
+
+        }
+
+
+
+
         holder.itemView.setOnClickListener(view -> {
             listener.onItemClick(itemData.getShareLink(), itemData.getShareLink2(), position);
         });
 
         holder.shareCardView.setOnClickListener(view -> {
-            MyUtils.shareLink(itemData.getShareLink(), mContext);
+            MyUtils.shareLink(itemData.getHariciShareLink(), mContext);
         });
 
 
@@ -108,6 +126,7 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView journalistImageView;
         TextView mediaNameTextView;
+        TextView positionTextView;
         TextView journalistNameTextView;
         TextView dateTextView;
         CardView shareCardView;
@@ -120,6 +139,7 @@ public class SubInternetAdapter extends RecyclerView.Adapter<SubInternetAdapter.
             journalistImageView = itemView.findViewById(R.id.journalistImageView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
             mediaNameTextView = itemView.findViewById(R.id.mediaNameTextView);
+            positionTextView = itemView.findViewById(R.id.positionTextView);
             journalistNameTextView = itemView.findViewById(R.id.journalistNameTextView);
             shareCardView = itemView.findViewById(R.id.shareCardView);
             frameLayout = itemView.findViewById(R.id.frameLayout);

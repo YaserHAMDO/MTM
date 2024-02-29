@@ -55,7 +55,7 @@ public class SubVisualAdapter extends RecyclerView.Adapter<SubVisualAdapter.View
 
         holder.shareCardView.setOnClickListener(view -> {
 
-            MyUtils.shareLink(itemData.getShareLink(), mContext);
+            MyUtils.shareLink(itemData.getHariciShareLink(), mContext);
 
         });
 

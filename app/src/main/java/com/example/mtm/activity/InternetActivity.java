@@ -1,10 +1,13 @@
 package com.example.mtm.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -29,6 +32,7 @@ import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;
 import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.PreferenceManager;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.text.SimpleDateFormat;
@@ -59,6 +63,13 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
     private TextView filteredDateTextView;
 
     private int index;
+
+
+    private TextView dateTextView, allTextView, newsTextView, adsTextView, okTextView;
+
+    private boolean materialDatePickerControl;
+
+    private BottomSheetDialog bottomSheetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,16 +112,110 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
     }
 
+    private void initBottomSheet() {
+
+        bottomSheetDialog = new BottomSheetDialog(this ,R.style.BottomSheetDialog);
+        bottomSheetDialog.setContentView(R.layout.filter_pop_up_layout);
+
+
+        dateTextView = bottomSheetDialog.findViewById(R.id.dateTextView);
+        allTextView = bottomSheetDialog.findViewById(R.id.allTextView);
+        newsTextView = bottomSheetDialog.findViewById(R.id.newsTextView);
+        adsTextView = bottomSheetDialog.findViewById(R.id.adsTextView);
+        okTextView = bottomSheetDialog.findViewById(R.id.okTextView);
+
+        if (index == 2) {
+            LinearLayout linearLayout = bottomSheetDialog.findViewById(R.id.linearLayout);
+            linearLayout.setVisibility(View.GONE);
+        }
+
+
+        dateTextView.setOnClickListener(v -> {
+
+            if (!materialDatePickerControl) {
+                materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+                materialDatePickerControl = true;
+            }
+
+//            bottomSheetDialog.dismiss();
+        });
+
+
+        allTextView.setOnClickListener(v -> {
+
+            allTextView.setTextColor(getColor(R.color.white));
+            newsTextView.setTextColor(getColor(R.color.white));
+            adsTextView.setTextColor(getColor(R.color.white));
+
+            allTextView.setBackground(getDrawable(R.drawable.test_f));
+            newsTextView.setBackground(getDrawable(R.drawable.test_f));
+            adsTextView.setBackground(getDrawable(R.drawable.test_f));
+        });
+
+        newsTextView.setOnClickListener(v -> {
+
+            allTextView.setTextColor(getColor(R.color.color3));
+            newsTextView.setTextColor(getColor(R.color.white));
+            adsTextView.setTextColor(getColor(R.color.color3));
+
+            allTextView.setBackground(getDrawable(R.drawable.test_d));
+            newsTextView.setBackground(getDrawable(R.drawable.test_f));
+            adsTextView.setBackground(getDrawable(R.drawable.test_d));
+        });
+
+        adsTextView.setOnClickListener(v -> {
+
+            allTextView.setTextColor(getColor(R.color.color3));
+            newsTextView.setTextColor(getColor(R.color.color3));
+            adsTextView.setTextColor(getColor(R.color.white));
+
+            allTextView.setBackground(getDrawable(R.drawable.test_d));
+            newsTextView.setBackground(getDrawable(R.drawable.test_d));
+            adsTextView.setBackground(getDrawable(R.drawable.test_f));
+        });
+
+        okTextView.setOnClickListener(v -> {
+
+            recyclerView.setAdapter(null);
+            progressBar.setVisibility(View.VISIBLE);
+
+            switch (index) {
+                case 1:
+                    menuList3(startDate, endDate);
+                    break;
+
+                case 2:
+                    internet(startDate, endDate);
+                    break;
+
+                case 3:
+                    visualMedia3(startDate, endDate);
+                    break;
+            }
+
+
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.show();
+    }
+
     private void initValues() {
         startDate = MyUtils.getPreviousDate(1);
         endDate = MyUtils.getCurrentDate();
 
+        materialDatePickerControl = false;
+
+
 //        filteredDateTextView.setText(startDate + " ile " + endDate + " arasında tarihi kayıtlar gösterilmektedir.");
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
-        filterImageView.setOnClickListener(view -> materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER"));
+//        filterImageView.setOnClickListener(view -> materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER"));
+//        filterImageView.setOnClickListener(view -> MyUtils.showFilterDialog(this));
+        filterImageView.setOnClickListener(view -> initBottomSheet());
 
     }
 
@@ -134,7 +239,12 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 //                        // will return selected date preview from the
 //                        // dialog
 //                    }
-//                });
+//                })
+
+
+        materialDatePicker.addOnDismissListener(dialog -> {
+            materialDatePickerControl = false;
+        });
 
         materialDatePicker.addOnPositiveButtonClickListener(
                 selection -> {
@@ -146,24 +256,28 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                         String formattedStartDate = sdf.format(new Date(startDate));
                         String formattedEndDate = sdf.format(new Date(endDate));
 //                        Toast.makeText(this, "Start Date: " + formattedStartDate + "\nEnd Date: " + formattedEndDate, Toast.LENGTH_SHORT).show();
-                        recyclerView.setAdapter(null);
-                        progressBar.setVisibility(View.VISIBLE);
+//                        recyclerView.setAdapter(null);
+//                        progressBar.setVisibility(View.VISIBLE);
                         filteredDateTextView.setText("");
                         this.startDate = formattedStartDate;
                         this.endDate = formattedEndDate;
-                        switch (index) {
-                            case 1:
-                                menuList3(formattedStartDate, formattedEndDate);
-                                break;
 
-                            case 2:
-                                internet(formattedStartDate, formattedEndDate);
-                                break;
+                        dateTextView.setText("Tarih: " + MyUtils.changeDateFormat(formattedStartDate) + " ile " + MyUtils.changeDateFormat(formattedEndDate)  + " arasında.");
+                        dateTextView.setTextColor(getColor(R.color.color6));
 
-                            case 3:
-                                visualMedia3(formattedStartDate, formattedEndDate);
-                                break;
-                        }
+//                        switch (index) {
+//                            case 1:
+//                                menuList3(formattedStartDate, formattedEndDate);
+//                                break;
+//
+//                            case 2:
+//                                internet(formattedStartDate, formattedEndDate);
+//                                break;
+//
+//                            case 3:
+//                                visualMedia3(formattedStartDate, formattedEndDate);
+//                                break;
+//                        }
 
                     }
                 });

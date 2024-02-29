@@ -35,9 +35,15 @@ public class DataHolder {
 
     private ArrayList<String> columnistsShowArray;
     private ArrayList<String> printedMediaFullPageShowArray;
+    private ArrayList<String> printedMediaShareLinkArray;
     private ArrayList<String> printedMediaSubPageShowArray;
     private ArrayList<String> printedMediaDateShowArray;
     private ArrayList<String> printedMediaNamesShowArray;
+
+    private ArrayList<String> CansinUrlArray;
+    private ArrayList<String> CansinShareUrlArray;
+    private ArrayList<String> CansinDatesArray;
+    private ArrayList<String> CansinNamesArray;
 
     private DataHolder() {}
 
@@ -189,6 +195,48 @@ public class DataHolder {
         this.printedMediaNamesShowArray = printedMediaNamesShowArray;
     }
 
+
+    public ArrayList<String> getCansinUrlArray() {
+        return CansinUrlArray;
+    }
+
+    public void setCansinUrlArray(ArrayList<String> cansinUrlArray) {
+        CansinUrlArray = cansinUrlArray;
+    }
+
+
+    public ArrayList<String> getCansinDatesArray() {
+        return CansinDatesArray;
+    }
+
+    public void setCansinDatesArray(ArrayList<String> cansinDatesArray) {
+        CansinDatesArray = cansinDatesArray;
+    }
+
+    public ArrayList<String> getCansinNamesArray() {
+        return CansinNamesArray;
+    }
+
+    public void setCansinNamesArray(ArrayList<String> cansinNamesArray) {
+        CansinNamesArray = cansinNamesArray;
+    }
+
+    public ArrayList<String> getCansinShareUrlArray() {
+        return CansinShareUrlArray;
+    }
+
+    public void setCansinShareUrlArray(ArrayList<String> cansinShareUrlArray) {
+        CansinShareUrlArray = cansinShareUrlArray;
+    }
+
+    public ArrayList<String> getPrintedMediaShareLinkArray() {
+        return printedMediaShareLinkArray;
+    }
+
+    public void setPrintedMediaShareLinkArray(ArrayList<String> printedMediaShareLinkArray) {
+        this.printedMediaShareLinkArray = printedMediaShareLinkArray;
+    }
+
     public void clearDataHolderClass() {
         this.mediaAgendaModel = null;
         this.newspaperFirstPagesModel = null;
@@ -208,5 +256,10 @@ public class DataHolder {
         this.printedMediaSubPageShowArray = null;
         this.printedMediaDateShowArray = null;
         this.printedMediaNamesShowArray = null;
+        this.CansinUrlArray = null;
+        this.CansinDatesArray = null;
+        this.CansinNamesArray = null;
+        this.CansinShareUrlArray = null;
+        this.printedMediaShareLinkArray = null;
     }
 }

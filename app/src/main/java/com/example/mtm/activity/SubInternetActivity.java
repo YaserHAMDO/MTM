@@ -2,10 +2,10 @@ package com.example.mtm.activity;
 
 import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -36,7 +36,7 @@ import com.example.mtm.util.Logger;
 import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.PreferenceManager;
 import com.example.mtm.util.ZoomClass;
-import com.jsibbold.zoomage.ZoomageView;
+import com.example.mtm.util.ZoomClassWebView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SubInternetActivity extends AppCompatActivity implements SubInternetAdapter.OnItemClickListener, ZoomClass.ZoomClassListener {
+public class SubInternetActivity extends AppCompatActivity implements SubInternetAdapter.OnItemClickListener, ZoomClass.ZoomClassListener{
 
     private static final String TAG = "SubInternetActivity";
 
@@ -54,7 +54,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     private boolean isLoading = false;
     private ImageView backIconImageView, backIconImageView2;
     private RecyclerView recyclerView;
-    private WebView webView;
+//    private WebView webView;
     List<SubInternetModel> items;
 
     private SubInternetAdapter adapter;
@@ -67,6 +67,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     private int count;
 
     ZoomClass zoomClass;
+    ZoomClassWebView webView;
     LinearLayout mesut;
 
     int x = 0;
@@ -74,9 +75,17 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
     private int index;
 
     private ArrayList<String> printedMediaFullPageShowArray;
+    private ArrayList<String> printedMediaShareLinkArray;
     private ArrayList<String> printedMediaSubPageShowArray;
     private ArrayList<String> printedMediaDateShowArray, printedMediaNamesShowArray;
 
+    private ArrayList<String> CansinUrlArray;
+    private ArrayList<String> CansinDatesArray;
+    private ArrayList<String> CansinNamesArray;
+    private ArrayList<String> CansinShareUrlArray;
+
+
+    private GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,12 +140,19 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             items.add(new SubInternetModel(
                     result.getData().getDocs().get(i).getTitle(),
                     result.getData().getDocs().get(i).getMedia().getName(),
-                    "",
+                    Constants.KEY_SHARE_URL3 + result.getData().getDocs().get(i).getGnoHash(),
                     result.getData().getDocs().get(i).getPublishDate(),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
                     Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo(),
-                    ""
+                    "",
+                    result.getData().getDocs().get(i).getProgram().getName()
             ));
+
+            CansinUrlArray.add(Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo());
+            CansinDatesArray.add(result.getData().getDocs().get(i).getPublishDate());
+            CansinNamesArray.add(result.getData().getDocs().get(i).getMedia().getName());
+            CansinShareUrlArray.add(Constants.KEY_SHARE_URL3 + result.getData().getDocs().get(i).getGnoHash());
+
 
         }
 
@@ -144,7 +160,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         if (pageNumber == 0) {
             x = items.size();
-            adapter = new SubInternetAdapter(this, items, this, x == count);
+            adapter = new SubInternetAdapter(this, items, this, x == count, index);
             recyclerView.setAdapter(adapter);
         } else {
 
@@ -173,9 +189,9 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
-        backIconImageView2 = findViewById(R.id.backIconImageView2);
+
         recyclerView = findViewById(R.id.recyclerView);
-        webView = findViewById(R.id.webView2);
+//        webView = findViewById(R.id.webView2);
         test12 = findViewById(R.id.test12);
         progressBar2 = findViewById(R.id.progressBar2);
         includedLayout = findViewById(R.id.web_view_layout);
@@ -203,15 +219,23 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         zoomClass = findViewById(R.id.imageView);
         zoomClass.setZoomClassListener(this);
 
+        webView = findViewById(R.id.webView2);
+//        webView.setZoomClassListener2(this);
+
         printedMediaFullPageShowArray = new ArrayList<>();
+        printedMediaShareLinkArray = new ArrayList<>();
         printedMediaSubPageShowArray = new ArrayList<>();
         printedMediaDateShowArray = new ArrayList<>();
         printedMediaNamesShowArray = new ArrayList<>();
+        CansinUrlArray = new ArrayList<>();
+        CansinDatesArray = new ArrayList<>();
+        CansinNamesArray = new ArrayList<>();
+        CansinShareUrlArray = new ArrayList<>();
     }
 
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
-        backIconImageView2.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+//        backIconImageView2.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
         titleTextView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
 
         sourceTextView.setOnClickListener(view -> {
@@ -265,17 +289,23 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             items.add(new SubInternetModel(
                     result.getData().getDocs().get(i).getTitle(),
                     result.getData().getDocs().get(i).getMedia().getName(),
-                    "",
+                    Constants.KEY_SHARE_URL2 + result.getData().getDocs().get(i).getGnoHash(),
                     result.getData().getDocs().get(i).getPublishDate(),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
                     result.getData().getDocs().get(i).getUrl(),
+                    "",
                     ""
             ));
+
+            CansinUrlArray.add(result.getData().getDocs().get(i).getUrl());
+            CansinDatesArray.add(result.getData().getDocs().get(i).getPublishDate());
+            CansinNamesArray.add(result.getData().getDocs().get(i).getMedia().getName());
+            CansinShareUrlArray.add(Constants.KEY_SHARE_URL2 + result.getData().getDocs().get(i).getGnoHash());
         }
 
         if (pageNumber == 0) {
             x = items.size();
-            adapter = new SubInternetAdapter(this, items, this, x == count);
+            adapter = new SubInternetAdapter(this, items, this, x == count, index);
             recyclerView.setAdapter(adapter);
         } else {
 
@@ -306,23 +336,25 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             items.add(new SubInternetModel(
                     result.getData().getDocs().get(i).getTitle(),
                     result.getData().getDocs().get(i).getMedia().getName(),
-                    "",
+                    Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash(),
                     result.getData().getDocs().get(i).getPublishDate(),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
-                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getPage().getFullImagePath()
+                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getPage().getFullImagePath(),
+                    ""
             ));
 
             printedMediaFullPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getPage().getFullImagePath());
             printedMediaSubPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
             printedMediaDateShowArray.add(result.getData().getDocs().get(i).getPublishDate());
             printedMediaNamesShowArray.add(result.getData().getDocs().get(i).getMedia().getName());
+            printedMediaShareLinkArray.add(Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash());
 
         }
 
         if (pageNumber == 0) {
             x = items.size();
-            adapter = new SubInternetAdapter(this, items, this, x == count);
+            adapter = new SubInternetAdapter(this, items, this, x == count, index);
             recyclerView.setAdapter(adapter);
         } else {
 
@@ -733,7 +765,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
         switch (index) {
             case 1:
-
+                DataHolder.getInstance().setPrintedMediaShareLinkArray(printedMediaShareLinkArray);
                 DataHolder.getInstance().setPrintedMediaFullPageShowArray(printedMediaFullPageShowArray);
                 DataHolder.getInstance().setPrintedMediaSubPageShowArray(printedMediaSubPageShowArray);
                 DataHolder.getInstance().setPrintedMediaDateShowArray(printedMediaDateShowArray);
@@ -750,27 +782,40 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             case 2:
 
             case 3:
-                // Show the included layout containing the WebView and ProgressBar
-                includedLayout.setVisibility(View.VISIBLE);
 
-                // Load the URL in the WebView
-                webView.loadUrl(mediaPath);
 
-                // Set up a WebViewClient to handle page loading events
-                webView.setWebViewClient(new WebViewClient() {
-                    // Show ProgressBar when page starts loading
-                    @Override
-                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                        progressBar2.setVisibility(View.VISIBLE);
-                    }
+                DataHolder.getInstance().setCansinUrlArray(CansinUrlArray);
+                DataHolder.getInstance().setCansinDatesArray(CansinDatesArray);
+                DataHolder.getInstance().setCansinNamesArray(CansinNamesArray);
+                DataHolder.getInstance().setCansinShareUrlArray(CansinShareUrlArray);
 
-                    // Hide ProgressBar when page finishes loading
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-                        progressBar2.setVisibility(View.GONE);
-                    }
-                });
+                Intent intent2 = new Intent(this, CansinActivity.class);
+
+                intent2.putExtra("index2", position);
+                startActivity(intent2);
+
                 break;
+
+            //                // Show the included layout containing the WebView and ProgressBar
+//                includedLayout.setVisibility(View.VISIBLE);
+//
+//                // Load the URL in the WebView
+//                webView.loadUrl(mediaPath);
+//
+//                // Set up a WebViewClient to handle page loading events
+//                webView.setWebViewClient(new WebViewClient() {
+//                    // Show ProgressBar when page starts loading
+//                    @Override
+//                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//                        progressBar2.setVisibility(View.VISIBLE);
+//                    }
+//
+//                    // Hide ProgressBar when page finishes loading
+//                    @Override
+//                    public void onPageFinished(WebView view, String url) {
+//                        progressBar2.setVisibility(View.GONE);
+//                    }
+//                });
         }
 
 

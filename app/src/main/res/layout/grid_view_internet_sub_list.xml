@@ -31,12 +31,14 @@
                 android:background="@drawable/baseline_play_arrow_24_2"/>
 
             <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:id="@+id/nameTextView"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:textStyle="bold"
                 android:text="Test"
                 android:textColor="@color/black"
@@ -44,16 +46,11 @@
 
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginStart="7dp"
                 android:layout_gravity="center_vertical"
                 android:layout_width="20dp"
                 android:layout_height="20dp"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
 
 
             <TextView

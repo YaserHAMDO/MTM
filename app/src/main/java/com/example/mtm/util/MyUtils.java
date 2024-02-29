@@ -1,22 +1,28 @@
 package com.example.mtm.util;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.mtm.R;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class MyUtils {
 
@@ -73,8 +79,46 @@ public class MyUtils {
     }
 
 
-    public static void showPopupDialog(Context context) {
+    public static void showImageSourceBottomSheet(Context context) {
 
+
+        //        https://www.section.io/engineering-education/bottom-sheet-dialogs-using-android-studio/
+
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context,R.style.BottomSheetDialog);
+        bottomSheetDialog.setContentView(R.layout.filter_pop_up_layout);
+
+//        LinearLayout cameraLinearLayout = bottomSheetDialog.findViewById(R.id.cameraLinearLayout);
+//        LinearLayout galleryLinearLayout = bottomSheetDialog.findViewById(R.id.galleryLinearLayout);
+//        LinearLayout deleteLinearLayout = bottomSheetDialog.findViewById(R.id.deleteLinearLayout);
+//        View view99 = bottomSheetDialog.findViewById(R.id.view99);
+
+
+//        cameraLinearLayout.setOnClickListener(v -> {
+//
+//            bottomSheetDialog.dismiss();
+//
+//        });
+
+
+
+
+
+
+
+//        if(bottomSheetDialog.getWindow() != null)
+//            bottomSheetDialog.getWindow().setDimAmount(90);
+        bottomSheetDialog.show();
+
+//        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                // Instructions on bottomSheetDialog Dismiss
+//            }
+//        });
+
+    }
+
+    public static void showSubscriptionDialog(Context context) {
 
         Dialog loginDialog = new Dialog(context, R.style.LoginDialog);
         loginDialog.setContentView(R.layout.report_pop_up_layout);
@@ -88,11 +132,32 @@ public class MyUtils {
             loginDialog.cancel();
         });
 
-//        close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                loginDialog.cancel();
-//            }
+        loginDialog.setOnDismissListener(dialogInterface -> {
+
+
+        });
+
+        loginDialog.setCancelable(true);
+
+        //   loginDialog.setCanceledOnTouchOutside(false);
+        loginDialog.setCanceledOnTouchOutside(true);
+
+        loginDialog.show();
+
+    }
+
+    public static void showFilterDialog(Context context) {
+
+        Dialog loginDialog = new Dialog(context, R.style.LoginDialog);
+        loginDialog.setContentView(R.layout.filter_pop_up_layout);
+        loginDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        loginDialog.getWindow().setGravity(Gravity.BOTTOM);
+
+//        TextView continue_privacy = loginDialog.findViewById(R.id.hyperlink);
+//        continue_privacy.setMovementMethod(LinkMovementMethod.getInstance());
+//
+//        continue_privacy.setOnClickListener(view -> {
+//            loginDialog.cancel();
 //        });
 
         loginDialog.setOnDismissListener(dialogInterface -> {
@@ -107,20 +172,6 @@ public class MyUtils {
 
         loginDialog.show();
 
-
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        builder.setTitle("Not:")
-//                .setMessage("")
-////                .setPositiveButton("Okundu", (dialog, which) -> {
-//////                    // Update item as read
-//////                    mItems.get(position).setRead(true);
-//////                    // Notify adapter about the change
-//////                    notifyItemChanged(position);
-////////                    listener.onItemClick(mItems.get(position).getId());
-////                })
-//                .setCancelable(true)
-//                .show();
     }
 
     // Method to handle sharing the link

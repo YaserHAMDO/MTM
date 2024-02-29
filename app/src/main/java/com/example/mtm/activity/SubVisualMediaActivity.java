@@ -45,6 +45,7 @@ public class SubVisualMediaActivity extends AppCompatActivity implements SubVisu
                     result.getData().getDocs().get(i).getPublishDate(),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
                     Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo(),
+                    "",
                     ""
             ));
 

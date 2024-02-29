@@ -52,6 +52,12 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
 
     private ArrayList<String> columnistsShowArray;
 
+    private ArrayList<String> printedMediaShareLinkArray;
+    private ArrayList<String> printedMediaFullPageShowArray;
+    private ArrayList<String> printedMediaSubPageShowArray;
+    private ArrayList<String> printedMediaDateShowArray;
+    private ArrayList<String> printedMediaNamesShowArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +80,12 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
         seeAll = findViewById(R.id.seeAll);
 
         columnistsShowArray = new ArrayList<>();
+        printedMediaShareLinkArray = new ArrayList<>();
+        printedMediaFullPageShowArray = new ArrayList<>();
+        printedMediaSubPageShowArray = new ArrayList<>();
+        printedMediaDateShowArray = new ArrayList<>();
+        printedMediaNamesShowArray = new ArrayList<>();
+
     }
 
     private void setItemClickListeners() {
@@ -160,16 +172,21 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
 
             String videoUrl;
             String magazineUrl;
+            String gnoHash;
 
             for (int i = 0; i < result.getData().getDocs().size() ; i++) {
 
                 videoUrl = "";
                 magazineUrl = "";
+                gnoHash = "";
                 if (result.getData().getDocs() != null && result.getData().getDocs().get(i).getClips() != null && result.getData().getDocs().get(i).getClips().getBc() != null && result.getData().getDocs().get(i).getClips().getBc().getDocs() != null && result.getData().getDocs().get(i).getClips().getBc().getDocs().size() > 0) {
                     videoUrl =  Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getClips().getBc().getDocs().get(0).getVideo();
                 }
                 if (result.getData().getDocs() != null && result.getData().getDocs().get(i).getClips() != null && result.getData().getDocs().get(i).getClips().getPm() != null && result.getData().getDocs().get(i).getClips().getPm().getDocs() != null && result.getData().getDocs().get(i).getClips().getPm().getDocs().size() > 0) {
                     magazineUrl =  Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getImageStoragePath();
+                }
+                if(result.getData().getDocs() != null && result.getData().getDocs().get(i).getClips() != null && result.getData().getDocs().get(i).getClips().getPm() != null && result.getData().getDocs().get(i).getClips().getPm().getDocs() != null && result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0) != null && result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getGnoHash() != null) {
+                    gnoHash = result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getGnoHash();
                 }
 
                 String type = result.getData().getDocs().get(i).getAgendaType().getName();
@@ -182,7 +199,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 magazineUrl,
                                 videoUrl,
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
-                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
+                                gnoHash,
+                                result.getData().getDocs().get(i).getDate()
                         ));
                         break;
 
@@ -193,7 +212,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 magazineUrl,
                                 videoUrl,
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
-                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
+                                gnoHash,
+                                result.getData().getDocs().get(i).getDate()
                         ));
                         break;
 
@@ -204,7 +225,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 magazineUrl,
                                 videoUrl,
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
-                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
+                                gnoHash,
+                                result.getData().getDocs().get(i).getDate()
                         ));
                         break;
 
@@ -215,7 +238,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 magazineUrl,
                                 videoUrl,
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
-                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
+                                gnoHash,
+                                result.getData().getDocs().get(i).getDate()
                         ));
                         break;
 
@@ -226,7 +251,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 magazineUrl,
                                 videoUrl,
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
-                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
+                                gnoHash,
+                                result.getData().getDocs().get(i).getDate()
                         ));
                         break;
 
@@ -237,7 +264,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 magazineUrl,
                                 videoUrl,
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
-                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
+                                gnoHash,
+                                result.getData().getDocs().get(i).getDate()
                         ));
                         break;
 
@@ -248,7 +277,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 magazineUrl,
                                 videoUrl,
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
-                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                                result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
+                                gnoHash,
+                                result.getData().getDocs().get(i).getDate()
                         ));
                         break;
                 }
@@ -259,7 +290,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                         magazineUrl,
                         videoUrl,
                         result.getData().getDocs().get(i).getAgendaType().getName(),
-                        result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
+                        result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
+                        gnoHash,
+                        result.getData().getDocs().get(i).getDate()
                 ));
 
             }
@@ -280,11 +313,25 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
     private void setTypesList2(List<MediaAgendaModel> dataList) {
         recyclerView2.setAdapter(null);
         columnistsShowArray.clear();
+
+        printedMediaShareLinkArray.clear();
+        printedMediaFullPageShowArray.clear();
+        printedMediaSubPageShowArray.clear();
+        printedMediaDateShowArray.clear();
+        printedMediaNamesShowArray.clear();
+
         adapter2 = new MediaAgendaBodyAdapter(this, dataList, this);
         recyclerView2.setAdapter(adapter2);
 
         for (int i = 0; i < dataList.size(); i++) {
             columnistsShowArray.add(dataList.get(i).getMagazineImageUrl());
+
+            printedMediaShareLinkArray.add(Constants.KEY_SHARE_URL + dataList.get(i).getGnoHash());
+            printedMediaFullPageShowArray.add("");
+            printedMediaSubPageShowArray.add(dataList.get(i).getMagazineImageUrl());
+            printedMediaDateShowArray.add(dataList.get(i).getDate());
+            printedMediaNamesShowArray.add(dataList.get(i).getTitle());
+
         }
     }
 
@@ -394,9 +441,16 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
     @Override
     public void onItemClick(int position) {
 
+
+        DataHolder.getInstance().setPrintedMediaShareLinkArray(printedMediaShareLinkArray);
+        DataHolder.getInstance().setPrintedMediaFullPageShowArray(printedMediaFullPageShowArray);
+        DataHolder.getInstance().setPrintedMediaSubPageShowArray(printedMediaSubPageShowArray);
+        DataHolder.getInstance().setPrintedMediaDateShowArray(printedMediaDateShowArray);
+        DataHolder.getInstance().setPrintedMediaNamesShowArray(printedMediaNamesShowArray);
+
         DataHolder.getInstance().setColumnistsShowArray(columnistsShowArray);
 
-        Intent intent = new Intent(this, ColumnistsShowActivity.class);
+        Intent intent = new Intent(this, MesutActivity.class);
         intent.putExtra("index", position);
         startActivity(intent);
 
