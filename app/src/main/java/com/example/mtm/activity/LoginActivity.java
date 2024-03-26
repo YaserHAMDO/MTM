@@ -21,6 +21,7 @@ import com.example.mtm.model.SliderModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.AccountResponse;
+import com.example.mtm.response.CurrentUserResponse;
 import com.example.mtm.response.TokenResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.Logger;
@@ -228,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else {
 
-                    Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Lütfen e-posta adresinizi ve şifrenizi kontrol ederek tekrar deneyin.", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -236,7 +237,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<TokenResponse> call, Throwable t) {
 
-                Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Lütfen e-posta adresinizi ve şifrenizi kontrol ederek tekrar deneyin.", Toast.LENGTH_SHORT).show();
                 Logger.getInstance().logDebug(TAG, "getToken", 3, t.getMessage());
             }
         });
@@ -293,9 +294,8 @@ public class LoginActivity extends AppCompatActivity {
                         preferenceManager.putStringArray(Constants.KEY_COSTUMER_NAME_ARRAY, names);
 
 
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(i);
-                        finish();
+                        getCurrentUser(token, tokenModel.getData().get(0).getId());
+
 
                     }
 
@@ -315,6 +315,75 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+
+    private void getCurrentUser(String token, int customerId) {
+
+//        String userName = usernameEditText.getText().toString();
+//        String password = passwordEditText.getText().toString();
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+//        Map<String, String> fields = new HashMap<>();
+//        fields.put("client_id", "account-mobile");
+//        fields.put("client_secret", "6323a00d-974f-46b9-974d-37e9a1588c59");
+//        fields.put("grant_type", "password");
+//        fields.put("scope", "offline_access");
+//        fields.put("username", userName);
+//        fields.put("password", password);
+
+        Call<CurrentUserResponse> call = apiService.getCurrentUser(
+                "Bearer " + token,
+                customerId);
+
+
+//        Logger.getInstance().logDebug(TAG, "getToken", 1, fields);
+
+        call.enqueue(new Callback<CurrentUserResponse>() {
+            @Override
+            public void onResponse(Call<CurrentUserResponse> call, Response<CurrentUserResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "getCurrentUser", 2, response.body());
+
+                if (response.isSuccessful()) {
+
+                    CurrentUserResponse tokenModel = response.body();
+                    if (tokenModel != null) {
+
+
+                        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+
+                        preferenceManager.putInt(Constants.KEY_CURRENT_COSTUMER_PM, tokenModel.getData().getDataSource().getPM());
+                        preferenceManager.putInt(Constants.KEY_CURRENT_COSTUMER_DM, tokenModel.getData().getDataSource().getDM());
+                        preferenceManager.putInt(Constants.KEY_CURRENT_COSTUMER_BC, tokenModel.getData().getDataSource().getBC());
+                        preferenceManager.putInt(Constants.KEY_CURRENT_COSTUMER_NA, tokenModel.getData().getDataSource().getNA());
+
+
+
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+
+                    }
+
+                } else {
+
+                    Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CurrentUserResponse> call, Throwable t) {
+
+                Toast.makeText(LoginActivity.this, "Please try again.", Toast.LENGTH_SHORT).show();
+                Logger.getInstance().logDebug(TAG, "getCurrentUser", 3, t.getMessage());
+            }
+        });
+
+    }
+
 
 
     @Override

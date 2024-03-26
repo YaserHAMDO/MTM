@@ -10,33 +10,34 @@
 
     <LinearLayout
         android:id="@+id/test12"
-        android:layout_marginTop="0dp"
-        android:paddingHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_gravity="center_vertical"
             android:id="@+id/backIconImageView"
-            android:padding="5dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
             android:src="@drawable/left_arrow_blue" />
 
         <TextView
-            android:visibility="invisible"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:textSize="20sp"
+            android:gravity="center"
+            android:text="Bildirimler"
             android:textColor="#4E4B66"
-            android:text="Bildirimler"/>
+            android:textSize="20sp"
+            android:visibility="invisible" />
 
         <androidx.cardview.widget.CardView
+            android:visibility="invisible"
             android:id="@+id/notificationImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,9 +46,9 @@
             app:cardElevation="8dp">
 
             <ImageView
-                android:padding="5dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:padding="5dp"
                 android:src="@drawable/baseline_link_24" />
 
         </androidx.cardview.widget.CardView>
@@ -55,48 +56,93 @@
     </LinearLayout>
 
 
-
     <TextView
-        android:layout_marginHorizontal="30dp"
         android:id="@+id/titleTextView"
-        app:layout_constraintTop_toBottomOf="@+id/test12"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:gravity="center"
+        android:text="Title"
+        android:textColor="@color/color6"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/color6"
-        android:text="Title"/>
-
-
-    <TextView
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginVertical="20dp"
-        android:id="@+id/bodyTextView"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test12" />
+
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:gravity="start"
-        android:textSize="20sp"
-        android:textColor="#4E4B66"
-        android:text="Body"/>
-
-
-    <Button
-        android:layout_marginBottom="10dp"
-        android:textAllCaps="false"
-        android:layout_gravity="center"
-        android:id="@+id/button"
-        android:text="Okundu olarak işaretle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:layout_gravity="end"
+                android:maxLines="2"
+                android:text="25-06-2020\n08:26"
+                android:textColor="@color/black"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="20dp" />
+
+
+
+            <TextView
+                android:id="@+id/bodyTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="20dp"
+                android:gravity="start"
+                android:text="Body"
+                android:textColor="#4E4B66"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/hyperlink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/hyperlink2"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:text="Okundu olarak işaretle"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

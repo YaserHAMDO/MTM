@@ -31,10 +31,10 @@ public class NotificationContentActivity extends AppCompatActivity {
     private static final String TAG = "NotificationContentActivity";
 
     private ImageView backIconImageView;
-    private TextView titleTextView, bodyTextView;
+    private TextView titleTextView, bodyTextView, hyperlink, dateTextView;
     private Button button;
     private CardView notificationImageView;
-    private String title, body, link;
+    private String title, body, link, date, time;
     private int id;
 
     @Override
@@ -46,10 +46,13 @@ public class NotificationContentActivity extends AppCompatActivity {
         initValues();
         setItemClickListeners();
         setDate();
+        markAsRead();
     }
 
     private void init() {
         backIconImageView = findViewById(R.id.backIconImageView);
+        hyperlink = findViewById(R.id.hyperlink);
+        dateTextView = findViewById(R.id.dateTextView);
         notificationImageView = findViewById(R.id.notificationImageView);
         titleTextView = findViewById(R.id.titleTextView);
         bodyTextView = findViewById(R.id.bodyTextView);
@@ -63,21 +66,26 @@ public class NotificationContentActivity extends AppCompatActivity {
         body = intent.getStringExtra("body");
         link = intent.getStringExtra("link");
         id = intent.getIntExtra("id", 0);
+        date = intent.getStringExtra("date");
+        time = intent.getStringExtra("time");
 
         if(link == null || link.equals("")) {
             notificationImageView.setVisibility(View.INVISIBLE);
+            hyperlink.setVisibility(View.INVISIBLE);
         }
     }
 
     private void setItemClickListeners() {
         backIconImageView.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
         notificationImageView.setOnClickListener(view -> MyUtils.openLink(link, this));
+        hyperlink.setOnClickListener(view -> MyUtils.openLink(link, this));
         button.setOnClickListener(view -> markAsRead());
     }
 
     private void setDate() {
         titleTextView.setText(title);
         bodyTextView.setText(body);
+        dateTextView.setText(date + "\n" + time);
     }
 
     private void markAsRead() {
@@ -107,7 +115,7 @@ public class NotificationContentActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
 
-                    Toast.makeText(NotificationContentActivity.this, "Okundu.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(NotificationContentActivity.this, "Okundu.", Toast.LENGTH_SHORT).show();
 
                 } else {
 

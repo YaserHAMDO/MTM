@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mtm.R;
 import com.example.mtm.adapter.NewspaperAdapter;
 import com.example.mtm.model.NewspaperModel;
+import com.example.mtm.model.SelimModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.MagazineFullPagesResponse;
@@ -73,13 +74,13 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
             case 1:
                 startDate = MyUtils.getCurrentDate();
                 endDate = MyUtils.getCurrentDate();
-                title.setText("Gazeteler");
+                title.setText("Gazete Menşetleri");
                 setData();
                 break;
             case 2:
                 startDate = MyUtils.getFirstDateOfMonth();
                 endDate = MyUtils.getCurrentDate();
-                title.setText("Dergiler");
+                title.setText("Dergi Kapakları");
                 setMagazineData();
                 break;
         }
@@ -227,6 +228,23 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
                     NewspaperFirstPagesResponse result = response.body();
 
+
+                    ArrayList<SelimModel> selimModel = new ArrayList<>();
+
+                    if (result.getData() != null) {
+                        for (int i = 0; i < result.getData().size(); i++) {
+                            selimModel.add(new SelimModel(
+                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().get(i).getImageInfo().getPageFile() + "-1.jpg?sz=full",
+                                    result.getData().get(i).getName(),
+                                    MyUtils.changeDateFormat(result.getData().get(i).getDate())
+                            ));
+                        }
+                    }
+                  
+
+                    DataHolder.getInstance().setSelimModels(selimModel);
+                    
+
                     DataHolder.getInstance().setNewspaperFirstPagesModel(result);
 
 
@@ -341,9 +359,9 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
 
     private void setData() {
-
+        
         NewspaperFirstPagesResponse result = DataHolder.getInstance().getNewspaperFirstPagesModel();
-
+        
         List<NewspaperModel> items = new ArrayList<>();
 
         if (result != null && result.getData() != null && result.getData().size() > 0) {
@@ -365,6 +383,10 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
             filteredDateTextView.setText(MyUtils.changeDateFormat(startDate) + " tarihi kayıtlar gösterilmektedir.");
 
 
+        }
+        
+        else {
+            Toast.makeText(this, "Seçtiğiniz tarihte kayıtlar bulunmamaktadır.", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -402,7 +424,7 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
     }
 
-    private void newspaperFullPages(String mediaPath, String pageFile, String gno) {
+    private void newspaperFullPages(String mediaPath, String pageFile, String gno, int position) {
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -442,11 +464,34 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
                     }
 
 
-                    Intent intent = new Intent(NewspaperActivity.this, SubNewspaperActivity.class);
+//                    Intent intent = new Intent(NewspaperActivity.this, SubNewspaperActivity.class);
+//                    intent.putExtra("mediaPath", mediaPath + "page/" + pageFile + "-");
+//                    intent.putExtra("count", count);
+//                    intent.putExtra("index", 1);
+//                    intent.putExtra("position", position);
+//                    startActivity(intent);
+
+
+                    ArrayList<SelimModel> selimModel = new ArrayList<>();
+
+                    for (int i = 0; i < result.getData().size(); i++) {
+                        selimModel.add(new SelimModel(
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().get(i).getImageInfo().getPageFile() + "-1.jpg?sz=full",
+                                result.getData().get(i).getName(),
+                                MyUtils.changeDateFormat(result.getData().get(i).getDate())
+                                ));
+                    }
+
+                    DataHolder.getInstance().setSelimModels(selimModel);
+
+                    Intent intent = new Intent(NewspaperActivity.this, SelimActivity.class);
                     intent.putExtra("mediaPath", mediaPath + "page/" + pageFile + "-");
                     intent.putExtra("count", count);
                     intent.putExtra("index", 1);
+                    intent.putExtra("position", position);
                     startActivity(intent);
+
+
 
                 } else {
 
@@ -466,7 +511,7 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
     }
 
-    private void newspaperFirstPages(String mediaPath, String pageFile, String gno, int count) {
+    private void newspaperFirstPages(String mediaPath, String pageFile, String gno, int count, int position) {
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -509,6 +554,7 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
                     Intent intent = new Intent(NewspaperActivity.this, SubNewspaperActivity.class);
                     intent.putExtra("mediaPath", mediaPath + "page/" + pageFile + "-");
                     intent.putExtra("count", count);
+                    intent.putExtra("position", position);
                     startActivity(intent);
 
 
@@ -586,6 +632,19 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
                     MagazineFullPagesResponse result = response.body();
 
 
+                    ArrayList<SelimModel> selimModel = new ArrayList<>();
+
+                    for (int i = 0; i < result.getData().size(); i++) {
+                        selimModel.add(new SelimModel(
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().get(i).getImageInfo().getPageFile() + "-1.jpg?sz=full",
+                                result.getData().get(i).getName(),
+                                MyUtils.changeDateFormat(result.getData().get(i).getDate())
+                        ));
+                    }
+
+                    DataHolder.getInstance().setSelimModels(selimModel);
+
+
                     DataHolder.getInstance().setMagazineFullPagesModel(result);
 
 //                    Intent intent = new Intent(MainActivity.this, MagazineActivity.class);
@@ -622,15 +681,31 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 
 
     @Override
-    public void onItemClick(String mediaPath, String pageFile, String gno, int count) {
-        switch (index) {
-            case 1:
-                newspaperFullPages(mediaPath, pageFile, gno);
-                break;
-            case 2:
-                newspaperFirstPages(mediaPath, pageFile, gno, count);
-                break;
-        }
+    public void onItemClick(String mediaPath, String pageFile, String gno, int count, int position) {
+
+
+        Intent intent = new Intent(NewspaperActivity.this, SelimActivity.class);
+
+        intent.putExtra("index", index);
+        intent.putExtra("position", position);
+
+        startActivity(intent);
+
+//        switch (index) {
+//            case 1:
+//
+//                Intent intent = new Intent(NewspaperActivity.this, SelimActivity.class);
+//
+//                intent.putExtra("index", index);
+//                intent.putExtra("position", position);
+//
+//                startActivity(intent);
+////                newspaperFullPages(mediaPath, pageFile, gno, position);
+//                break;
+//            case 2:
+////                newspaperFirstPages(mediaPath, pageFile, gno, count, position);
+//                break;
+//        }
 
     }
 }

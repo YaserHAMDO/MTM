@@ -3,6 +3,7 @@ package com.example.mtm.network;
 import com.example.mtm.request.MarkAsReadRequestBody;
 import com.example.mtm.response.AccountResponse;
 import com.example.mtm.response.ColumnistsResponse;
+import com.example.mtm.response.CurrentUserResponse;
 import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
 import com.example.mtm.response.MagazineFullPagesResponse;
@@ -62,6 +63,10 @@ public interface ApiService {
     );
 
 
+    @GET("api/customer/current-user")
+    Call<CurrentUserResponse> getCurrentUser(@Header("Authorization") String authToken, @Query("customerId") int customerId);
+
+
     @GET("api/data/email/list")
     Call<SummaryListResponse> summaryList(
             @Header("Authorization") String authToken,
@@ -70,7 +75,7 @@ public interface ApiService {
             @Query("cdateStart") String cdateStart,
             @Query("cdateEnd") String cdateEnd
 //            @Query("isAddClip") boolean isAddClip,
-//            @Query("isAddContent") boolean isAddContent,
+//            @Que ry("isAddContent") boolean isAddContent,
 //            @Query("isAddDocs") boolean isAddDocs,
 //            @Query("isAddDocsBaseDate") boolean isAddDocsBaseDate,
 //            @Query("isAddDsMenu") boolean isAddDsMenu,
@@ -247,7 +252,8 @@ public interface ApiService {
 
             @Query("groupByParent") boolean groupByParent,
             @Query("addDataGroup") boolean addDataGroup,
-            @Query("addSplitter") boolean addSplitter
+            @Query("addSplitter") boolean addSplitter,
+            @Query("clipType") String clipType
     );
 
 
@@ -331,7 +337,8 @@ public interface ApiService {
 
             @Query("groupByParent") boolean groupByParent,
             @Query("addDataGroup") boolean addDataGroup,
-            @Query("addSplitter") boolean addSplitter
+            @Query("addSplitter") boolean addSplitter,
+            @Query("clipType") String clipType
     );
 
 
@@ -356,7 +363,7 @@ public interface ApiService {
             @Query("cdateEnd") String cdateEnd,
             @Query("ctimeStart") String ctimeStart,
             @Query("ctimeEnd") String ctimeEnd,
-//            @Query("clipType") String clipType,
+            @Query("clipType") String clipType,
             @Query("ignoreType") String ignoreType,
             @Query("groupByParent") boolean groupByParent,
 //            @Query("groupGnos") String groupGnos,
@@ -409,7 +416,8 @@ public interface ApiService {
             @Query("groupByParent") boolean groupByParent,
             @Query("addDataGroup") boolean addDataGroup,
             @Query("addSplitter") boolean addSplitter,
-            @Query("onlyColmnList") boolean onlyColmnList
+            @Query("onlyColmnList") boolean onlyColmnList,
+            @Query("clipType") String clipType
     );
 
     @GET("/api/data/pm/news-list")

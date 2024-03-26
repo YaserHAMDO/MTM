@@ -21,7 +21,10 @@ import com.example.mtm.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class MyUtils {
@@ -68,15 +71,75 @@ public class MyUtils {
 
 
     public static String changeDateFormat(String inputDate) {
-        // Parse the input string into a LocalDate object
-        LocalDate date = LocalDate.parse(inputDate);
+        if (inputDate == null)
+            return "";
+        try {
+            // Parse the input string into a LocalDate object
+            LocalDate date = LocalDate.parse(inputDate);
 
-        // Define the desired date format
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            // Define the desired date format
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-        // Format the date using the formatter
-        return date.format(formatter);
+            // Format the date using the formatter
+            return date.format(formatter);
+        }
+        catch (DateTimeParseException e) {
+        // Handle the parsing exception
+        e.printStackTrace();
+        return null;
     }
+
+    }
+
+
+
+    public static String getDate(String input) {
+        try {
+            // Define the formatter
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+
+            // Parse the string to LocalDateTime
+            LocalDateTime dateTime = LocalDateTime.parse(input, formatter);
+
+            // Extract the date part
+            LocalDate date = dateTime.toLocalDate();
+
+            // Define the desired date format
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            // Format the date using the formatter
+            return date.format(dateFormatter);
+        } catch (DateTimeParseException e) {
+            // Handle the parsing exception
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getTime(String input) {
+        try {
+            // Define the formatter
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+
+            // Parse the string to LocalDateTime
+            LocalDateTime dateTime = LocalDateTime.parse(input, formatter);
+
+            // Extract the time part
+            LocalTime time = dateTime.toLocalTime();
+
+            // Define the desired time format
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+            // Format the time using the formatter
+            return time.format(timeFormatter);
+        } catch (DateTimeParseException e) {
+            // Handle the parsing exception
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
 
     public static void showImageSourceBottomSheet(Context context) {

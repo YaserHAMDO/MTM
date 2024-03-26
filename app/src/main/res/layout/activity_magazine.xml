@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:textColor="#4E4B66"
-            android:text="Dergiler"/>
+            android:text="Dergi Kapakları"/>
 
         <androidx.cardview.widget.CardView
             android:visibility="invisible"

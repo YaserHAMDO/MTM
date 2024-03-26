@@ -28,7 +28,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:textSize="17sp"
@@ -40,6 +40,24 @@
                         android:layout_gravity="start"
                         android:textColor="#D88030"
                         android:maxLines="1"
+                        android:ellipsize="end" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_marginTop="0dp"
+                        android:id="@+id/dateTextView"
+                        android:textSize="9sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textStyle="bold"
+                        android:text="25-06-2020\n08:26"
+                        android:textColor="@color/black"
+                        android:maxLines="2"
                         android:ellipsize="end" />
 
                 </LinearLayout>

@@ -17,6 +17,7 @@ import com.example.mtm.R;
 import com.example.mtm.adapter.MainActivityAdapter;
 import com.example.mtm.adapter.ViewPagerAdapter;
 import com.example.mtm.model.MainActivityModel;
+import com.example.mtm.model.SelimModel;
 import com.example.mtm.model.SliderModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
@@ -88,16 +89,16 @@ public class MainActivity extends AppCompatActivity {
         setItemClickListeners();
 
         items = new ArrayList<>();
-        items.add(new MainActivityModel(R.drawable.media_icon, R.drawable.test7, "Medya Raporu"));
-        items.add(new MainActivityModel(R.drawable.news_icon, R.drawable.test8, "Haber Listesi"));
-        items.add(new MainActivityModel(R.drawable.media2_icon, R.drawable.test9, "Medya Gündemi"));
+        items.add(new MainActivityModel(R.drawable.media_icon, R.drawable.test7, "Haber Servisi"));
+        items.add(new MainActivityModel(R.drawable.news_icon, R.drawable.test8, "Medya Yansımaları"));
+        items.add(new MainActivityModel(R.drawable.media2_icon, R.drawable.test9, "Haber Servisi"));
 
         items.add(new MainActivityModel(R.drawable.media_icon, R.drawable.test10, "Yazılı"));
         items.add(new MainActivityModel(R.drawable.internet_icon, R.drawable.test11, "İnternet"));
         items.add(new MainActivityModel(R.drawable.visual_and_auditory_icon, R.drawable.test12, getString(R.string.visual_media)));
 
-        items.add(new MainActivityModel(R.drawable.newspapers_icon, R.drawable.test13, "Gazeteler"));
-        items.add(new MainActivityModel(R.drawable.magazines_icon, R.drawable.test14, "Dergiler"));
+        items.add(new MainActivityModel(R.drawable.newspapers_icon, R.drawable.test13, "Gazete Menşetleri"));
+        items.add(new MainActivityModel(R.drawable.magazines_icon, R.drawable.test14, "Dergi Kapakları"));
         items.add(new MainActivityModel(R.drawable.opinion_writers_icon, R.drawable.test15, "Köşe Yazarları"));
 
         adapter = new MainActivityAdapter(this, items);
@@ -204,40 +205,40 @@ public class MainActivity extends AppCompatActivity {
 
 
         mediaCardView.setOnClickListener(view -> {
-            summaryList2();
+            summaryList2(); // 1
         });
 
         newsCardView.setOnClickListener(view -> {
-            newsList2();
+            newsList2(); // 2 4 5 6
         });
 
         media2CardView.setOnClickListener(view -> {
-            getMediaAgenda2();
+            getMediaAgenda2(); // 3
         });
 
         writeCardView.setOnClickListener(view -> {
-            menuList3(false);
+            menuList3(false); // 4
         });
 
         internetCardView.setOnClickListener(view -> {
-            internet2(false);
+            internet2(false); // 5
         });
 
         visualCardView.setOnClickListener(view -> {
-            visualMedia3(false);
+            visualMedia3(false); // 6
         });
 
 
         newsPaperCardView.setOnClickListener(view -> {
-            newspaperFirstPages2();
+            newspaperFirstPages2(); // 7
         });
 
         magazineCardView.setOnClickListener(view -> {
-            magazine2();
+            magazine2(); // 8
         });
 
         columnistCardView.setOnClickListener(view -> {
-            columnists2();
+            columnists2(); // 9
         });
 
 
@@ -819,7 +820,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(2);
+                        refreshToken2(3);
                     }
 
                 }
@@ -1050,7 +1051,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(3);
+                        if(!newsList) {
+                            refreshToken2(4);
+                        }
+                        else {
+                            refreshToken2(2);
+                        }
+
                     }
 
 
@@ -1106,7 +1113,8 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 true,
                 true,
-                false
+                false,
+                "NEWS"
         );
 
         call.enqueue(new Callback<InternetResponse>() {
@@ -1163,7 +1171,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(3);
+                        refreshToken2(4);
                     }
 
 
@@ -1337,7 +1345,8 @@ public class MainActivity extends AppCompatActivity {
                 "UNIGNORED",
                 true,
                 true,
-                true
+                true,
+                "NEWS"
         );
 
         call.enqueue(new Callback<InternetResponse>() {
@@ -1396,7 +1405,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(4);
+                        if(!newsList) {
+                        refreshToken2(5);}
                     }
 
 
@@ -1618,7 +1628,8 @@ public class MainActivity extends AppCompatActivity {
                         showSubscriptionDialog();
                     }
                     else {
-                        refreshToken2(5);
+                        if(!newsList) {
+                            refreshToken2(6);}
                     }
 
                 }
@@ -1671,7 +1682,8 @@ public class MainActivity extends AppCompatActivity {
                 "UNIGNORED",
                 true,
                 true,
-                true
+                true,
+                "NEWS"
         );
 
         call.enqueue(new Callback<InternetResponse>() {
@@ -1725,7 +1737,7 @@ public class MainActivity extends AppCompatActivity {
                         showSubscriptionDialog();
                     }
                     else {
-                        refreshToken2(5);
+                        refreshToken2(6);
                     }
 
                 }
@@ -1857,7 +1869,27 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+
+
                     NewspaperFirstPagesResponse result = response.body();
+
+
+
+
+                    ArrayList<SelimModel> selimModel = new ArrayList<>();
+
+                    for (int i = 0; i < result.getData().size(); i++) {
+                        selimModel.add(new SelimModel(
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().get(i).getImageInfo().getPageFile() + "-1.jpg?sz=full",
+                                result.getData().get(i).getName(),
+                                MyUtils.changeDateFormat(result.getData().get(i).getDate())
+                        ));
+                    }
+
+                    DataHolder.getInstance().setSelimModels(selimModel);
+
 
                     DataHolder.getInstance().setNewspaperFirstPagesModel(result);
 
@@ -1872,7 +1904,7 @@ public class MainActivity extends AppCompatActivity {
                         showSubscriptionDialog();
                     }
                     else {
-                        refreshToken2( 6);
+                        refreshToken2(7);
                     }
 
                 }
@@ -2025,6 +2057,21 @@ public class MainActivity extends AppCompatActivity {
 //                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
 //                    startActivity(intent, options);
 
+
+                    ArrayList<SelimModel> selimModel = new ArrayList<>();
+
+                    for (int i = 0; i < result.getData().size(); i++) {
+                        selimModel.add(new SelimModel(
+                                Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().get(i).getImageInfo().getPageFile() + "-1.jpg?sz=full",
+                                result.getData().get(i).getName(),
+                                MyUtils.changeDateFormat(result.getData().get(i).getDate())
+                        ));
+                    }
+
+                    DataHolder.getInstance().setSelimModels(selimModel);
+
+
+
                     Intent intent = new Intent(MainActivity.this, NewspaperActivity.class);
                     intent.putExtra("index", 2);
                     Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
@@ -2037,7 +2084,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2( 7);
+                        refreshToken2(8);
                     }
 
                 }
@@ -2188,7 +2235,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(8);
+                        refreshToken2(9);
                     }
 
                 }
@@ -2318,31 +2365,31 @@ public class MainActivity extends AppCompatActivity {
                         preferenceManager.putString(Constants.KEY_REFRESH_TOKEN, tokenModel.getRefreshToken());
 
                         switch (index) {
-                            case 0:
+                            case 1:
                                 summaryList2();
                                 break;
-                            case 1:
+                            case 2:
                                 newsList2();
                                 break;
-                            case 2:
+                            case 3:
                                 getMediaAgenda2();
                                 break;
-                            case 3:
+                            case 4:
                                 menuList2(false);
                                 break;
-                            case 4:
+                            case 5:
                                 internet2(false);
                                 break;
-                            case 5:
+                            case 6:
                                 visualMedia2(false);
                                 break;
-                            case 6:
+                            case 7:
                                 newspaperFirstPages2();
                                 break;
-                            case 7:
+                            case 8:
                                 magazine2();
                                 break;
-                            case 8:
+                            case 9:
                                 columnists2();
                                 break;
                         }

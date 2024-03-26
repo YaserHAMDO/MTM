@@ -43,7 +43,7 @@ public class MediaReportActivity extends AppCompatActivity implements MediaRepor
 
     private static final String TAG = "MediaReportActivity";
 
-    private ImageView backIconImageView, filterImageView;;
+    private ImageView backIconImageView, filterImageView;
     private RecyclerView recyclerView;
     private MaterialDatePicker materialDatePicker;
     private TextView filteredDateTextView;
@@ -136,7 +136,7 @@ public class MediaReportActivity extends AppCompatActivity implements MediaRepor
         for (int i = 0; i < result.getData().size(); i++) {
 
             items.add(new MediaReportModel(
-                    startDate,
+                    MyUtils.changeDateFormat(startDate),
                     result.getData().get(i).getName(),
                     result.getData().get(i).getName(),
                     Constants.KEY_MEDIA_REPORT_URL + result.getData().get(i).getMailUrl()

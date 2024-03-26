@@ -5,6 +5,10 @@ public class Constants {
     public static final String KEY_ACCESS_TOKEN = "keyAccessToken";
     public static final String KEY_REFRESH_TOKEN = "keyRefreshToken";
     public static final String KEY_CURRENT_COSTUMER_ID = "keyCostumerID";
+    public static final String KEY_CURRENT_COSTUMER_PM = "keyCostumerPM";
+    public static final String KEY_CURRENT_COSTUMER_DM = "keyCostumerDM";
+    public static final String KEY_CURRENT_COSTUMER_BC = "keyCostumerBC";
+    public static final String KEY_CURRENT_COSTUMER_NA = "keyCostumerNA";
     public static final String KEY_CURRENT_COSTUMER_NAME = "keyCostumerName";
     public static final String KEY_CURRENT_COSTUMER_EMAIL = "keyCostumerEmail";
     public static final String KEY_COSTUMER_ID_ARRAY = "keyCostumerIDArray";

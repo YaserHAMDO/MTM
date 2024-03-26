@@ -2,10 +2,15 @@ package com.example.mtm.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -16,12 +21,17 @@ import android.widget.TextView;
 import com.example.mtm.R;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.MyUtils;
-import com.example.mtm.util.ZoomClass;
 import com.example.mtm.util.ZoomClassWebView;
 
-import org.w3c.dom.Text;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CansinActivity extends AppCompatActivity implements ZoomClassWebView.ZoomClassListener2 {
@@ -41,6 +51,7 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
 
     ImageView cancel, paylas;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +68,7 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
 
         webView = findViewById(R.id.webView2);
         webView.setZoomClassListener2(this);
-
+        webView.setWebViewClient(new CustomWebViewClient2());
 
         Intent intent = getIntent();
         index = intent.getIntExtra("index2", 0);
@@ -70,8 +81,16 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
         count = CansinUrlArray.size();
 
 
-        loadImage();
+        // Enable JavaScript and hardware acceleration
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
+
+        loadUrl(CansinUrlArray.get(index));
+
+//        loadImage();
+//        preloadImages();
 
 
         paylas.setOnClickListener(view -> {
@@ -99,7 +118,7 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
     private void loadImage() {
 
 
-        sourceTextView.setText(CansinNamesArray.get(index) + "\n" + MyUtils.changeDateFormat(CansinDatesArray.get(index)));
+        sourceTextView.setText(CansinNamesArray.get(index) + "\n" + CansinDatesArray.get(index));
 
         progressBar2.setVisibility(View.VISIBLE);
         webView.setVisibility(View.INVISIBLE);
@@ -107,6 +126,8 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
 
         test3.setVisibility(View.INVISIBLE);
         test12.setVisibility(View.INVISIBLE);
+
+
 
 
         // Load the URL in the WebView
@@ -125,7 +146,21 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
             public void onPageFinished(WebView view, String url) {
                 progressBar2.setVisibility(View.GONE);
                 webView.setVisibility(View.VISIBLE);
+                test12.setVisibility(View.VISIBLE);
+                test3.setVisibility(View.VISIBLE);
 
+                if (index > CansinUrlArray.size()) {
+                    WebView view2 = new WebView(CansinActivity.this);
+                    view2.loadUrl(CansinUrlArray.get(index + 1));
+                }
+//                if (index > 1) {
+//                    WebView view2 = new WebView(CansinActivity.this);
+//                    view.loadUrl(CansinUrlArray.get(index - 1));
+//                }
+
+
+
+//                preloadImages();
 
             }
         });
@@ -133,11 +168,32 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
     }
 
 
+    private void preloadImages() {
+        // Preload all URLs in CansinUrlArray
+        for (String url : CansinUrlArray) {
+            WebView preloadWebView = new WebView(this);
+            preloadWebView.loadUrl(url);
+            preloadWebView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    // Check if the parent view of the WebView is not null before removing it
+                    ViewGroup parentView = (ViewGroup) preloadWebView.getParent();
+                    if (parentView != null) {
+                        parentView.removeView(preloadWebView);
+                    }
+                }
+            });
+        }
+    }
+
+
     @Override
     public void onSwipeRight2() {
         if (index > 0) {
             index--;
-            loadImage();
+            loadUrl(CansinUrlArray.get(index));
+
+//            loadImage();
         }
         else {
 //            text.animate().
@@ -157,7 +213,8 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
 
         if (index < count - 1) {
             index++;
-            loadImage();
+            loadUrl(CansinUrlArray.get(index));
+//            loadImage();
         }
         else {
 //            text.animate().
@@ -182,6 +239,7 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
     @Override
     public void onSingleTapUp2() {
 
+
         if (test3.getVisibility() == View.VISIBLE) {
             test3.setVisibility(View.INVISIBLE);
             test12.setVisibility(View.INVISIBLE);
@@ -192,4 +250,100 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
         }
 
     }
+
+    private class CustomWebViewClient extends WebViewClient {
+        private final Map<String, byte[]> cache = new HashMap<>();
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            // Hide loading indicator
+            progressBar2.setVisibility(View.GONE);
+        }
+
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            String url = request.getUrl().toString();
+            if (cache.containsKey(url)) {
+                // If resource is cached, return it
+                byte[] data = cache.get(url);
+                return new WebResourceResponse("text/html", "UTF-8", new ByteArrayInputStream(data));
+            } else {
+                // Otherwise, load the resource and cache it
+                try {
+                    URLConnection connection = new URL(url).openConnection();
+                    InputStream inputStream = connection.getInputStream();
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                    byte[] data = outputStream.toByteArray();
+                    cache.put(url, data);
+                    return new WebResourceResponse("text/html", "UTF-8", new ByteArrayInputStream(data));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return super.shouldInterceptRequest(view, request);
+                }
+            }
+        }
+    }
+
+
+    private void loadUrl(String url) {
+        sourceTextView.setText(CansinNamesArray.get(index) + "\n" + CansinDatesArray.get(index));
+        progressBar2.setVisibility(View.VISIBLE); // Show loading indicator
+        webView.loadUrl(url);
+    }
+
+    // Example method to navigate to the next URL in the array
+    private void navigateToNextUrl() {
+        index = (index + 1) % CansinUrlArray.size();
+        loadUrl(CansinUrlArray.get(index));
+    }
+
+
+    private class CustomWebViewClient2 extends WebViewClient {
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            // Hide loading indicator
+            progressBar2.setVisibility(View.GONE);
+
+            // Delay navigation until the page has fully loaded
+            if (!CansinUrlArray.contains(url)) {
+                CansinUrlArray.add(url);
+                // Preload linked pages in the background
+                preloadLinkedPages(view);
+            }
+        }
+
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//            // Delay navigation until the page has fully loaded
+//            if (CansinUrlArray.contains(url)) {
+//                // Page has been preloaded, navigate now
+//                return false;
+//            } else {
+//                // Page hasn't been preloaded yet, wait for onPageFinished() callback
+//                return true;
+//            }
+//        }
+
+        private void preloadLinkedPages(WebView view) {
+            // Extract links from the current page and preload them in the background
+            String javascript = "javascript:(function() {" +
+                    "var links = document.getElementsByTagName('a');" +
+                    "for (var i = 0; i < links.length; i++) {" +
+                    "   var href = links[i].getAttribute('href');" +
+                    "   if (href.startsWith('http')) {" +
+                    "       var xhr = new XMLHttpRequest();" +
+                    "       xhr.open('GET', href, true);" +
+                    "       xhr.send();" +
+                    "   }" +
+                    "}" +
+                    "})()";
+            view.loadUrl(javascript);
+        }
+    }
+
 }

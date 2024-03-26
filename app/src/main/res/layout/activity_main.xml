@@ -155,7 +155,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="11sp"
-                            android:text="Medya Raporu"/>
+                            android:text="Haber Servisi"/>
 
                     </LinearLayout>
 
@@ -212,7 +212,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="11sp"
-                            android:text="Haber Listesi"/>
+                            android:text="Tüm Haberler"/>
 
                     </LinearLayout>
 
@@ -269,7 +269,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="11sp"
-                            android:text="Medya Gündemi"/>
+                            android:text="Türkiye Gündemi"/>
 
                     </LinearLayout>
 
@@ -514,7 +514,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="11sp"
-                            android:text="Gazeteler"/>
+                            android:text="Gazete Manşetleri"/>
 
                     </LinearLayout>
 
@@ -571,7 +571,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="11sp"
-                            android:text="Dergiler"/>
+                            android:text="Dergi Kapakları"/>
 
                     </LinearLayout>
 

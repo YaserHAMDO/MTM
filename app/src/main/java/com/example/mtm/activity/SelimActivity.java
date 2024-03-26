@@ -19,15 +19,17 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.mtm.R;
+import com.example.mtm.model.SelimModel;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
+import com.example.mtm.util.ImagePreloader;
+import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.ZoomClass;
-import com.jsibbold.zoomage.ZoomageView;
 
 import java.util.ArrayList;
 
-public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass.ZoomClassListener{
+public class SelimActivity extends AppCompatActivity implements ZoomClass.ZoomClassListener, ImagePreloader.progressBarVisibility {
 
     int i;
     int j;
@@ -44,12 +46,14 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
     ImageView paylas, cancel;
     TextView sourceTextView;
 
-    ArrayList<String> firstPages;
+    ArrayList<SelimModel> selimModels;
+
+    ImagePreloader imagePreloader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub_newspaper);
+        setContentView(R.layout.activity_selim);
 
 
 
@@ -73,18 +77,17 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
         Intent intent = getIntent();
         // Get the value passed from FirstActivity
         mediaPath = intent.getStringExtra("mediaPath");
-        count = intent.getIntExtra("count", 0);
+//        count = intent.getIntExtra("count", 0);
         j = intent.getIntExtra("position", 0);
 
         i = 1;
 
 
-        firstPages = new ArrayList<>();
-        NewsPaperFullPagesResponse result = DataHolder.getInstance().getNewsPaperFullPagesModel();
+        selimModels = DataHolder.getInstance().getSelimModels();
 
-        for (int i = 0; i < result.getData().size(); i++) {
-            firstPages.add(Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().get(i).getImageInfo().getPageFile() + "-1.jpg?sz=full");
-        }
+//        for (int i = 0; i < result.getData().size(); i++) {
+//            selimModels.add(Constants.KEY_IMAGE_BASIC_URL + result.getData().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().get(i).getImageInfo().getPageFile() + "-1.jpg?sz=full");
+//        }
 
 //        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(this);
 //        circularProgressDrawable.setStrokeWidth(5f);
@@ -93,11 +96,26 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
 
 
 
-        count = firstPages.size();
+        count = selimModels.size();
+        setTitle();
 
 
-        loadImage2();
+//        loadImage2();
 
+
+        // Initialize your imageViews and imageUrls arrays
+
+        ArrayList<String> imageUrls = new ArrayList<>();
+
+        for(int i = 0; i < selimModels.size(); i++) {
+            imageUrls.add(selimModels.get(i).getFirstPageUrl());
+        }
+
+
+        imagePreloader = new ImagePreloader(this, zoomClass, imageUrls, this);
+
+        imagePreloader.loadCurrentImage(j);
+//        imagePreloader.preloadImages(j);
 
 
 //        text.setText(i + "/" + count);
@@ -116,18 +134,37 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
 
 
         leftArrowImageView.setOnClickListener(view -> {
+
+
+
             selectLeft();
         });
 
         rightArrowImageView.setOnClickListener(view -> {
+            // When user swipes to the next image
+
+
             selectRight();
 
 
         });
 
+        test12.setOnClickListener(view -> {
+
+        });
+
+        cancel.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
+
+        paylas.setOnClickListener(view -> MyUtils.shareLink(selimModels.get(j).getFirstPageUrl(), this));
+
     }
 
-//    private void selectLeft() {
+    private void setTitle() {
+        text.setText((j + 1) + "/" + selimModels.size());
+        sourceTextView.setText(selimModels.get(j).getName() + "\n" + selimModels.get(j).getDate());
+    }
+
+    //    private void selectLeft() {
 //        if (i > 1) {
 //            i--;
 //            loadImage();
@@ -143,7 +180,10 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
     private void selectLeft() {
         if (j > 0) {
             j--;
-            loadImage2();
+            imagePreloader.loadPreviousImage();
+            setTitle();
+//            loadImage2();
+            zoomClass.fitToScreen();
         }
         else {
             text.animate().
@@ -171,9 +211,12 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
 //    }
 
     private void selectRight() {
-        if (j < firstPages.size()) {
+        if (j < selimModels.size() - 1) {
             j++;
-            loadImage2();
+//            loadImage2();
+            zoomClass.fitToScreen();
+            imagePreloader.loadNextImage();
+            setTitle();
         }
         else {
             text.animate().
@@ -211,30 +254,30 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
                         if (showed < count) {
 
                             if (i == 1) {
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                     .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (i + 1) + ".jpg" + "?sz=full")
                                     .preload();
 
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                     .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (i + 2) + ".jpg" + "?sz=full")
                                     .preload();
                             }
 
                             if(showed + 3 <= count) {
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                         .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 3) + ".jpg" + "?sz=full")
                                         .preload();
                             }
 
                             if(showed + 4 <= count) {
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                         .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 4) + ".jpg" + "?sz=full")
                                         .preload();
                             }
 
 
                             if(showed + 5 <= count) {
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                         .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 5) + ".jpg" + "?sz=full")
                                         .preload();
 
@@ -265,7 +308,7 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
 
 
         Glide.with(this)
-                .load(firstPages.get(j))
+                .load(selimModels.get(j).getFirstPageUrl())
 //                    .placeholder(R.drawable.placeholder_image) // Placeholder resource while the image is loading
 //                    .error(R.drawable.error_image) // Error resource if the image fails to load
                 .listener(new RequestListener<Drawable>() {
@@ -282,30 +325,30 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
                         if (showed < count) {
 
                             if (j == 0) {
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                     .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (j + 1) + ".jpg" + "?sz=full")
                                     .preload();
 
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                     .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (j + 2) + ".jpg" + "?sz=full")
                                     .preload();
                             }
 
                             if(showed + 3 <= count) {
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                         .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 3) + ".jpg" + "?sz=full")
                                         .preload();
                             }
 
                             if(showed + 4 <= count) {
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                         .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 4) + ".jpg" + "?sz=full")
                                         .preload();
                             }
 
 
                             if(showed + 5 <= count) {
-                                Glide.with(SubNewspaperActivity.this)
+                                Glide.with(SelimActivity.this)
                                         .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (showed + 5) + ".jpg" + "?sz=full")
                                         .preload();
 
@@ -352,6 +395,11 @@ public class SubNewspaperActivity extends AppCompatActivity implements ZoomClass
 
     @Override
     public void onSingleTapUp() {
+        test12.setVisibility(test12.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+    }
 
+    @Override
+    public void showProgressBar(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 }

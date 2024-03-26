@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.example.mtm.R;
 import com.example.mtm.adapter.SubInternetAdapter;
 import com.example.mtm.model.SubInternetModel;
+import com.example.mtm.model.VerticalModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.InternetSubResponse;
@@ -49,8 +50,10 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     private static final String TAG = "SubInternetActivity";
 
+    PreferenceManager preferenceManager;
+
     private int pageNumber = 0;
-    private int pageSize = 10;
+    private int pageSize = 50;
     private boolean isLoading = false;
     private ImageView backIconImageView, backIconImageView2;
     private RecyclerView recyclerView;
@@ -76,6 +79,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     private ArrayList<String> printedMediaFullPageShowArray;
     private ArrayList<String> printedMediaShareLinkArray;
+    private ArrayList<VerticalModel> verticalModels;
     private ArrayList<String> printedMediaSubPageShowArray;
     private ArrayList<String> printedMediaDateShowArray, printedMediaNamesShowArray;
 
@@ -141,7 +145,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                     result.getData().getDocs().get(i).getTitle(),
                     result.getData().getDocs().get(i).getMedia().getName(),
                     Constants.KEY_SHARE_URL3 + result.getData().getDocs().get(i).getGnoHash(),
-                    result.getData().getDocs().get(i).getPublishDate(),
+                    MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
                     Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo(),
                     "",
@@ -149,8 +153,8 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             ));
 
             CansinUrlArray.add(Constants.KEY_VIDEO_BASIC_URL + result.getData().getDocs().get(i).getVideo());
-            CansinDatesArray.add(result.getData().getDocs().get(i).getPublishDate());
-            CansinNamesArray.add(result.getData().getDocs().get(i).getMedia().getName());
+            CansinDatesArray.add(MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()) + " - " + result.getData().getDocs().get(i).getPublishTime());
+            CansinNamesArray.add(result.getData().getDocs().get(i).getMedia().getName() + " - " + result.getData().getDocs().get(i).getProgram().getName());
             CansinShareUrlArray.add(Constants.KEY_SHARE_URL3 + result.getData().getDocs().get(i).getGnoHash());
 
 
@@ -188,6 +192,10 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
 
     private void init() {
+
+        preferenceManager = new PreferenceManager(getApplicationContext());
+
+
         backIconImageView = findViewById(R.id.backIconImageView);
 
         recyclerView = findViewById(R.id.recyclerView);
@@ -223,6 +231,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 //        webView.setZoomClassListener2(this);
 
         printedMediaFullPageShowArray = new ArrayList<>();
+        verticalModels = new ArrayList<>();
         printedMediaShareLinkArray = new ArrayList<>();
         printedMediaSubPageShowArray = new ArrayList<>();
         printedMediaDateShowArray = new ArrayList<>();
@@ -251,11 +260,10 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-                // Step 2: Detect when the user has scrolled to the end of the list
+                // Step 2: Detect when the user has scrolled to a certain point in the list
+                int triggerPoint = totalItemCount / 2; // For example, trigger when scrolled halfway through the list
                 if (!isLoading && !(x >= count)) {
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                            && firstVisibleItemPosition >= 0
-                            && totalItemCount >= PAGE_SIZE) {
+                    if (firstVisibleItemPosition >= triggerPoint && totalItemCount >= PAGE_SIZE) {
 
                         pageNumber++;
 
@@ -272,7 +280,6 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                                 SubMenuVisualMedia(menuId, subMenuId, startDate, endDate);
                                 break;
                         }
-
                     }
                 }
             }
@@ -290,7 +297,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                     result.getData().getDocs().get(i).getTitle(),
                     result.getData().getDocs().get(i).getMedia().getName(),
                     Constants.KEY_SHARE_URL2 + result.getData().getDocs().get(i).getGnoHash(),
-                    result.getData().getDocs().get(i).getPublishDate(),
+                    MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()),
                     Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
                     result.getData().getDocs().get(i).getUrl(),
                     "",
@@ -298,7 +305,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             ));
 
             CansinUrlArray.add(result.getData().getDocs().get(i).getUrl());
-            CansinDatesArray.add(result.getData().getDocs().get(i).getPublishDate());
+            CansinDatesArray.add(MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()));
             CansinNamesArray.add(result.getData().getDocs().get(i).getMedia().getName());
             CansinShareUrlArray.add(Constants.KEY_SHARE_URL2 + result.getData().getDocs().get(i).getGnoHash());
         }
@@ -318,10 +325,10 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
             adapter.addItems(items);
 
             if (items.size() < 5) {
-                recyclerView.scrollToPosition(x - 1);
+//                recyclerView.scrollToPosition(x - 1);
             }
             else {
-                recyclerView.scrollToPosition(y + 3);
+//                recyclerView.scrollToPosition(y + 3);
             }
 
         }
@@ -332,48 +339,100 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         PrintedMediaSubResponse result = DataHolder.getInstance().getPrintedMediaSubResponse();
         List<SubInternetModel> items = new ArrayList<>(); // Initialize or clear items list if needed
 
-        for (int i = 0; i < result.getData().getDocs().size(); i++) {
-            items.add(new SubInternetModel(
-                    result.getData().getDocs().get(i).getTitle(),
-                    result.getData().getDocs().get(i).getMedia().getName(),
-                    Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash(),
-                    result.getData().getDocs().get(i).getPublishDate(),
-                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
-                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
-                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getPage().getFullImagePath(),
-                    ""
-            ));
+        if (result.getData() != null) {
+            for (int i = 0; i < result.getData().getDocs().size(); i++) {
+                items.add(new SubInternetModel(
+                        result.getData().getDocs().get(i).getTitle(),
+                        result.getData().getDocs().get(i).getMedia().getName(),
+                        Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash(),
+                        MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()),
+                        Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getMedia().getLogo(),
+                        Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageStoragePath(),
+                        Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getPage().getFullImagePath(),
+                        ""
+                ));
 
-            printedMediaFullPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getPage().getFullImagePath());
-            printedMediaSubPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
-            printedMediaDateShowArray.add(result.getData().getDocs().get(i).getPublishDate());
-            printedMediaNamesShowArray.add(result.getData().getDocs().get(i).getMedia().getName());
-            printedMediaShareLinkArray.add(Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash());
+                ArrayList<String> clipImages = new ArrayList<>();
+                ArrayList<String> fullImages = new ArrayList<>();
 
+
+                if (result.getData().getDocs().get(i).getContinuesClip().size() > 1) {
+
+                    for (int j = 0; j < result.getData().getDocs().get(i).getContinuesClip().size(); j++) {
+
+                        clipImages.add(
+                                "https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getContinuesClip().get(j).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+
+                        fullImages.add("https://imgsrv.medyatakip.com/store/" + result.getData().getDocs().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() + "-" + result.getData().getDocs().get(i).getContinuesClip().get(j).getPn() + ".jpg");
+                    }
+                }
+                else {
+                    clipImages.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
+                    fullImages.add(Constants.KEY_IMAGE_BASIC_URL +
+                            result.getData().getDocs().get(i).getImageInfo().getMediaPath() +
+                            "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() +
+                            "-" + result.getData().getDocs().get(i).getContinuesClip().get(0).getPn() +
+                            ".jpg");
+                }
+
+
+
+                printedMediaFullPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getPage().getFullImagePath());
+//            printedMediaSubPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
+
+
+
+
+
+                verticalModels.add(new VerticalModel(fullImages, clipImages));
+
+                System.out.println("Yaser " + Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() + "-" + result.getData().getDocs().get(i).getContinuesClip().get(0).getPn() + ".jpg");
+
+                for (int n = 0; n < clipImages.size(); n++) {
+                    System.out.println("Yaser verticalImages " + n + ": " +  clipImages.get(n));
+                }
+                System.out.println("Yaser getFullImagePath " + Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getPage().getFullImagePath());
+
+
+//            printedMediaFullPageShowArray.add(
+//                    Constants.KEY_IMAGE_BASIC_URL +
+//                            result.getData().getDocs().get(i).getImageInfo().getMediaPath() +
+//                            "/page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() +
+//                            "-" + result.getData().getDocs().get(i).getContinuesClip().get(0).getPn() +
+//                            ".jpg");
+
+//            printedMediaSubPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
+                printedMediaDateShowArray.add(MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()));
+                printedMediaNamesShowArray.add(result.getData().getDocs().get(i).getMedia().getName());
+                printedMediaShareLinkArray.add(Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash());
+
+            }
+
+            if (pageNumber == 0) {
+                x = items.size();
+                adapter = new SubInternetAdapter(this, items, this, x == count, index);
+                recyclerView.setAdapter(adapter);
+            } else {
+
+                int y = x;
+                x = x + items.size();
+
+                if (x >= count) {
+                    adapter.setAllList(true);}
+
+                adapter.addItems(items);
+
+//            if (items.size() < 5) {
+//                recyclerView.smoothScrollToPosition(x - 1);
+//            }
+//            else {
+//                recyclerView.s(y);
+//            }
+
+            }
         }
 
-        if (pageNumber == 0) {
-            x = items.size();
-            adapter = new SubInternetAdapter(this, items, this, x == count, index);
-            recyclerView.setAdapter(adapter);
-        } else {
 
-            int y = x;
-            x = x + items.size();
-
-            if (x >= count) {
-                adapter.setAllList(true);}
-
-            adapter.addItems(items);
-
-            if (items.size() < 5) {
-                recyclerView.scrollToPosition(x - 1);
-            }
-            else {
-                recyclerView.scrollToPosition(y + 3);
-            }
-
-        }
 
     }
 
@@ -488,6 +547,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 endDate,
                 "07:00:00",
                 "23:59:00",
+                "NEWS",
                 "UNIGNORED",
                 true,
                 menuId,
@@ -608,6 +668,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     private void subPrinted(String menuId, String subMenuId, String startDate, String endDate) {
 
+
         if (isLoading) {
             return;
         }
@@ -649,6 +710,10 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 false,
                 false
         );
+
+        Logger.getInstance().logDebug(TAG, "subMenuList", 1, "menuId: " + menuId + "subMenuId: " + subMenuId);
+        System.out.println("hasan " + "menuId: " + menuId + "subMenuId: " + subMenuId);
+
         call.enqueue(new Callback<PrintedMediaSubResponse>() {
             @Override
             public void onResponse(Call<PrintedMediaSubResponse> call, Response<PrintedMediaSubResponse> response) {
@@ -766,12 +831,13 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         switch (index) {
             case 1:
                 DataHolder.getInstance().setPrintedMediaShareLinkArray(printedMediaShareLinkArray);
+                DataHolder.getInstance().setVerticalModels(verticalModels);
                 DataHolder.getInstance().setPrintedMediaFullPageShowArray(printedMediaFullPageShowArray);
                 DataHolder.getInstance().setPrintedMediaSubPageShowArray(printedMediaSubPageShowArray);
                 DataHolder.getInstance().setPrintedMediaDateShowArray(printedMediaDateShowArray);
                 DataHolder.getInstance().setPrintedMediaNamesShowArray(printedMediaNamesShowArray);
 
-                Intent intent = new Intent(this, MesutActivity.class);
+                Intent intent = new Intent(this, Mesut2Activity.class);
 
 
                 intent.putExtra("index", position);

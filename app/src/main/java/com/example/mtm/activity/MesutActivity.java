@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.mtm.R;
 import com.example.mtm.adapter.SubInternetAdapter;
+import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.ZoomClass;
@@ -37,6 +38,7 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
     private TextView text, tumSayfa, name;
     private ImageView paylas, cancel;
     private boolean fullPage;
+    int showed = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,12 +167,94 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE); // Hide progress bar if image loading fails
+                        hamdo.setVisibility(View.VISIBLE);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE); // Hide progress bar when image loading is complete
+                        hamdo.setVisibility(View.VISIBLE);
+
+                        if (showed < count) {
+
+                            if (index == 1) {
+
+                                String s1 = "", s2 = "";
+
+                                if (fullPage) {
+                                    if (index + 1 < printedMediaFullPageShowArray.size())
+                                        s1 = printedMediaFullPageShowArray.get(index + 1);
+                                    if (index + 2 < printedMediaFullPageShowArray.size())
+                                        s2 = printedMediaFullPageShowArray.get(index + 2);
+                                }
+                                else {
+                                    if (index + 1 < printedMediaSubPageShowArray.size())
+                                        s1 = printedMediaSubPageShowArray.get(index + 1);
+                                    if (index + 2 < printedMediaSubPageShowArray.size())
+                                        s2 = printedMediaSubPageShowArray.get(index + 2);
+                                }
+                                Glide.with(MesutActivity.this)
+                                        .load(s1)
+                                        .preload();
+
+                                Glide.with(MesutActivity.this)
+                                        .load(s2)
+                                        .preload();
+                            }
+
+                            if(showed + 3 <= count) {
+                                String s;
+                                if (fullPage) {
+                                    s = printedMediaFullPageShowArray.get(index + 3);
+                                }
+                                else {
+                                    s = printedMediaSubPageShowArray.get(index + 3);
+                                }
+
+                                Glide.with(MesutActivity.this)
+                                        .load(s)
+                                        .preload();
+                            }
+
+                            if(showed + 4 <= count) {
+
+                                String s;
+                                if (fullPage) {
+                                    s = printedMediaFullPageShowArray.get(index + 4);
+                                }
+                                else {
+                                    s = printedMediaSubPageShowArray.get(index + 4);
+                                }
+
+
+                                Glide.with(MesutActivity.this)
+                                        .load(s)
+                                        .preload();
+                            }
+
+
+                            if(showed + 5 <= count) {
+
+                                String s;
+                                if (fullPage) {
+                                    s = printedMediaFullPageShowArray.get(index + 5);
+                                }
+                                else {
+                                    s = printedMediaSubPageShowArray.get(index + 5);
+                                }
+
+                                Glide.with(MesutActivity.this)
+                                        .load(s)
+                                        .preload();
+
+                            }
+
+                            showed = showed + 3;
+
+                        }
+
+
 
 //                        Glide.with(ColumnistsShowActivity.this)
 //                                        .load(Constants.KEY_IMAGE_BASIC_URL + mediaPath + (i + 1) + ".jpg" + "?sz=full")

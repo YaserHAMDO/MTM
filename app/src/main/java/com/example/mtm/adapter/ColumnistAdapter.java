@@ -49,6 +49,8 @@ public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.View
         holder.dateTextView.setText(itemData.getDate());
         holder.titleTextView.setText(itemData.getTitle());
 
+        holder.positionTextView.setText("/sf." + (position + 1));
+
 
         holder.itemView.setOnClickListener(view -> {
             listener.onItemClick(position);
@@ -74,6 +76,7 @@ public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.View
         TextView mediaNameTextView;
         TextView journalistNameTextView;
         TextView titleTextView;
+        TextView positionTextView;
         TextView dateTextView;
         CardView shareCardView;
 
@@ -84,6 +87,7 @@ public class ColumnistAdapter extends RecyclerView.Adapter<ColumnistAdapter.View
             mediaNameTextView = itemView.findViewById(R.id.mediaNameTextView);
             journalistNameTextView = itemView.findViewById(R.id.journalistNameTextView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
+            positionTextView = itemView.findViewById(R.id.positionTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
             shareCardView = itemView.findViewById(R.id.shareCardView);
         }

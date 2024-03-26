@@ -61,7 +61,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     private ImageView backIconImageView;
 
     private int pageNumber = 0;
-    private int pageSize = 7;
+    private int pageSize = 8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +120,9 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     result.getData().get(i).getBody(),
                     url,
                     result.getData().get(i).getId(),
-                    result.getData().get(i).getRtime() != null
+                    result.getData().get(i).getRtime() != null,
+                    MyUtils.changeDateFormat(MyUtils.getDate(result.getData().get(i).getCdatetime())),
+                    MyUtils.getTime(result.getData().get(i).getCdatetime())
             ));
 
 //            columnistsShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
@@ -279,7 +281,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     }
 
     @Override
-    public void onItemClick(String title, String body, String link, int id) {
+    public void onItemClick(String title, String body, String link, int id, String date, String time) {
 
         Intent intent = new Intent(this, NotificationContentActivity.class);
 
@@ -287,10 +289,12 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         intent.putExtra("body", body);
         intent.putExtra("link", link);
         intent.putExtra("id", id);
+        intent.putExtra("date", date);
+        intent.putExtra("time", time);
 
         Bundle options = ActivityOptions.makeCustomAnimation(this, R.anim.left, R.anim.right).toBundle();
         startActivity(intent, options);
-        finish();
+//        finish();
 //        setRead(index);
     }
 
@@ -351,6 +355,10 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+        Intent intent = new Intent(this, MainActivity.class);
+
+        Bundle options = ActivityOptions.makeCustomAnimation(this, R.anim.left_to_right, R.anim.right_to_left).toBundle();
+        startActivity(intent, options);
+
     }
 }

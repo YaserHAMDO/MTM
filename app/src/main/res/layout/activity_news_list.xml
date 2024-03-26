@@ -33,7 +33,7 @@
             android:textSize="23sp"
             android:textColor="@color/color1"
             android:textStyle="bold"
-            android:text="Haber Listesi"/>
+            android:text="Tüm Haberler"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"

@@ -64,7 +64,7 @@
 
             <TextView
                 android:layout_marginHorizontal="10dp"
-                android:background="@drawable/test_d"
+                android:background="@drawable/test_f"
                 android:id="@+id/newsTextView"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:paddingVertical="10dp"
                 android:text="Haber"
-                android:textColor="@color/color3"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 

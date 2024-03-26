@@ -64,7 +64,7 @@ public class PrintedMediaSubResponse {
     public class ContinuesClip{
         public int pn;
         public String fl;
-        public Object gno;
+        public long gno;
         public boolean fp;
         public double area;
         public boolean tm;
@@ -77,7 +77,7 @@ public class PrintedMediaSubResponse {
             return fl;
         }
 
-        public Object getGno() {
+        public long getGno() {
             return gno;
         }
 
@@ -106,12 +106,24 @@ public class PrintedMediaSubResponse {
         public int id;
         public String name;
         public ArrayList<Tag> tags;
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public ArrayList<Tag> getTags() {
+            return tags;
+        }
     }
 
     public class Doc{
-        public Object gno;
+        public long gno;
         public String gnoHash;
-        public Object mtoGno;
+        public long mtoGno;
         public String title;
         public String publishDate;
         public String cdate;
@@ -121,13 +133,13 @@ public class PrintedMediaSubResponse {
         public ArrayList<TagMap> tagMap;
         public Page page;
         public double area;
-        public Object pclip;
+        public long pclip;
         public boolean isFullPage;
         public ImageInfo imageInfo;
         public ArrayList<ContinuesClip> continuesClip;
         public String imageStoragePath;
 
-        public Object getGno() {
+        public long getGno() {
             return gno;
         }
 
@@ -135,7 +147,7 @@ public class PrintedMediaSubResponse {
             return gnoHash;
         }
 
-        public Object getMtoGno() {
+        public long getMtoGno() {
             return mtoGno;
         }
 
@@ -175,7 +187,7 @@ public class PrintedMediaSubResponse {
             return area;
         }
 
-        public Object getPclip() {
+        public long getPclip() {
             return pclip;
         }
 
@@ -237,7 +249,7 @@ public class PrintedMediaSubResponse {
         public double circulation;
         public City city;
         public MediaType mediaType;
-        public Object gno;
+        public long gno;
         public String infoclip;
         public String icHash;
         public double accessInformation;
@@ -272,7 +284,7 @@ public class PrintedMediaSubResponse {
             return mediaType;
         }
 
-        public Object getGno() {
+        public long getGno() {
             return gno;
         }
 

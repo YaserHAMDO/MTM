@@ -46,7 +46,7 @@ public class NewspaperAdapter extends RecyclerView.Adapter<NewspaperAdapter.View
 
 
         holder.mediaImageView.setOnClickListener(view -> {
-            listener.onItemClick(itemData.getMediaPath(), itemData.getPageFile(), itemData.getGno(), itemData.getCount());
+            listener.onItemClick(itemData.getMediaPath(), itemData.getPageFile(), itemData.getGno(), itemData.getCount(), position);
         });
 
         // Set progress bar visibility
@@ -72,6 +72,6 @@ public class NewspaperAdapter extends RecyclerView.Adapter<NewspaperAdapter.View
 
 
     public interface OnItemClickListener {
-        void onItemClick(String mediaPath, String pageFile, String gno, int count);
+        void onItemClick(String mediaPath, String pageFile, String gno, int count, int position);
     }
 }

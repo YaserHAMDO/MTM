@@ -71,6 +71,8 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
     private BottomSheetDialog bottomSheetDialog;
 
+    private String clipType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +142,38 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 //            bottomSheetDialog.dismiss();
         });
 
+        switch (clipType) {
+            case "NEWS":
+                allTextView.setTextColor(getColor(R.color.color3));
+                newsTextView.setTextColor(getColor(R.color.white));
+                adsTextView.setTextColor(getColor(R.color.color3));
+
+                allTextView.setBackground(getDrawable(R.drawable.test_d));
+                newsTextView.setBackground(getDrawable(R.drawable.test_f));
+                adsTextView.setBackground(getDrawable(R.drawable.test_d));
+                break;
+
+            case "ADS":
+                allTextView.setTextColor(getColor(R.color.color3));
+                newsTextView.setTextColor(getColor(R.color.color3));
+                adsTextView.setTextColor(getColor(R.color.white));
+
+                allTextView.setBackground(getDrawable(R.drawable.test_d));
+                newsTextView.setBackground(getDrawable(R.drawable.test_d));
+                adsTextView.setBackground(getDrawable(R.drawable.test_f));
+                break;
+
+            case "":
+                allTextView.setTextColor(getColor(R.color.white));
+                newsTextView.setTextColor(getColor(R.color.white));
+                adsTextView.setTextColor(getColor(R.color.white));
+
+                allTextView.setBackground(getDrawable(R.drawable.test_f));
+                newsTextView.setBackground(getDrawable(R.drawable.test_f));
+                adsTextView.setBackground(getDrawable(R.drawable.test_f));
+                break;
+        }
+
 
         allTextView.setOnClickListener(v -> {
 
@@ -150,6 +184,8 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
             allTextView.setBackground(getDrawable(R.drawable.test_f));
             newsTextView.setBackground(getDrawable(R.drawable.test_f));
             adsTextView.setBackground(getDrawable(R.drawable.test_f));
+
+            clipType = "";
         });
 
         newsTextView.setOnClickListener(v -> {
@@ -161,6 +197,8 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
             allTextView.setBackground(getDrawable(R.drawable.test_d));
             newsTextView.setBackground(getDrawable(R.drawable.test_f));
             adsTextView.setBackground(getDrawable(R.drawable.test_d));
+
+            clipType = "NEWS";
         });
 
         adsTextView.setOnClickListener(v -> {
@@ -172,6 +210,9 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
             allTextView.setBackground(getDrawable(R.drawable.test_d));
             newsTextView.setBackground(getDrawable(R.drawable.test_d));
             adsTextView.setBackground(getDrawable(R.drawable.test_f));
+
+
+            clipType = "ADS";
         });
 
         okTextView.setOnClickListener(v -> {
@@ -206,6 +247,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
         materialDatePickerControl = false;
 
+        clipType = "NEWS";
 
 //        filteredDateTextView.setText(startDate + " ile " + endDate + " arasında tarihi kayıtlar gösterilmektedir.");
     }
@@ -331,7 +373,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         Call<InternetSubResponse> call = apiService.subInternet(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10,
+                50,
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
@@ -346,7 +388,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 endDate,
                 "07:00:00",
                 "23:59:00",
-//                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
 //                "2024010003615660",
@@ -355,6 +397,10 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 false,
                 false
         );
+
+        Logger.getInstance().logDebug(TAG, "subMenuList", 1, "menuId: " + menuId + "subMenuId: " + subMenuId);
+        System.out.println("hasan " + "menuId: " + menuId + "subMenuId: " + subMenuId);
+
         call.enqueue(new Callback<InternetSubResponse>() {
             @Override
             public void onResponse(Call<InternetSubResponse> call, Response<InternetSubResponse> response) {
@@ -405,7 +451,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         Call<PrintedMediaSubResponse> call = apiService.subMenuList(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10,
+                50,
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
@@ -423,7 +469,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 endDate,
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
 //                "2024010003615660",
@@ -433,6 +479,11 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 false,
                 false
         );
+
+
+        Logger.getInstance().logDebug(TAG, "subMenuList", 1, "menuId: " + menuId + " subMenuId: " + subMenuId + " costumerID: " + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID));
+//        System.out.println("hasan 123 " + "menuId: " + menuId + " subMenuId: " + subMenuId);
+
         call.enqueue(new Callback<PrintedMediaSubResponse>() {
             @Override
             public void onResponse(Call<PrintedMediaSubResponse> call, Response<PrintedMediaSubResponse> response) {
@@ -499,7 +550,8 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 "UNIGNORED",
                 true,
                 true,
-                true
+                true,
+                clipType
         );
 
         call.enqueue(new Callback<InternetResponse>() {
@@ -566,7 +618,8 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 "UNIGNORED",
                 true,
                 true,
-                true
+                true,
+                clipType
         );
 
         call.enqueue(new Callback<InternetResponse>() {
@@ -628,7 +681,8 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 true,
                 true,
                 true,
-                false
+                false,
+                clipType
         );
 
         call.enqueue(new Callback<InternetResponse>() {
@@ -676,7 +730,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         Call<SubMenuVisualMediaResponse> call = apiService.subMenuVisualMedia(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10,
+                50,
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
@@ -692,7 +746,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 endDate,
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
                 menuId,

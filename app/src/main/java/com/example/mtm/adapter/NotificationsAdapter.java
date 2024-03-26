@@ -53,6 +53,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         holder.titleTextView.setText(itemData.getTitle());
         holder.bodyTextView.setText(itemData.getBody());
+        holder.dateTextView.setText(itemData.getDate() + "\n" + itemData.getTime());
         holder.view.setVisibility(itemData.isRead() ? View.INVISIBLE : View.VISIBLE);
 
 //        holder.itemView.setOnClickListener(view -> {
@@ -72,7 +73,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 //        });
         holder.itemView.setOnClickListener(view -> {
 //            openNotificationActivity(itemData.getTitle(), itemData.getBody(), itemData.getUrl(), itemData.getId());
-            listener.onItemClick(itemData.getTitle(), itemData.getBody(), itemData.getUrl(), itemData.getId());
+            listener.onItemClick(itemData.getTitle(), itemData.getBody(), itemData.getUrl(), itemData.getId(), itemData.getDate(), itemData.getTime());
         });
     }
 
@@ -84,12 +85,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView bodyTextView;
+        TextView dateTextView;
         View view;
 
         ViewHolder(View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             bodyTextView = itemView.findViewById(R.id.bodyTextView);
+            dateTextView = itemView.findViewById(R.id.dateTextView);
             view = itemView.findViewById(R.id.view);
 
         }
@@ -146,6 +149,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String title, String body, String link, int id);
+        void onItemClick(String title, String body, String link, int id, String date, String time);
     }
 }

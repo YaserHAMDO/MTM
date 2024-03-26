@@ -374,7 +374,8 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 "UNIGNORED",
                 true,
                 true,
-                true
+                true,
+                "NEWS"
         );
 
         call.enqueue(new Callback<InternetResponse>() {
@@ -852,7 +853,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
         Call<InternetSubResponse> call = apiService.subInternet(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10,
+                50,
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
@@ -867,7 +868,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 endDate,
                 "07:00:00",
                 "23:59:00",
-//                "NEWS",
+                "NEWS",
                 "UNIGNORED",
                 true,
 //                "2024010003615660",
@@ -926,7 +927,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
         Call<PrintedMediaSubResponse> call = apiService.subMenuList(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10,
+                50,
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,
@@ -1005,7 +1006,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
         Call<SubMenuVisualMediaResponse> call = apiService.subMenuVisualMedia(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
-                10,
+                50,
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
                 true,

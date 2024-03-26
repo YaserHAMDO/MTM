@@ -1,0 +1,6 @@
+<View xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/circle"
+    android:layout_width="15dp"
+    android:layout_height="15dp"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/orange_circule" />

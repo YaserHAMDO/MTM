@@ -94,7 +94,7 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
         }
     }
 
-    private void fitToScreen() {
+    public void fitToScreen() {
         mSaveScale = 1f;
         float scale;
         if (getDrawable() == null || getDrawable().getIntrinsicWidth() == 0 || getDrawable().getIntrinsicHeight() == 0)

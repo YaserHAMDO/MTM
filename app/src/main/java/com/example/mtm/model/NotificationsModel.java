@@ -7,13 +7,25 @@ public class NotificationsModel {
     private final String url;
     private final int id;
     private boolean read;
+    private final String date;
+    private final String time;
 
-    public NotificationsModel(String title, String body, String url, int id, boolean read) {
+    public NotificationsModel(String title, String body, String url, int id, boolean read, String date, String time) {
         this.title = title;
         this.body = body;
         this.url = url;
         this.id = id;
         this.read = read;
+        this.date = date;
+        this.time = time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 
     public String getTitle() {

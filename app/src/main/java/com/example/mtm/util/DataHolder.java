@@ -1,5 +1,7 @@
 package com.example.mtm.util;
 
+import com.example.mtm.model.SelimModel;
+import com.example.mtm.model.VerticalModel;
 import com.example.mtm.response.ColumnistsResponse;
 import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
@@ -35,6 +37,7 @@ public class DataHolder {
 
     private ArrayList<String> columnistsShowArray;
     private ArrayList<String> printedMediaFullPageShowArray;
+    private ArrayList<VerticalModel> verticalModels;
     private ArrayList<String> printedMediaShareLinkArray;
     private ArrayList<String> printedMediaSubPageShowArray;
     private ArrayList<String> printedMediaDateShowArray;
@@ -44,6 +47,8 @@ public class DataHolder {
     private ArrayList<String> CansinShareUrlArray;
     private ArrayList<String> CansinDatesArray;
     private ArrayList<String> CansinNamesArray;
+
+    private ArrayList<SelimModel> selimModels;
 
     private DataHolder() {}
 
@@ -237,6 +242,22 @@ public class DataHolder {
         this.printedMediaShareLinkArray = printedMediaShareLinkArray;
     }
 
+    public ArrayList<VerticalModel> getVerticalModels() {
+        return verticalModels;
+    }
+
+    public void setVerticalModels(ArrayList<VerticalModel> verticalModels) {
+        this.verticalModels = verticalModels;
+    }
+
+    public ArrayList<SelimModel> getSelimModels() {
+        return selimModels;
+    }
+
+    public void setSelimModels(ArrayList<SelimModel> selimModels) {
+        this.selimModels = selimModels;
+    }
+
     public void clearDataHolderClass() {
         this.mediaAgendaModel = null;
         this.newspaperFirstPagesModel = null;
@@ -253,6 +274,7 @@ public class DataHolder {
         this.notificationsResponse = null;
         this.columnistsShowArray = null;
         this.printedMediaFullPageShowArray = null;
+        this.verticalModels = null;
         this.printedMediaSubPageShowArray = null;
         this.printedMediaDateShowArray = null;
         this.printedMediaNamesShowArray = null;
@@ -261,5 +283,6 @@ public class DataHolder {
         this.CansinNamesArray = null;
         this.CansinShareUrlArray = null;
         this.printedMediaShareLinkArray = null;
+        this.selimModels = null;
     }
 }

@@ -261,7 +261,7 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
                     result.getData().getDocs().get(i).getJournalist().getName(),
                     result.getData().getDocs().get(i).getMedia().getName(),
                     result.getData().getDocs().get(i).getTitle(),
-                    result.getData().getDocs().get(i).getPublishDate(),
+                    MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()),
                     Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath(),
                     Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash()
             ));
@@ -271,7 +271,7 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
             printedMediaShareLinkArray.add(Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash());
             printedMediaFullPageShowArray.add("");
             printedMediaSubPageShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
-            printedMediaDateShowArray.add(result.getData().getDocs().get(i).getPublishDate());
+            printedMediaDateShowArray.add(MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()));
             printedMediaNamesShowArray.add(result.getData().getDocs().get(i).getMedia().getName());
 
         }

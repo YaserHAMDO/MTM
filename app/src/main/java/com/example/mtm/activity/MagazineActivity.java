@@ -77,7 +77,7 @@ public class MagazineActivity extends AppCompatActivity implements MagazineAdapt
 
     }
 
-    private void newspaperFirstPages(String mediaPath, String pageFile, String gno, int count) {
+    private void newspaperFirstPages(String mediaPath, String pageFile, String gno, int count, int position) {
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -120,6 +120,7 @@ public class MagazineActivity extends AppCompatActivity implements MagazineAdapt
                     Intent intent = new Intent(MagazineActivity.this, SubNewspaperActivity.class);
                     intent.putExtra("mediaPath", mediaPath + "page/" + pageFile + "-");
                     intent.putExtra("count", count);
+                    intent.putExtra("position", position);
                     startActivity(intent);
 
 
@@ -162,8 +163,8 @@ public class MagazineActivity extends AppCompatActivity implements MagazineAdapt
 
 
     @Override
-    public void onItemClick(String mediaPath, String pageFile, String gno, int count) {
-        newspaperFirstPages(mediaPath, pageFile, gno, count);
+    public void onItemClick(String mediaPath, String pageFile, String gno, int count, int position) {
+        newspaperFirstPages(mediaPath, pageFile, gno, count, position);
         System.out.println("hasan yaserHamdo  "+ mediaPath + " " + pageFile + " " + gno);
     }
 }
