@@ -72,6 +72,8 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
     private BottomSheetDialog bottomSheetDialog;
 
+    private String clipType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,12 +104,14 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
         startDay = MyUtils.getPreviousDate(1);
         endDay = MyUtils.getCurrentDate();
+        clipType = "NEWS";
 
         filteredDateTextView.setText(MyUtils.changeDateFormat(startDay) + " ile " + MyUtils.changeDateFormat(endDay) + " arasında tarihi\nkayıtlar gösterilmektedir.");
 
     }
 
     private void setItemClickListeners() {
+
         internetConstraintLayout.setOnClickListener(view -> setInternetData());
         tvConstraintLayout.setOnClickListener(view -> setVisualData());
         menuListConstraintLayout.setOnClickListener(view -> setMenuList());
@@ -196,7 +200,48 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 //            bottomSheetDialog.dismiss();
         });
 
+
+        switch (clipType) {
+            case "NEWS":
+                allTextView.setTextColor(getColor(R.color.color3));
+                newsTextView.setTextColor(getColor(R.color.white));
+                adsTextView.setTextColor(getColor(R.color.color3));
+
+                allTextView.setBackground(getDrawable(R.drawable.test_d));
+                newsTextView.setBackground(getDrawable(R.drawable.test_f));
+                adsTextView.setBackground(getDrawable(R.drawable.test_d));
+                break;
+
+            case "ADS":
+                allTextView.setTextColor(getColor(R.color.color3));
+                newsTextView.setTextColor(getColor(R.color.color3));
+                adsTextView.setTextColor(getColor(R.color.white));
+
+                allTextView.setBackground(getDrawable(R.drawable.test_d));
+                newsTextView.setBackground(getDrawable(R.drawable.test_d));
+                adsTextView.setBackground(getDrawable(R.drawable.test_f));
+                break;
+
+            case "":
+                allTextView.setTextColor(getColor(R.color.white));
+                newsTextView.setTextColor(getColor(R.color.white));
+                adsTextView.setTextColor(getColor(R.color.white));
+
+                allTextView.setBackground(getDrawable(R.drawable.test_f));
+                newsTextView.setBackground(getDrawable(R.drawable.test_f));
+                adsTextView.setBackground(getDrawable(R.drawable.test_f));
+                break;
+        }
+
+        if (startDay != null && endDay != null) {
+            dateTextView.setText("Tarih: " + MyUtils.changeDateFormat(startDay) + " ile " + MyUtils.changeDateFormat(endDay)  + " arasında.");
+        }
+
+
+
         allTextView.setOnClickListener(v -> {
+
+            clipType = "";
 
             allTextView.setTextColor(getColor(R.color.white));
             newsTextView.setTextColor(getColor(R.color.white));
@@ -216,6 +261,9 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
             allTextView.setBackground(getDrawable(R.drawable.test_d));
             newsTextView.setBackground(getDrawable(R.drawable.test_f));
             adsTextView.setBackground(getDrawable(R.drawable.test_d));
+
+            clipType = "NEWS";
+
         });
 
         adsTextView.setOnClickListener(v -> {
@@ -227,6 +275,8 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
             allTextView.setBackground(getDrawable(R.drawable.test_d));
             newsTextView.setBackground(getDrawable(R.drawable.test_d));
             adsTextView.setBackground(getDrawable(R.drawable.test_f));
+
+            clipType = "ADS";
         });
 
         okTextView.setOnClickListener(v -> {
@@ -264,7 +314,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
         ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
 
-        Call<MenuListResponse> call = apiService.menuList(
+        Call<InternetResponse> call = apiService.menuList2(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 10000,
@@ -283,12 +333,13 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 true,
                 true,
                 true,
-                false
+                false,
+                clipType
         );
 
-        call.enqueue(new Callback<MenuListResponse>() {
+        call.enqueue(new Callback<InternetResponse>() {
             @Override
-            public void onResponse(Call<MenuListResponse> call, Response<MenuListResponse> response) {
+            public void onResponse(Call<InternetResponse> call, Response<InternetResponse> response) {
 
                 Logger.getInstance().logDebug(TAG, "menuList", 2, response.body());
 
@@ -296,7 +347,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
                 if (response.isSuccessful()) {
 
-                    MenuListResponse result = response.body();
+                    InternetResponse result = response.body();
 
                     DataHolder.getInstance().setMenuListResponse(result);
 
@@ -336,7 +387,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
             }
 
             @Override
-            public void onFailure(Call<MenuListResponse> call, Throwable t) {
+            public void onFailure(Call<InternetResponse> call, Throwable t) {
 
 
                 progressBar.setVisibility(View.INVISIBLE);
@@ -451,7 +502,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
         ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
 
-        Call<VisualMediaResponse> call = apiService.visualMedia(
+        Call<InternetResponse> call = apiService.visualMedia2(
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 0,
                 1000,
@@ -468,12 +519,13 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 "UNIGNORED",
                 true,
                 true,
-                true
+                true,
+                clipType
         );
 
-        call.enqueue(new Callback<VisualMediaResponse>() {
+        call.enqueue(new Callback<InternetResponse>() {
             @Override
-            public void onResponse(Call<VisualMediaResponse> call, Response<VisualMediaResponse> response) {
+            public void onResponse(Call<InternetResponse> call, Response<InternetResponse> response) {
 
                 Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
 
@@ -481,7 +533,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
                 if (response.isSuccessful()) {
 
-                    VisualMediaResponse result = response.body();
+                    InternetResponse result = response.body();
 
                     DataHolder.getInstance().setVisualMediaModel(result);
 
@@ -521,7 +573,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
             }
 
             @Override
-            public void onFailure(Call<VisualMediaResponse> call, Throwable t) {
+            public void onFailure(Call<InternetResponse> call, Throwable t) {
 
                 progressBar.setVisibility(View.INVISIBLE);
                 internetConstraintLayout.setVisibility(View.VISIBLE);
@@ -589,13 +641,14 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
         updateUI(0);
 
-        MenuListResponse result = DataHolder.getInstance().getMenuListResponse();
+        InternetResponse result = DataHolder.getInstance().getMenuListResponse();
 
         List<InternetModel> items = new ArrayList<>();
         List<InternetSubListModel> items2;
 
 
-        for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
+        if (result.getData() != null)
+            for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
             items2 = new ArrayList<>();
 
             for (int j = 0; j < result.getData().getMenu().getMenu().get(i).getSubMenus().size(); j++) {
@@ -627,26 +680,29 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
         List<InternetModel> items = new ArrayList<>();
         List<InternetSubListModel> items2;
 
+        if (result.getData().getMenu().getMenu() != null) {
+            for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
+                items2 = new ArrayList<>();
 
-        for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
-            items2 = new ArrayList<>();
+                for (int j = 0; j < result.getData().getMenu().getMenu().get(i).getSubMenus().size(); j++) {
+                    items2.add(new InternetSubListModel(
+                            result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getName(),
+                            result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getDocCount(),
+                            result.getData().getMenu().getMenu().get(i).getId() + "",
+                            result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getId() + ""
+                    ));
+                }
 
-            for (int j = 0; j < result.getData().getMenu().getMenu().get(i).getSubMenus().size(); j++) {
-                items2.add(new InternetSubListModel(
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getName(),
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getDocCount(),
-                        result.getData().getMenu().getMenu().get(i).getId() + "",
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getId() + ""
+                items.add(new InternetModel(
+                        result.getData().getMenu().getMenu().get(i).getName(),
+                        result.getData().getMenu().getMenu().get(i).getDocCount(),
+                        items2
                 ));
+
             }
-
-            items.add(new InternetModel(
-                    result.getData().getMenu().getMenu().get(i).getName(),
-                    result.getData().getMenu().getMenu().get(i).getDocCount(),
-                    items2
-            ));
-
         }
+
+
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(new InternetAdapter(this, items, this));
     }
@@ -655,20 +711,21 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
         updateUI(2);
 
-        VisualMediaResponse result = DataHolder.getInstance().getVisualMediaModel();
+        InternetResponse result = DataHolder.getInstance().getVisualMediaModel();
 
         List<InternetModel> items = new ArrayList<>();
         List<InternetSubListModel> items2;
 
 
-        for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
+        if (result != null)
+            for (int i = 0; i < result.getData().getMenu().getMenu().size(); i++) {
             items2 = new ArrayList<>();
 
             for (int j = 0; j < result.getData().getMenu().getMenu().get(i).getSubMenus().size(); j++) {
 
                 items2.add(new InternetSubListModel(
                         result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getName(),
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getNewsCount(),
+                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getDocCount(),
                         result.getData().getMenu().getMenu().get(i).getId() + "",
                         result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getId() + ""
                 ));
@@ -677,7 +734,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
             items.add(new InternetModel(
                     result.getData().getMenu().getMenu().get(i).getName(),
-                    result.getData().getMenu().getMenu().get(i).getNewsCount(),
+                    result.getData().getMenu().getMenu().get(i).getDocCount(),
                     items2
             ));
 
@@ -713,7 +770,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 MyUtils.getCurrentDate(),
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
                 menuId,
@@ -745,6 +802,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("endDate", endDay);
                     intent.putExtra("count", 5);
                     intent.putExtra("index", 1);
+                    intent.putExtra("clipType", clipType);
 
                     Bundle options = ActivityOptions.makeCustomAnimation(NewsListActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);
@@ -791,7 +849,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 MyUtils.getCurrentDate(),
                 "07:00:00",
                 "23:59:00",
-//                "NEWS",
+//                clipType,
                 "UNIGNORED",
                 true,
 //                "2024010003615660",
@@ -868,7 +926,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 endDate,
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
 //                "2024010003615660",
@@ -897,6 +955,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
                     intent.putExtra("index", index);
+                    intent.putExtra("clipType", clipType);
 
                     Bundle options = ActivityOptions.makeCustomAnimation(NewsListActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);
@@ -945,7 +1004,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 endDate,
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
 //                "2024010003615660",
@@ -975,6 +1034,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
                     intent.putExtra("index", 1);
+                    intent.putExtra("clipType", clipType);
 
                     Bundle options = ActivityOptions.makeCustomAnimation(NewsListActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);
@@ -1022,7 +1082,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                 endDate,
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
                 menuId,
@@ -1052,6 +1112,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
                     intent.putExtra("index", index);
+                    intent.putExtra("clipType", clipType);
 
                     Bundle options = ActivityOptions.makeCustomAnimation(NewsListActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);

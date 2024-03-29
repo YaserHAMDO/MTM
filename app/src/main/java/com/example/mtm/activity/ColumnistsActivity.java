@@ -140,6 +140,9 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
 //            bottomSheetDialog.dismiss();
         });
 
+        if (startDate != null && endDate != null) {
+            dateTextView.setText("Tarih: " + MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(startDate)  + " arasında.");
+        }
 
         allTextView.setOnClickListener(v -> {
 

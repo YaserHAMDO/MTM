@@ -205,40 +205,40 @@ public class MainActivity extends AppCompatActivity {
 
 
         mediaCardView.setOnClickListener(view -> {
-            summaryList2(); // 1
+            haberServisi(); // 1
         });
 
         newsCardView.setOnClickListener(view -> {
-            newsList2(); // 2 4 5 6
+            tumHaberler(); // 2 4 5 6
         });
 
         media2CardView.setOnClickListener(view -> {
-            getMediaAgenda2(); // 3
+            turkiyeGundemi(); // 3
         });
 
         writeCardView.setOnClickListener(view -> {
-            menuList3(false); // 4
+            yaziliBasin(false); // 4
         });
 
         internetCardView.setOnClickListener(view -> {
-            internet2(false); // 5
+            internet(false); // 5
         });
 
         visualCardView.setOnClickListener(view -> {
-            visualMedia3(false); // 6
+            tv(false); // 6
         });
 
 
         newsPaperCardView.setOnClickListener(view -> {
-            newspaperFirstPages2(); // 7
+            gazeteler(); // 7
         });
 
         magazineCardView.setOnClickListener(view -> {
-            magazine2(); // 8
+            dergiler(); // 8
         });
 
         columnistCardView.setOnClickListener(view -> {
-            columnists2(); // 9
+            koseYazarlari(); // 9
         });
 
 
@@ -276,94 +276,11 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
     }
-/*
-    private void summaryList(MainActivityModel itemData) {
-
-        // Show progress bar for the clicked item
-        itemData.setProgressBarVisible(true);
-
-        // Notify the adapter that data has changed
-        adapter.notifyDataSetChanged();
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<SummaryListResponse> call = apiService.summaryList(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-//                "2024-02-01",
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate()
-//                true,
-//                true,
-//                true,
-//                true,
-//                true,
-//                true,
-//                true,
-//                true
-        );
-
-        call.enqueue(new Callback<SummaryListResponse>() {
-            @Override
-            public void onResponse(Call<SummaryListResponse> call, Response<SummaryListResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "summaryList", 2, response.body());
 
 
-                    // Show progress bar for the clicked item
-                    itemData.setProgressBarVisible(false);
 
-                    // Notify the adapter that data has changed
-                    adapter.notifyDataSetChanged();
-
-
-                if (response.isSuccessful()) {
-
-                    SummaryListResponse result = response.body();
-
-                    DataHolder.getInstance().setSummaryListResponse(result);
-
-                    Intent intent = new Intent(MainActivity.this, MediaReportActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-
-                    else {
-                        refreshToken(itemData, 1);
-                    }
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SummaryListResponse> call, Throwable t) {
-
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-
-                Logger.getInstance().logDebug(TAG, "summaryList", 3, t.getMessage());
-            }
-        });
-
-
-    }
-*/
-    private void summaryList2() {
+    // 1111111111
+    private void haberServisi() {
 
         mediaImageView.setVisibility(View.INVISIBLE);
         mediaProgressBar.setVisibility(View.VISIBLE);
@@ -423,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(1);
+                        refreshToken(1);
                     }
 
 
@@ -451,221 +368,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-/*
-    private void newsList(MainActivityModel itemData) {
 
-        // Show progress bar for the clicked item
-        itemData.setProgressBarVisible(true);
-
-        // Notify the adapter that data has changed
-        adapter.notifyDataSetChanged();
-
-        newListIndex = 0;
-
-        menuList(itemData, true);
-        internet(itemData, true);
-        visualMedia(itemData, true);
-
-
-    }
-    */
-    private void newsList2() {
+    // 222222222222
+    private void tumHaberler() {
 
         newsImageView.setVisibility(View.INVISIBLE);
         newsProgressBar.setVisibility(View.VISIBLE);
 
         newListIndex = 0;
 
-        menuList2(true);
-        internet2(true);
-        visualMedia2(true);
+//        menuList2(true);
+        yaziliBasin(true);
+        internet(true);
+//        visualMedia2(true);
+        tv(true);
 
     }
-/*
-    private void getMediaAgenda(MainActivityModel itemData) {
 
-
-        // Show progress bar for the clicked item
-        itemData.setProgressBarVisible(true);
-
-        // Notify the adapter that data has changed
-        adapter.notifyDataSetChanged();
-
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<MediaAgendaResponse> call = apiService.getMediaAgenda(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                true,
-                true,
-                true,
-                true,
-                true,
-                MyUtils.getCurrentDate()
-        );
-
-        call.enqueue(new Callback<MediaAgendaResponse>() {
-            @Override
-            public void onResponse(Call<MediaAgendaResponse> call, Response<MediaAgendaResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-                if (response.isSuccessful()) {
-
-
-
-
-                    MediaAgendaResponse result = response.body();
-
-
-                    DataHolder.getInstance().setMediaAgendaModel(result);
-
-//                    ArrayList<String> userMatch2 = new ArrayList<>();
-//                    siyasetModels = new ArrayList<>();
-//                    ekonomiModels = new ArrayList<>();
-//                    dunyaModels = new ArrayList<>();
-//                    kulturModels = new ArrayList<>();
-//                    yasamModels = new ArrayList<>();
-//                    sporModels = new ArrayList<>();
-//                    isModels = new ArrayList<>();
-//
-//                    String genderType = "";
-//
-//                    for (int i = 0; i < result.getData().getDocs().size(); i++) {
-//
-//                        String newGenderType = result.getData().getDocs().get(i).getAgendaType().getName();
-//                        if (!newGenderType.equals(genderType)) {
-//                            userMatch2.add(newGenderType);
-//                            genderType = newGenderType;
-//                        }
-//                    }
-//
-//                    setTypesList(userMatch2);
-//
-//
-//
-//
-//
-//
-//
-//                    for (int i = 0; i < result.getData().getDocs().size() ; i++) {
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Siyaset")) {
-//                            siyasetModels.add(new Models(
-//                                    "Siyaset",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Ekonomi")) {
-//                            ekonomiModels.add(new Models(
-//                                    "Ekonomi",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Dünya")) {
-//                            dunyaModels.add(new Models(
-//                                    "Dünya",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Kültür-Sanat")) {
-//                            kulturModels.add(new Models(
-//                                    "Kültür-Sanat",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Yaşam")) {
-//                            yasamModels.add(new Models(
-//                                    "Yaşam",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Spor")) {
-//                            sporModels.add(new Models(
-//                                    "spor",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("İş Dünyası")) {
-//                            isModels.add(new Models(
-//                                    "İş Dünyası",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                    }
-//
-//
-//
-//
-//                    setTypesList2(siyasetModels);
-
-
-
-                    Intent intent = new Intent(MainActivity.this, MediaAgendaActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-
-                    else {
-                        refreshToken(itemData, 2);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MediaAgendaResponse> call, Throwable t) {
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
-            }
-        });
-
-
-    }
-*/
-    private void getMediaAgenda2() {
+    // 3333333333333333
+    private void turkiyeGundemi() {
 
 
         media2ImageView.setVisibility(View.INVISIBLE);
@@ -706,108 +427,6 @@ public class MainActivity extends AppCompatActivity {
 
                     DataHolder.getInstance().setMediaAgendaModel(result);
 
-//                    ArrayList<String> userMatch2 = new ArrayList<>();
-//                    siyasetModels = new ArrayList<>();
-//                    ekonomiModels = new ArrayList<>();
-//                    dunyaModels = new ArrayList<>();
-//                    kulturModels = new ArrayList<>();
-//                    yasamModels = new ArrayList<>();
-//                    sporModels = new ArrayList<>();
-//                    isModels = new ArrayList<>();
-//
-//                    String genderType = "";
-//
-//                    for (int i = 0; i < result.getData().getDocs().size(); i++) {
-//
-//                        String newGenderType = result.getData().getDocs().get(i).getAgendaType().getName();
-//                        if (!newGenderType.equals(genderType)) {
-//                            userMatch2.add(newGenderType);
-//                            genderType = newGenderType;
-//                        }
-//                    }
-//
-//                    setTypesList(userMatch2);
-//
-//
-//
-//
-//
-//
-//
-//                    for (int i = 0; i < result.getData().getDocs().size() ; i++) {
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Siyaset")) {
-//                            siyasetModels.add(new Models(
-//                                    "Siyaset",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Ekonomi")) {
-//                            ekonomiModels.add(new Models(
-//                                    "Ekonomi",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Dünya")) {
-//                            dunyaModels.add(new Models(
-//                                    "Dünya",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Kültür-Sanat")) {
-//                            kulturModels.add(new Models(
-//                                    "Kültür-Sanat",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Yaşam")) {
-//                            yasamModels.add(new Models(
-//                                    "Yaşam",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("Spor")) {
-//                            sporModels.add(new Models(
-//                                    "spor",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                        if (result.getData().getDocs().get(i).getAgendaType().getName().equals("İş Dünyası")) {
-//                            isModels.add(new Models(
-//                                    "İş Dünyası",
-//                                    Constants.KEY_IMAGE_BASIC_URL + result.getData().getDocs().get(i).getImageUrl(),
-//                                    result.getData().getDocs().get(i).getAgendaType().getName(),
-//                                    result.getData().getDocs().get(i).getContents().getTr_TR().getTitle()
-//                            ));
-//                        }
-//
-//                    }
-//
-//
-//
-//
-//                    setTypesList2(siyasetModels);
-
-
-
                     Intent intent = new Intent(MainActivity.this, MediaAgendaActivity.class);
 //                    intent.putExtra("itemData", itemData.getText());
                     Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
@@ -820,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(3);
+                        refreshToken(3);
                     }
 
                 }
@@ -838,252 +457,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-/*
-    private void menuList(MainActivityModel itemData, boolean newsList) {
 
-        if (!newsList) {
-            // Show progress bar for the clicked item
-            itemData.setProgressBarVisible(true);
-
-            // Notify the adapter that data has changed
-            adapter.notifyDataSetChanged();
-        }
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<MenuListResponse> call = apiService.menuList(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                0,
-                10000,
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                false,
-                false,
-                true,
-                true,
-                true,
-                true,
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate(),
-                "07:00:00",
-                "23:59:00",
-                "UNIGNORED",
-                true,
-                true,
-                true,
-                false
-        );
-
-        call.enqueue(new Callback<MenuListResponse>() {
-            @Override
-            public void onResponse(Call<MenuListResponse> call, Response<MenuListResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "menuList", 2, response.body());
-
-                if (!newsList) {
-                    // Show progress bar for the clicked item
-                    itemData.setProgressBarVisible(false);
-
-                    // Notify the adapter that data has changed
-                    adapter.notifyDataSetChanged();
-                }
-                else {
-                    newListIndex++;
-                }
-
-
-
-
-                if (response.isSuccessful()) {
-
-
-
-                    MenuListResponse result = response.body();
-
-                    DataHolder.getInstance().setMenuListResponse(result);
-
-                    if(!newsList) {
-                        Intent intent = new Intent(MainActivity.this, PrintedActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                    }
-                    else {
-                        if (newListIndex == 3) {
-
-                            newListIndex = 0;
-
-                            // Show progress bar for the clicked item
-                            itemData.setProgressBarVisible(false);
-
-                            // Notify the adapter that data has changed
-                            adapter.notifyDataSetChanged();
-
-                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                        }
-
-                    }
-
-
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-
-                    else {
-                        refreshToken(itemData, 3);
-                    }
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MenuListResponse> call, Throwable t) {
-
-                if (!newsList) {
-                    // Show progress bar for the clicked item
-                    itemData.setProgressBarVisible(false);
-
-                    // Notify the adapter that data has changed
-                    adapter.notifyDataSetChanged();
-                }
-
-                Logger.getInstance().logDebug(TAG, "menuList", 3, t.getMessage());
-            }
-        });
-
-
-    }
-*/
-
-
-    private void menuList2(boolean newsList) {
-
-        if (!newsList) {
-            writeImageView.setVisibility(View.INVISIBLE);
-            writeProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<MenuListResponse> call = apiService.menuList(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                0,
-                10000,
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                false,
-                false,
-                true,
-                true,
-                true,
-                true,
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate(),
-                "07:00:00",
-                "23:59:00",
-                "UNIGNORED",
-                true,
-                true,
-                true,
-                false
-        );
-
-        call.enqueue(new Callback<MenuListResponse>() {
-            @Override
-            public void onResponse(Call<MenuListResponse> call, Response<MenuListResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "menuList", 2, response.body());
-
-                if (!newsList) {
-                    writeImageView.setVisibility(View.VISIBLE);
-                    writeProgressBar.setVisibility(View.INVISIBLE);
-                }
-                else {
-                    newListIndex++;
-                }
-
-
-
-
-                if (response.isSuccessful()) {
-
-
-
-                    MenuListResponse result = response.body();
-
-                    DataHolder.getInstance().setMenuListResponse(result);
-
-                    if(!newsList) {
-                        Intent intent = new Intent(MainActivity.this, PrintedActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                    }
-                    else {
-                        if (newListIndex == 3) {
-
-                            newListIndex = 0;
-
-                            newsImageView.setVisibility(View.VISIBLE);
-                            newsProgressBar.setVisibility(View.INVISIBLE);
-
-                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                        }
-
-                    }
-
-
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-
-                    else {
-                        if(!newsList) {
-                            refreshToken2(4);
-                        }
-                        else {
-                            refreshToken2(2);
-                        }
-
-                    }
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MenuListResponse> call, Throwable t) {
-
-                if (!newsList) {
-                    writeImageView.setVisibility(View.VISIBLE);
-                    writeProgressBar.setVisibility(View.INVISIBLE);
-                }
-                else {
-                    newsImageView.setVisibility(View.VISIBLE);
-                    newsProgressBar.setVisibility(View.INVISIBLE);
-                }
-
-                Logger.getInstance().logDebug(TAG, "menuList", 3, t.getMessage());
-            }
-        });
-
-
-    }
-
-    private void menuList3(boolean newsList) {
+    // 444444444444
+    private void yaziliBasin(boolean newsList) {
 
         if (!newsList) {
             writeImageView.setVisibility(View.INVISIBLE);
@@ -1139,6 +515,14 @@ public class MainActivity extends AppCompatActivity {
                     InternetResponse result = response.body();
 
                     DataHolder.getInstance().setInternetModel(result);
+                    DataHolder.getInstance().setMenuListResponse(result);
+
+//                    InternetResponse result2 = response.body();
+
+
+
+
+
 
                     if (!newsList) {
                         Intent intent = new Intent(MainActivity.this, InternetActivity.class);
@@ -1171,7 +555,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(4);
+                        if(!newsList) {
+                            refreshToken(4);}
                     }
 
 
@@ -1196,128 +581,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-/*
-    private void internet(MainActivityModel itemData, boolean newsList) {
 
-        if (!newsList) {
-            // Show progress bar for the clicked item
-            itemData.setProgressBarVisible(true);
-
-            // Notify the adapter that data has changed
-            adapter.notifyDataSetChanged();
-        }
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<InternetResponse> call = apiService.internet(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                0,
-                100000,
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                false,
-                false,
-                true,
-                true,
-                true,
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate(),
-                "07:00:00",
-                "23:59:00",
-                "UNIGNORED",
-                true,
-                true,
-                true
-        );
-
-        call.enqueue(new Callback<InternetResponse>() {
-            @Override
-            public void onResponse(Call<InternetResponse> call, Response<InternetResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
-
-                if (!newsList) {
-                    // Show progress bar for the clicked item
-                    itemData.setProgressBarVisible(false);
-
-                    // Notify the adapter that data has changed
-                    adapter.notifyDataSetChanged();
-                }
-                else {
-                    newListIndex++;
-                }
-
-
-
-                if (response.isSuccessful()) {
-
-
-
-                    InternetResponse result = response.body();
-
-                    DataHolder.getInstance().setInternetModel(result);
-
-                    if(!newsList) {
-                        Intent intent = new Intent(MainActivity.this, InternetActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                    }
-                    else {
-
-                        if (newListIndex == 3) {
-
-                            newListIndex = 0;
-
-                            // Show progress bar for the clicked item
-                            itemData.setProgressBarVisible(false);
-
-                            // Notify the adapter that data has changed
-                            adapter.notifyDataSetChanged();
-
-                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                        }
-
-
-                    }
-
-
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-
-                    else {
-                        refreshToken(itemData, 4);
-                    }
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<InternetResponse> call, Throwable t) {
-
-                if (!newsList) {
-                    // Show progress bar for the clicked item
-                    itemData.setProgressBarVisible(false);
-
-                    // Notify the adapter that data has changed
-                    adapter.notifyDataSetChanged();
-                }
-                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
-            }
-        });
-
-
-    }
-*/
-    private void internet2(boolean newsList) {
+    // 55555555555
+    private void internet(boolean newsList) {
 
         if (!newsList) {
             internetImageView.setVisibility(View.INVISIBLE);
@@ -1406,7 +672,7 @@ public class MainActivity extends AppCompatActivity {
 
                     else {
                         if(!newsList) {
-                        refreshToken2(5);}
+                        refreshToken(5);}
                     }
 
 
@@ -1430,231 +696,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-/*
-    private void visualMedia(MainActivityModel itemData, boolean newsList) {
 
-        if (!newsList) {
-            // Show progress bar for the clicked item
-            itemData.setProgressBarVisible(true);
-
-            // Notify the adapter that data has changed
-            adapter.notifyDataSetChanged();
-        }
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<VisualMediaResponse> call = apiService.visualMedia(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                0,
-                1000,
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                false,
-                false,
-                true,
-                true,
-                true,
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate(),
-                "07:00:00",
-                "23:59:00",
-                "UNIGNORED",
-                true,
-                true,
-                true
-        );
-
-        call.enqueue(new Callback<VisualMediaResponse>() {
-            @Override
-            public void onResponse(Call<VisualMediaResponse> call, Response<VisualMediaResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
-
-                if (!newsList) {
-                    // Show progress bar for the clicked item
-                    itemData.setProgressBarVisible(false);
-
-                    // Notify the adapter that data has changed
-                    adapter.notifyDataSetChanged();
-                }
-
-                else {
-                    newListIndex++;
-                }
-
-                if (response.isSuccessful()) {
-
-                    VisualMediaResponse result = response.body();
-
-                    DataHolder.getInstance().setVisualMediaModel(result);
-
-                    if (!newsList) {
-                        Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                    }
-                    else {
-
-                        if (newListIndex == 3) {
-
-                            newListIndex = 0;
-
-                            // Show progress bar for the clicked item
-                            itemData.setProgressBarVisible(false);
-
-                            // Notify the adapter that data has changed
-                            adapter.notifyDataSetChanged();
-
-                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                        }
-
-                    }
-
-
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-                    else {
-                        refreshToken(itemData, 5);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<VisualMediaResponse> call, Throwable t) {
-
-                if(!newsList) {
-                    // Show progress bar for the clicked item
-                    itemData.setProgressBarVisible(false);
-
-                    // Notify the adapter that data has changed
-                    adapter.notifyDataSetChanged();
-                }
-
-                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
-            }
-        });
-
-
-    }
-*/
-    private void visualMedia2(boolean newsList) {
-
-        if (!newsList) {
-          visualImageView.setVisibility(View.INVISIBLE);
-          visualProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<VisualMediaResponse> call = apiService.visualMedia(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                0,
-                1000,
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                false,
-                false,
-                true,
-                true,
-                true,
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate(),
-                "07:00:00",
-                "23:59:00",
-                "UNIGNORED",
-                true,
-                true,
-                true
-        );
-
-        call.enqueue(new Callback<VisualMediaResponse>() {
-            @Override
-            public void onResponse(Call<VisualMediaResponse> call, Response<VisualMediaResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
-
-                if (!newsList) {
-                    visualImageView.setVisibility(View.VISIBLE);
-                    visualProgressBar.setVisibility(View.INVISIBLE);
-                }
-
-                else {
-                    newListIndex++;
-                }
-
-                if (response.isSuccessful()) {
-
-                    VisualMediaResponse result = response.body();
-
-                    DataHolder.getInstance().setVisualMediaModel(result);
-
-                    if (!newsList) {
-                        Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                    }
-                    else {
-
-                        if (newListIndex == 3) {
-
-                            newListIndex = 0;
-
-                            newsImageView.setVisibility(View.VISIBLE);
-                            newsProgressBar.setVisibility(View.INVISIBLE);
-
-                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
-                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-                        }
-
-                    }
-
-
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-                    else {
-                        if(!newsList) {
-                            refreshToken2(6);}
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<VisualMediaResponse> call, Throwable t) {
-
-                if(!newsList) {
-                    visualImageView.setVisibility(View.VISIBLE);
-                    visualProgressBar.setVisibility(View.INVISIBLE);
-                }
-                else {
-                    newsImageView.setVisibility(View.VISIBLE);
-                    newsProgressBar.setVisibility(View.INVISIBLE);
-                }
-
-                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
-            }
-        });
-
-
-    }
-
-    private void visualMedia3(boolean newsList) {
+    // 6666666666666
+    private void tv(boolean newsList) {
 
         if (!newsList) {
             visualImageView.setVisibility(View.INVISIBLE);
@@ -1707,6 +751,8 @@ public class MainActivity extends AppCompatActivity {
 
                     DataHolder.getInstance().setInternetModel(result);
 
+                    DataHolder.getInstance().setVisualMediaModel(result);
+
                     if (!newsList) {
                         Intent intent = new Intent(MainActivity.this, InternetActivity.class);
                         intent.putExtra("index", 3);
@@ -1737,7 +783,7 @@ public class MainActivity extends AppCompatActivity {
                         showSubscriptionDialog();
                     }
                     else {
-                        refreshToken2(6);
+                        refreshToken(6);
                     }
 
                 }
@@ -1761,83 +807,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-/*
-    private void newspaperFirstPages(MainActivityModel itemData) {
 
-        // Show progress bar for the clicked item
-        itemData.setProgressBarVisible(true);
-
-        // Notify the adapter that data has changed
-        adapter.notifyDataSetChanged();
-
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<NewspaperFirstPagesResponse> call = apiService.newspaperFirstPages(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                0,
-                50,
-                MyUtils.getCurrentDate()
-        );
-
-        call.enqueue(new Callback<NewspaperFirstPagesResponse>() {
-            @Override
-            public void onResponse(Call<NewspaperFirstPagesResponse> call, Response<NewspaperFirstPagesResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "mediaAgenda", 2, response.body());
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-                if (response.isSuccessful()) {
-
-
-
-
-                    NewspaperFirstPagesResponse result = response.body();
-
-                    DataHolder.getInstance().setNewspaperFirstPagesModel(result);
-
-                    Intent intent = new Intent(MainActivity.this, NewspaperActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-                    else {
-                        refreshToken(itemData, 6);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<NewspaperFirstPagesResponse> call, Throwable t) {
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-                Logger.getInstance().logDebug(TAG, "mediaAgenda", 3, t.getMessage());
-            }
-        });
-
-
-    }
-*/
-    private void newspaperFirstPages2() {
+    // 777777777
+    private void gazeteler() {
 
         newsPaperImageView.setVisibility(View.INVISIBLE);
         newsPaperProgressBar.setVisibility(View.VISIBLE);
@@ -1904,7 +876,7 @@ public class MainActivity extends AppCompatActivity {
                         showSubscriptionDialog();
                     }
                     else {
-                        refreshToken2(7);
+                        refreshToken(7);
                     }
 
                 }
@@ -1922,92 +894,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-/*
-    private void magazine(MainActivityModel itemData) {
 
-        // Show progress bar for the clicked item
-        itemData.setProgressBarVisible(true);
-
-        // Notify the adapter that data has changed
-        adapter.notifyDataSetChanged();
-
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<MagazineFullPagesResponse> call = apiService.magazines(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                0,
-                50,
-                true,
-                true,
-                "National",
-                "Magazine",
-                MyUtils.getFirstDateOfMonth(),
-                MyUtils.getCurrentDate()
-        );
-
-        call.enqueue(new Callback<MagazineFullPagesResponse>() {
-            @Override
-            public void onResponse(Call<MagazineFullPagesResponse> call, Response<MagazineFullPagesResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "magazines", 2, response.body());
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-                if (response.isSuccessful()) {
-
-
-
-
-
-
-                    MagazineFullPagesResponse result = response.body();
-
-
-                    DataHolder.getInstance().setMagazineFullPagesModel(result);
-
-                    Intent intent = new Intent(MainActivity.this, MagazineActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-
-                    else {
-                        refreshToken(itemData, 7);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MagazineFullPagesResponse> call, Throwable t) {
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-                Logger.getInstance().logDebug(TAG, "magazines", 3, t.getMessage());
-            }
-        });
-
-
-    }
-*/
-    private void magazine2() {
+    // 888888888
+    private void dergiler() {
 
 
         magazineImageView.setVisibility(View.INVISIBLE);
@@ -2084,7 +973,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(8);
+                        refreshToken(8);
                     }
 
                 }
@@ -2102,88 +991,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-/*
-    private void columnists(MainActivityModel itemData) {
 
-        // Show progress bar for the clicked item
-        itemData.setProgressBarVisible(true);
-
-        // Notify the adapter that data has changed
-        adapter.notifyDataSetChanged();
-
-
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-
-        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
-
-        Call<ColumnistsResponse> call = apiService.columnists(
-                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
-                0,
-                50,
-                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
-                true,
-                MyUtils.getPreviousDate(1),
-                MyUtils.getCurrentDate(),
-                "UNIGNORED",
-                true,
-                false
-        );
-
-        call.enqueue(new Callback<ColumnistsResponse>() {
-            @Override
-            public void onResponse(Call<ColumnistsResponse> call, Response<ColumnistsResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "columnists", 2, response.body());
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-                if (response.isSuccessful()) {
-
-
-
-                    ColumnistsResponse result = response.body();
-
-                    DataHolder.getInstance().setColumnistsModel(result);
-
-                    Intent intent = new Intent(MainActivity.this, ColumnistsActivity.class);
-//                    intent.putExtra("itemData", itemData.getText());
-                    Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
-                    startActivity(intent, options);
-
-                } else {
-
-                    if (response.code() == 403) {
-                        showSubscriptionDialog();
-                    }
-
-                    else {
-                        refreshToken(itemData, 8);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ColumnistsResponse> call, Throwable t) {
-
-                // Show progress bar for the clicked item
-                itemData.setProgressBarVisible(false);
-
-                // Notify the adapter that data has changed
-                adapter.notifyDataSetChanged();
-
-                Logger.getInstance().logDebug(TAG, "columnists", 3, t.getMessage());
-            }
-        });
-
-
-    }
-*/
-    private void columnists2() {
+    // 999999999
+    private void koseYazarlari() {
 
       columnistImageView.setVisibility(View.INVISIBLE);
       columnistProgressBar.setVisibility(View.VISIBLE);
@@ -2235,7 +1045,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
-                        refreshToken2(9);
+                        refreshToken(9);
                     }
 
                 }
@@ -2254,86 +1064,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /*
-    private void refreshToken(MainActivityModel itemData, int index) {
-
-        ApiService apiService = RetrofitClient.getClient(1).create(ApiService.class);
-
-        Map<String, String> fields = new HashMap<>();
-        fields.put("client_id", "account-mobile");
-        fields.put("client_secret", "6323a00d-974f-46b9-974d-37e9a1588c59");
-        fields.put("grant_type", "refresh_token");
-        fields.put("refresh_token", preferenceManager.getString(Constants.KEY_REFRESH_TOKEN));
-
-        Call<RefreshTokenResponse> call = apiService.refreshToken(preferenceManager.getString(Constants.KEY_ACCESS_TOKEN), fields);
-
-        Logger.getInstance().logDebug(TAG, "refreshToken", 1, fields);
-
-        call.enqueue(new Callback<RefreshTokenResponse>() {
-            @Override
-            public void onResponse(Call<RefreshTokenResponse> call, Response<RefreshTokenResponse> response) {
-
-                Logger.getInstance().logDebug(TAG, "refreshToken", 2, response.body());
-
-                Logger.getInstance().logDebug(TAG, "refreshToken KEY_ACCESS_TOKEN", 2, preferenceManager.getString(Constants.KEY_ACCESS_TOKEN));
-
-
-                if (response.isSuccessful()) {
-
-                    RefreshTokenResponse tokenModel = response.body();
-                    if (tokenModel != null) {
-
-                        preferenceManager.putString(Constants.KEY_ACCESS_TOKEN, tokenModel.getAccessToken());
-                        preferenceManager.putString(Constants.KEY_REFRESH_TOKEN, tokenModel.getRefreshToken());
-
-                        switch (index) {
-                            case 0:
-
-                                break;
-                            case 1:
-                                newsList(itemData);
-                                break;
-                            case 2:
-                                getMediaAgenda(itemData);
-                                break;
-                            case 3:
-                                menuList(itemData, false);
-                                break;
-                            case 4:
-                                internet(itemData, false);
-                                break;
-                            case 5:
-                                visualMedia(itemData, false);
-                                break;
-                            case 6:
-                                newspaperFirstPages(itemData);
-                                break;
-                            case 7:
-                                magazine(itemData);
-                                break;
-                            case 8:
-                                columnists(itemData);
-                                break;
-                        }
-
-
-                    }
-
-                }
-                else {
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RefreshTokenResponse> call, Throwable t) {
-                Logger.getInstance().logDebug(TAG, "refreshToken", 3, t.getMessage());
-            }
-        });
-    }
-*/
-    private void refreshToken2(int index) {
+    // refresh token
+    private void refreshToken(int index) {
 
         ApiService apiService = RetrofitClient.getClient(1).create(ApiService.class);
 
@@ -2366,31 +1098,31 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (index) {
                             case 1:
-                                summaryList2();
+                                haberServisi();
                                 break;
                             case 2:
-                                newsList2();
+                                tumHaberler();
                                 break;
                             case 3:
-                                getMediaAgenda2();
+                                turkiyeGundemi();
                                 break;
                             case 4:
-                                menuList2(false);
+                                yaziliBasin(false);
                                 break;
                             case 5:
-                                internet2(false);
+                                internet(false);
                                 break;
                             case 6:
-                                visualMedia2(false);
+                                tv(false);
                                 break;
                             case 7:
-                                newspaperFirstPages2();
+                                gazeteler();
                                 break;
                             case 8:
-                                magazine2();
+                                dergiler();
                                 break;
                             case 9:
-                                columnists2();
+                                koseYazarlari();
                                 break;
                         }
 
@@ -2410,6 +1142,242 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+   /*
+    xxxx
+    private void menuList2(boolean newsList) {
+
+        if (!newsList) {
+            writeImageView.setVisibility(View.INVISIBLE);
+            writeProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<MenuListResponse> call = apiService.menuList(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                10000,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true,
+                false
+        );
+
+        call.enqueue(new Callback<MenuListResponse>() {
+            @Override
+            public void onResponse(Call<MenuListResponse> call, Response<MenuListResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "menuList", 2, response.body());
+
+                if (!newsList) {
+                    writeImageView.setVisibility(View.VISIBLE);
+                    writeProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newListIndex++;
+                }
+
+
+
+
+                if (response.isSuccessful()) {
+
+
+
+                    MenuListResponse result = response.body();
+
+                    DataHolder.getInstance().setMenuListResponse(result);
+
+                    if(!newsList) {
+                        Intent intent = new Intent(MainActivity.this, PrintedActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                        startActivity(intent, options);
+                    }
+                    else {
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            newsImageView.setVisibility(View.VISIBLE);
+                            newsProgressBar.setVisibility(View.INVISIBLE);
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                            startActivity(intent, options);
+                        }
+
+                    }
+
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        showSubscriptionDialog();
+                    }
+
+                    else {
+                        if(!newsList) {
+                            refreshToken(4);
+                        }
+                        else {
+                            refreshToken(2);
+                        }
+
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MenuListResponse> call, Throwable t) {
+
+                if (!newsList) {
+                    writeImageView.setVisibility(View.VISIBLE);
+                    writeProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newsImageView.setVisibility(View.VISIBLE);
+                    newsProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                Logger.getInstance().logDebug(TAG, "menuList", 3, t.getMessage());
+            }
+        });
+
+
+    }
+    */
+    /*
+    private void visualMedia2(boolean newsList) {
+
+        if (!newsList) {
+            visualImageView.setVisibility(View.INVISIBLE);
+            visualProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+
+        ApiService apiService = RetrofitClient.getClient(2).create(ApiService.class);
+
+        Call<VisualMediaResponse> call = apiService.visualMedia(
+                "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
+                0,
+                1000,
+                preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
+                false,
+                false,
+                true,
+                true,
+                true,
+                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
+                "07:00:00",
+                "23:59:00",
+                "UNIGNORED",
+                true,
+                true,
+                true
+        );
+
+        call.enqueue(new Callback<VisualMediaResponse>() {
+            @Override
+            public void onResponse(Call<VisualMediaResponse> call, Response<VisualMediaResponse> response) {
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 2, response.body());
+
+                if (!newsList) {
+                    visualImageView.setVisibility(View.VISIBLE);
+                    visualProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                else {
+                    newListIndex++;
+                }
+
+                if (response.isSuccessful()) {
+
+                    VisualMediaResponse result = response.body();
+
+                    DataHolder.getInstance().setVisualMediaModel(result);
+
+                    if (!newsList) {
+                        Intent intent = new Intent(MainActivity.this, VisualMediaActivity.class);
+//                    intent.putExtra("itemData", itemData.getText());
+                        Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                        startActivity(intent, options);
+                    }
+                    else {
+
+                        if (newListIndex == 3) {
+
+                            newListIndex = 0;
+
+                            newsImageView.setVisibility(View.VISIBLE);
+                            newsProgressBar.setVisibility(View.INVISIBLE);
+
+                            Intent intent = new Intent(MainActivity.this, NewsListActivity.class);
+                            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.left, R.anim.right).toBundle();
+                            startActivity(intent, options);
+                        }
+
+                    }
+
+
+
+                } else {
+
+                    if (response.code() == 403) {
+                        showSubscriptionDialog();
+                    }
+                    else {
+                        if(!newsList) {
+                            refreshToken(6);}
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VisualMediaResponse> call, Throwable t) {
+
+                if(!newsList) {
+                    visualImageView.setVisibility(View.VISIBLE);
+                    visualProgressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    newsImageView.setVisibility(View.VISIBLE);
+                    newsProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                Logger.getInstance().logDebug(TAG, "visualMedia", 3, t.getMessage());
+            }
+        });
+
+
+    }
+    */
+
 
     private void showSubscriptionDialog() {
         MyUtils.showSubscriptionDialog(this);

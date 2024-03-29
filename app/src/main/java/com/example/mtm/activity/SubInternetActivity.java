@@ -91,6 +91,8 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
 
     private GestureDetector gestureDetector;
 
+    private String clipType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -220,6 +222,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
         count = intent.getIntExtra("count", 0);
         index = intent.getIntExtra("index", 0);
 
+        clipType = intent.getStringExtra("clipType");
 
         sourceUrl = "";
 
@@ -547,7 +550,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 endDate,
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
                 menuId,
@@ -619,7 +622,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 endDate,
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
                 menuId,
@@ -700,7 +703,7 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                 endDate,
                 "07:00:00",
                 "23:59:00",
-                "NEWS",
+                clipType,
                 "UNIGNORED",
                 true,
 //                "2024010003615660",

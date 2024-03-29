@@ -116,8 +116,6 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
 
     private void initBottomSheet() {
 
-        bottomSheetDialog = new BottomSheetDialog(this ,R.style.BottomSheetDialog);
-        bottomSheetDialog.setContentView(R.layout.filter_pop_up_layout);
 
 
         dateTextView = bottomSheetDialog.findViewById(R.id.dateTextView);
@@ -172,6 +170,10 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 newsTextView.setBackground(getDrawable(R.drawable.test_f));
                 adsTextView.setBackground(getDrawable(R.drawable.test_f));
                 break;
+        }
+
+        if (startDate != null && endDate != null) {
+            dateTextView.setText("Tarih: " + MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(startDate)  + " arasında.");
         }
 
 
@@ -248,6 +250,11 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
         materialDatePickerControl = false;
 
         clipType = "NEWS";
+
+
+        bottomSheetDialog = new BottomSheetDialog(this ,R.style.BottomSheetDialog);
+        bottomSheetDialog.setContentView(R.layout.filter_pop_up_layout);
+
 
 //        filteredDateTextView.setText(startDate + " ile " + endDate + " arasında tarihi kayıtlar gösterilmektedir.");
     }
@@ -421,6 +428,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
                     intent.putExtra("index", index);
+                    intent.putExtra("clipType", clipType);
 
                     Bundle options = ActivityOptions.makeCustomAnimation(InternetActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);
@@ -504,6 +512,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
                     intent.putExtra("index", 1);
+                    intent.putExtra("clipType", clipType);
 
                     Bundle options = ActivityOptions.makeCustomAnimation(InternetActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);
@@ -551,7 +560,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                 true,
                 true,
                 true,
-                clipType
+                "NEWS"
         );
 
         call.enqueue(new Callback<InternetResponse>() {
@@ -776,6 +785,7 @@ public class InternetActivity extends AppCompatActivity implements InternetSubLi
                     intent.putExtra("endDate", endDate);
                     intent.putExtra("count", count);
                     intent.putExtra("index", index);
+                    intent.putExtra("clipType", clipType);
 
                     Bundle options = ActivityOptions.makeCustomAnimation(InternetActivity.this, R.anim.left, R.anim.right).toBundle();
                     startActivity(intent, options);

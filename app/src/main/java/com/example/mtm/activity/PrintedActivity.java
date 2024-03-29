@@ -13,6 +13,7 @@ import com.example.mtm.adapter.InternetAdapter;
 import com.example.mtm.adapter.InternetSubListAdapter;
 import com.example.mtm.model.InternetModel;
 import com.example.mtm.model.InternetSubListModel;
+import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.util.DataHolder;
 
@@ -43,7 +44,7 @@ public class PrintedActivity extends AppCompatActivity implements InternetSubLis
     }
 
     private void setMenuList() {
-        MenuListResponse result = DataHolder.getInstance().getMenuListResponse();
+        InternetResponse result = DataHolder.getInstance().getMenuListResponse();
 
         List<InternetModel> items = new ArrayList<>();
         List<InternetSubListModel> items2;

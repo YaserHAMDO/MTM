@@ -294,6 +294,7 @@ public class CansinActivity extends AppCompatActivity implements ZoomClassWebVie
         sourceTextView.setText(CansinNamesArray.get(index) + "\n" + CansinDatesArray.get(index));
         progressBar2.setVisibility(View.VISIBLE); // Show loading indicator
         webView.loadUrl(url);
+        System.out.println("hasan Hediye abla: " + url);
     }
 
     // Example method to navigate to the next URL in the array

@@ -15,6 +15,7 @@ import com.example.mtm.model.SubVisualMediaModel;
 import com.example.mtm.model.VisualMediaModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
+import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.response.VisualMediaResponse;
 import com.example.mtm.util.Constants;
@@ -59,7 +60,7 @@ public class VisualMediaActivity extends AppCompatActivity implements SubVisualM
 
     private void setData() {
 
-        VisualMediaResponse result = DataHolder.getInstance().getVisualMediaModel();
+        InternetResponse result = DataHolder.getInstance().getVisualMediaModel();
 
         List<VisualMediaModel> items = new ArrayList<>();
         List<SubVisualMediaModel> items2;
@@ -72,7 +73,7 @@ public class VisualMediaActivity extends AppCompatActivity implements SubVisualM
 
                 items2.add(new SubVisualMediaModel(
                         result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getName(),
-                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getNewsCount(),
+                        result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getDocCount(),
                         result.getData().getMenu().getMenu().get(i).getId() + "",
                         result.getData().getMenu().getMenu().get(i).getSubMenus().get(j).getId() + ""
                 ));
@@ -81,7 +82,7 @@ public class VisualMediaActivity extends AppCompatActivity implements SubVisualM
 
             items.add(new VisualMediaModel(
                     result.getData().getMenu().getMenu().get(i).getName(),
-                    result.getData().getMenu().getMenu().get(i).getNewsCount(),
+                    result.getData().getMenu().getMenu().get(i).getDocCount(),
                     items2
             ));
 

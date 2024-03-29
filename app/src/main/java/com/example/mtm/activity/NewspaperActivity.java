@@ -138,6 +138,10 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 //            bottomSheetDialog.dismiss();
         });
 
+//        if (startDate != null && endDate != null) {
+//            dateTextView.setText("Tarih: " + MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(startDate)  + " arasında.");
+//        }
+
 
         allTextView.setOnClickListener(v -> {
 

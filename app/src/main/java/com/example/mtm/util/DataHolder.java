@@ -26,12 +26,12 @@ public class DataHolder {
     private NewsPaperFullPagesResponse newsPaperFullPagesModel;
     private MagazineFullPagesResponse magazineFullPagesModel;
     private ColumnistsResponse columnistsModel;
-    private VisualMediaResponse visualMediaModel;
+    private InternetResponse visualMediaModel;
     private SubMenuVisualMediaResponse subMenuVisualMediaModel;
     private InternetResponse internetModel;
     private InternetSubResponse InternetSubModel;
     private PrintedMediaSubResponse printedMediaSubResponse;
-    private MenuListResponse menuListResponse;
+    private InternetResponse menuListResponse;
     private SummaryListResponse summaryListResponse;
     private NotificationsResponse notificationsResponse;
 
@@ -96,11 +96,11 @@ public class DataHolder {
         this.columnistsModel = columnistsModel;
     }
 
-    public VisualMediaResponse getVisualMediaModel() {
+    public InternetResponse getVisualMediaModel() {
         return visualMediaModel;
     }
 
-    public void setVisualMediaModel(VisualMediaResponse visualMediaModel) {
+    public void setVisualMediaModel(InternetResponse visualMediaModel) {
         this.visualMediaModel = visualMediaModel;
     }
 
@@ -128,11 +128,11 @@ public class DataHolder {
         InternetSubModel = internetSubModel;
     }
 
-    public MenuListResponse getMenuListResponse() {
+    public InternetResponse getMenuListResponse() {
         return menuListResponse;
     }
 
-    public void setMenuListResponse(MenuListResponse menuListResponse) {
+    public void setMenuListResponse(InternetResponse menuListResponse) {
         this.menuListResponse = menuListResponse;
     }
 
