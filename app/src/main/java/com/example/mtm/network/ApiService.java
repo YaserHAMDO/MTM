@@ -93,7 +93,8 @@ public interface ApiService {
             @Query("addContent") boolean addContent,
             @Query("addDocs") boolean addDocs,
             @Query("addTitle") boolean addTitle,
-            @Query("date") String date
+            @Query("date") String date,
+            @Query("addContinues") boolean addContinues
     );
 
     @GET("api/data/agenda/list")
@@ -106,7 +107,8 @@ public interface ApiService {
             @Query("addDocs") boolean addDocs,
             @Query("addTitle") boolean addTitle,
             @Query("dateStart") String dateStart,
-            @Query("dateEnd") String dateEnd
+            @Query("dateEnd") String dateEnd,
+            @Query("addContinues") boolean addContinues
     );
 
     @GET("api/customer/notifier/")
@@ -205,7 +207,8 @@ public interface ApiService {
             @Query("dateEnd") String dateEnd,
             @Query("ignoreType") String ignoreType,
             @Query("groupByParent") boolean groupByParent,
-            @Query("onlyColmnList") boolean onlyColmnList
+            @Query("onlyColmnList") boolean onlyColmnList,
+            @Query("addContinues") boolean addContinues
     );
 
 

@@ -2,6 +2,7 @@ package com.example.mtm.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Range;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mtm.R;
 import com.example.mtm.adapter.ColumnistAdapter;
 import com.example.mtm.model.ColumnistModel;
+import com.example.mtm.model.VerticalModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.ColumnistsResponse;
@@ -41,6 +43,8 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
 
     private static final String TAG = "InternetActivity";
 
+    private ArrayList<VerticalModel> verticalModels;
+    PreferenceManager preferenceManager;
     private ImageView backIconImageView, filterImageView;
     private RecyclerView recyclerView;
     private MaterialDatePicker materialDatePicker;
@@ -54,6 +58,8 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
 
     private BottomSheetDialog bottomSheetDialog;
 
+
+    private boolean called;
 
     private ArrayList<String> columnistsShowArray;
     private ArrayList<String> printedMediaShareLinkArray;
@@ -77,6 +83,8 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
     }
 
     private void init() {
+        preferenceManager = new PreferenceManager(getApplicationContext());
+
         backIconImageView = findViewById(R.id.backIconImageView);
         recyclerView = findViewById(R.id.recyclerView);
         filterImageView = findViewById(R.id.filterImageView);
@@ -95,8 +103,9 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
     private void initValues() {
         startDate = MyUtils.getPreviousDate(1);
         endDate = MyUtils.getCurrentDate();
-
+        called = false;
         columnistsShowArray = new ArrayList<>();
+        verticalModels = new ArrayList<>();
 
         printedMediaShareLinkArray = new ArrayList<>();
         printedMediaFullPageShowArray = new ArrayList<>();
@@ -141,7 +150,14 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
         });
 
         if (startDate != null && endDate != null) {
-            dateTextView.setText("Tarih: " + MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(startDate)  + " arasında.");
+            if (called) {
+                dateTextView.setText("Tarih: " + MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(startDate)  + " arasında.");
+            }
+            else {
+                dateTextView.setText(MyUtils.changeDateFormat(endDate));
+
+            }
+
         }
 
         allTextView.setOnClickListener(v -> {
@@ -193,6 +209,8 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
     private void confDate() {
         MaterialDatePicker.Builder<Pair<Long, Long>> materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
         materialDateBuilder.setTitleText("Tarih Seç");
+        // Set the maximum date range to today's date
+
         materialDateBuilder.setTheme(R.style.MaterialDatePicker);
         materialDatePicker = materialDateBuilder.build();
 
@@ -251,6 +269,7 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
         printedMediaSubPageShowArray.clear();
         printedMediaDateShowArray.clear();
         printedMediaNamesShowArray.clear();
+        verticalModels.clear();
 
 
         ColumnistsResponse result = DataHolder.getInstance().getColumnistsModel();
@@ -269,6 +288,41 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
                     Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash()
             ));
 
+
+            ArrayList<String> clipImages = new ArrayList<>();
+            ArrayList<String> fullImages = new ArrayList<>();
+
+
+            if (result.getData().getDocs().get(i).getContinuesClip() != null && result.getData().getDocs().get(i).getContinuesClip().size() > 1) {
+
+                for (int j = 0; j < result.getData().getDocs().get(i).getContinuesClip().size(); j++) {
+
+                    clipImages.add(
+                            "https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getContinuesClip().get(j).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+
+                    fullImages.add(
+                            "https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getContinuesClip().get(j).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+
+//                    fullImages.add("https://imgsrv.medyatakip.com/store/" + result.getData().getDocs().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() + "-" + result.getData().getDocs().get(i).getContinuesClip().get(j).getPn() + ".jpg");
+                }
+            }
+            else {
+//                    clipImages.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath() );
+                clipImages.add("https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+                fullImages.add("https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+//                fullImages.add(Constants.KEY_IMAGE_BASIC_URL +
+//                        result.getData().getDocs().get(i).getImageInfo().getMediaPath() +
+//                        "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() +
+//                        "-" + result.getData().getDocs().get(i).getContinuesClip().get(0).getPn() +
+//                        ".jpg");
+
+            }
+
+            verticalModels.add(new VerticalModel(fullImages, clipImages));
+
+
+
+
             columnistsShowArray.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
 
             printedMediaShareLinkArray.add(Constants.KEY_SHARE_URL + result.getData().getDocs().get(i).getGnoHash());
@@ -281,7 +335,13 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(new ColumnistAdapter(this, items, this));
 
-        filteredDateTextView.setText(MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(endDate) + " arasında tarihi\nkayıtlar gösterilmektedir.");
+        if (called) {
+            filteredDateTextView.setText(MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(endDate) + " arasında tarihi\nkayıtlar gösterilmektedir.");
+        }
+        else {
+            filteredDateTextView.setText(MyUtils.changeDateFormat(endDate) + "  tarihi kayıtlar gösterilmektedir.");
+
+        }
 
     }
 
@@ -301,8 +361,10 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
                 endDate,
                 "UNIGNORED",
                 true,
-                false
+                false,
+                true
         );
+        System.out.println("Hasan customer? " + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID));
 
         call.enqueue(new Callback<ColumnistsResponse>() {
             @Override
@@ -315,6 +377,7 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
                 if (response.isSuccessful()) {
 
 
+                    called = true;
 
                     ColumnistsResponse result = response.body();
 
@@ -365,17 +428,33 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
 
 
 
+//        DataHolder.getInstance().setPrintedMediaShareLinkArray(printedMediaShareLinkArray);
+//        DataHolder.getInstance().setPrintedMediaFullPageShowArray(printedMediaFullPageShowArray);
+//        DataHolder.getInstance().setPrintedMediaSubPageShowArray(printedMediaSubPageShowArray);
+//        DataHolder.getInstance().setPrintedMediaDateShowArray(printedMediaDateShowArray);
+//        DataHolder.getInstance().setPrintedMediaNamesShowArray(printedMediaNamesShowArray);
+//
+//        DataHolder.getInstance().setColumnistsShowArray(columnistsShowArray);
+//
+//        Intent intent = new Intent(this, MesutActivity.class);
+//        intent.putExtra("index", index);
+//        startActivity(intent);
+
+
+
         DataHolder.getInstance().setPrintedMediaShareLinkArray(printedMediaShareLinkArray);
+        DataHolder.getInstance().setVerticalModels(verticalModels);
         DataHolder.getInstance().setPrintedMediaFullPageShowArray(printedMediaFullPageShowArray);
         DataHolder.getInstance().setPrintedMediaSubPageShowArray(printedMediaSubPageShowArray);
         DataHolder.getInstance().setPrintedMediaDateShowArray(printedMediaDateShowArray);
         DataHolder.getInstance().setPrintedMediaNamesShowArray(printedMediaNamesShowArray);
 
-        DataHolder.getInstance().setColumnistsShowArray(columnistsShowArray);
+        Intent intent = new Intent(this, Mesut3Activity.class);
 
-        Intent intent = new Intent(this, MesutActivity.class);
+
         intent.putExtra("index", index);
         startActivity(intent);
+
 
 
     }

@@ -41,6 +41,40 @@ public class MediaAgendaResponse {
         }
     }
 
+    public class ContinuesClip{
+        public int pn;
+        public String fl;
+        public long gno;
+        public boolean fp;
+        public double area;
+        public boolean tm;
+
+        public int getPn() {
+            return pn;
+        }
+
+        public String getFl() {
+            return fl;
+        }
+
+        public long getGno() {
+            return gno;
+        }
+
+        public boolean isFp() {
+            return fp;
+        }
+
+        public double getArea() {
+            return area;
+        }
+
+        public boolean isTm() {
+            return tm;
+        }
+    }
+
+
     public class Clips{
         public Pm pm;
         public Bc bc;
@@ -96,9 +130,9 @@ public class MediaAgendaResponse {
         public Contents contents;
         public String imageUrl;
         public boolean headline;
-        public Object gno;
+        public long gno;
         public String gnoHash;
-        public Object mtoGno;
+        public long mtoGno;
         public String title;
         public String publishDate;
         public String ctime;
@@ -110,12 +144,18 @@ public class MediaAgendaResponse {
         public double area;
         public Object pclip;
         public boolean isFullPage;
+
+        public ArrayList<ContinuesClip> continuesClip;
         public String imageStoragePath;
         public Program program;
         public String duration;
         public String video;
         public String publishTime;
 
+
+        public ArrayList<ContinuesClip> getContinuesClip() {
+            return continuesClip;
+        }
 
         public String getCdate() {
             return cdate;
@@ -165,7 +205,7 @@ public class MediaAgendaResponse {
             return headline;
         }
 
-        public Object getGno() {
+        public long getGno() {
             return gno;
         }
 
@@ -173,7 +213,7 @@ public class MediaAgendaResponse {
             return gnoHash;
         }
 
-        public Object getMtoGno() {
+        public long getMtoGno() {
             return mtoGno;
         }
 
@@ -248,7 +288,7 @@ public class MediaAgendaResponse {
         public int pageCount;
         public String cdate;
         public double circulation;
-        public Object gno;
+        public long gno;
         public String infoclip;
         public String icHash;
         public String imageFirstPage;
@@ -274,7 +314,7 @@ public class MediaAgendaResponse {
             return circulation;
         }
 
-        public Object getGno() {
+        public long getGno() {
             return gno;
         }
 

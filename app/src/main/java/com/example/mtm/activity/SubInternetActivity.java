@@ -307,7 +307,8 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                     ""
             ));
 
-            CansinUrlArray.add(result.getData().getDocs().get(i).getUrl());
+//            CansinUrlArray.add(result.getData().getDocs().get(i).getUrl());
+            CansinUrlArray.add(Constants.KEY_INTERNET_URL + result.getData().getDocs().get(i).getGnoHash());
             CansinDatesArray.add(MyUtils.changeDateFormat(result.getData().getDocs().get(i).getPublishDate()));
             CansinNamesArray.add(result.getData().getDocs().get(i).getMedia().getName());
             CansinShareUrlArray.add(Constants.KEY_SHARE_URL2 + result.getData().getDocs().get(i).getGnoHash());
@@ -370,7 +371,8 @@ public class SubInternetActivity extends AppCompatActivity implements SubInterne
                     }
                 }
                 else {
-                    clipImages.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath());
+//                    clipImages.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath() );
+                    clipImages.add("https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
                     fullImages.add(Constants.KEY_IMAGE_BASIC_URL +
                             result.getData().getDocs().get(i).getImageInfo().getMediaPath() +
                             "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() +

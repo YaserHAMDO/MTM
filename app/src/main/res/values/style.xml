@@ -68,7 +68,8 @@
     </style>
 
     <style name="date_text_appearance2" parent="@style/TextAppearance.AppCompat">
-        <item name="android:visibility">gone</item>
+        <item name="android:visibility">visible</item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 
 

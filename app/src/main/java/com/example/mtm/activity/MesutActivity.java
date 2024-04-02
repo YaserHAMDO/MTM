@@ -156,6 +156,7 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
             imageUrl = printedMediaSubPageShowArray.get(index);
         }
 
+        System.out.println("hasan Yilmaz " + imageUrl);
 
 
 
@@ -234,7 +235,7 @@ public class MesutActivity extends AppCompatActivity implements ZoomClass.ZoomCl
                             }
 
 
-                            if(showed + 5 <= count) {
+                            if(showed + 5 <= count - 1) {
 
                                 String s;
                                 if (fullPage) {

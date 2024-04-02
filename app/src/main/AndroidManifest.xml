@@ -29,6 +29,9 @@
             android:name=".activity.Mesut2Activity"
             android:exported="false" />
         <activity
+            android:name=".activity.Mesut3Activity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ColumnistsShowActivity"
             android:exported="false" />
         <activity

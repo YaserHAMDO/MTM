@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                 "Bearer " + preferenceManager.getString(Constants.KEY_ACCESS_TOKEN),
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
 //                "2024-02-01",
-                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
                 MyUtils.getCurrentDate()
 //                true,
 //                true,
@@ -405,7 +405,8 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 true,
                 true,
-                MyUtils.getCurrentDate()
+                MyUtils.getCurrentDate(),
+                true
         );
 
         call.enqueue(new Callback<MediaAgendaResponse>() {
@@ -1009,11 +1010,12 @@ public class MainActivity extends AppCompatActivity {
                 50,
                 preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_ID),
                 true,
-                MyUtils.getPreviousDate(1),
+                MyUtils.getCurrentDate(),
                 MyUtils.getCurrentDate(),
                 "UNIGNORED",
                 true,
-                false
+                false,
+                true
         );
 
         call.enqueue(new Callback<ColumnistsResponse>() {

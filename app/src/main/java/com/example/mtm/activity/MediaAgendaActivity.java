@@ -16,6 +16,7 @@ import com.example.mtm.R;
 import com.example.mtm.adapter.MediaAgendaTitleAdapter;
 import com.example.mtm.adapter.MediaAgendaBodyAdapter;
 import com.example.mtm.model.MediaAgendaModel;
+import com.example.mtm.model.VerticalModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.MediaAgendaResponse;
@@ -38,6 +39,9 @@ import retrofit2.Response;
 public class MediaAgendaActivity extends AppCompatActivity implements MediaAgendaTitleAdapter.OnItemClickListener,  MediaAgendaBodyAdapter.OnItemClickListener{
 
     private static final String TAG = "InternetActivity";
+
+    private ArrayList<VerticalModel> verticalModels;
+    PreferenceManager preferenceManager;
 
     private RecyclerView recyclerView;
     private RecyclerView recyclerView2;
@@ -71,6 +75,8 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
     }
 
     private void init() {
+        preferenceManager = new PreferenceManager(getApplicationContext());
+
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView2 = findViewById(R.id.recyclerView2);
         backIconImageView = findViewById(R.id.backIconImageView);
@@ -85,7 +91,7 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
         printedMediaSubPageShowArray = new ArrayList<>();
         printedMediaDateShowArray = new ArrayList<>();
         printedMediaNamesShowArray = new ArrayList<>();
-
+        verticalModels = new ArrayList<>();
     }
 
     private void setItemClickListeners() {
@@ -176,6 +182,46 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
 
             for (int i = 0; i < result.getData().getDocs().size() ; i++) {
 
+
+
+
+
+                ArrayList<String> clipImages = new ArrayList<>();
+                ArrayList<String> fullImages = new ArrayList<>();
+
+
+                if (result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getContinuesClip() != null && result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getContinuesClip().size() > 1) {
+
+                    for (int j = 0; j < result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getContinuesClip().size(); j++) {
+
+                        clipImages.add(
+                                "https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getContinuesClip().get(j).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+
+                        fullImages.add(
+                                "https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getContinuesClip().get(j).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+
+//                    fullImages.add("https://imgsrv.medyatakip.com/store/" + result.getData().getDocs().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() + "-" + result.getData().getDocs().get(i).getContinuesClip().get(j).getPn() + ".jpg");
+                    }
+                }
+                else {
+//                    clipImages.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath() );
+                    clipImages.add("https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+                    fullImages.add("https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getClips().getPm().getDocs().get(0).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+//                fullImages.add(Constants.KEY_IMAGE_BASIC_URL +
+//                        result.getData().getDocs().get(i).getImageInfo().getMediaPath() +
+//                        "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() +
+//                        "-" + result.getData().getDocs().get(i).getContinuesClip().get(0).getPn() +
+//                        ".jpg");
+
+                }
+
+
+
+
+
+
+
+
                 videoUrl = "";
                 magazineUrl = "";
                 gnoHash = "";
@@ -201,7 +247,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
                                 result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
                                 gnoHash,
-                                result.getData().getDocs().get(i).getDate()
+                                result.getData().getDocs().get(i).getDate(),
+                                clipImages,
+                                fullImages
                         ));
                         break;
 
@@ -214,7 +262,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
                                 result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
                                 gnoHash,
-                                result.getData().getDocs().get(i).getDate()
+                                result.getData().getDocs().get(i).getDate(),
+                                clipImages,
+                                fullImages
                         ));
                         break;
 
@@ -227,7 +277,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
                                 result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
                                 gnoHash,
-                                result.getData().getDocs().get(i).getDate()
+                                result.getData().getDocs().get(i).getDate(),
+                                clipImages,
+                                fullImages
                         ));
                         break;
 
@@ -240,7 +292,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
                                 result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
                                 gnoHash,
-                                result.getData().getDocs().get(i).getDate()
+                                result.getData().getDocs().get(i).getDate(),
+                                clipImages,
+                                fullImages
                         ));
                         break;
 
@@ -253,7 +307,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
                                 result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
                                 gnoHash,
-                                result.getData().getDocs().get(i).getDate()
+                                result.getData().getDocs().get(i).getDate(),
+                                clipImages,
+                                fullImages
                         ));
                         break;
 
@@ -266,7 +322,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
                                 result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
                                 gnoHash,
-                                result.getData().getDocs().get(i).getDate()
+                                result.getData().getDocs().get(i).getDate(),
+                                clipImages,
+                                fullImages
                         ));
                         break;
 
@@ -279,7 +337,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                                 result.getData().getDocs().get(i).getAgendaType().getName(),
                                 result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
                                 gnoHash,
-                                result.getData().getDocs().get(i).getDate()
+                                result.getData().getDocs().get(i).getDate(),
+                                clipImages,
+                                fullImages
                         ));
                         break;
                 }
@@ -292,7 +352,9 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                         result.getData().getDocs().get(i).getAgendaType().getName(),
                         result.getData().getDocs().get(i).getContents().getTr_TR().getTitle(),
                         gnoHash,
-                        result.getData().getDocs().get(i).getDate()
+                        result.getData().getDocs().get(i).getDate(),
+                        clipImages,
+                        fullImages
                 ));
 
             }
@@ -313,6 +375,7 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
     private void setTypesList2(List<MediaAgendaModel> dataList) {
         recyclerView2.setAdapter(null);
         columnistsShowArray.clear();
+        verticalModels.clear();
 
         printedMediaShareLinkArray.clear();
         printedMediaFullPageShowArray.clear();
@@ -331,6 +394,39 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
             printedMediaSubPageShowArray.add(dataList.get(i).getMagazineImageUrl());
             printedMediaDateShowArray.add(dataList.get(i).getDate());
             printedMediaNamesShowArray.add(dataList.get(i).getTitle());
+
+//
+//            ArrayList<String> clipImages = new ArrayList<>();
+//            ArrayList<String> fullImages = new ArrayList<>();
+//
+//            if (dataList.get(i).getDocs().get(i).getContinuesClip() != null && result.getData().getDocs().get(i).getContinuesClip().size() > 1) {
+//
+//                for (int j = 0; j < result.getData().getDocs().get(i).getContinuesClip().size(); j++) {
+//
+//                    clipImages.add(
+//                            "https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getContinuesClip().get(j).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+//
+//                    fullImages.add(
+//                            "https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getContinuesClip().get(j).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+//
+////                    fullImages.add("https://imgsrv.medyatakip.com/store/" + result.getData().getDocs().get(i).getImageInfo().getMediaPath() + "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() + "-" + result.getData().getDocs().get(i).getContinuesClip().get(j).getPn() + ".jpg");
+//                }
+//            }
+//            else {
+////                    clipImages.add(Constants.KEY_IMAGE_BASIC_URL +  result.getData().getDocs().get(i).getImageStoragePath() );
+//                clipImages.add("https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+//                fullImages.add("https://imgsrv.medyatakip.com/store/clip?gno=" +  result.getData().getDocs().get(i).getGno() + "&ds=" + preferenceManager.getInt(Constants.KEY_CURRENT_COSTUMER_PM));
+////                fullImages.add(Constants.KEY_IMAGE_BASIC_URL +
+////                        result.getData().getDocs().get(i).getImageInfo().getMediaPath() +
+////                        "page/" + result.getData().getDocs().get(i).getImageInfo().getPageFile() +
+////                        "-" + result.getData().getDocs().get(i).getContinuesClip().get(0).getPn() +
+////                        ".jpg");
+//
+//            }
+
+            verticalModels.add(new VerticalModel(dataList.get(i).getFullImages(), dataList.get(i).getClipImages()));
+
+
 
         }
     }
@@ -351,7 +447,8 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
                 true,
                 true,
                 startDate,
-                endDate
+                endDate,
+                true
         );
 
         call.enqueue(new Callback<MediaAgendaResponse>() {
@@ -442,17 +539,33 @@ public class MediaAgendaActivity extends AppCompatActivity implements MediaAgend
     public void onItemClick(int position) {
 
 
+//        DataHolder.getInstance().setPrintedMediaShareLinkArray(printedMediaShareLinkArray);
+//        DataHolder.getInstance().setPrintedMediaFullPageShowArray(printedMediaFullPageShowArray);
+//        DataHolder.getInstance().setPrintedMediaSubPageShowArray(printedMediaSubPageShowArray);
+//        DataHolder.getInstance().setPrintedMediaDateShowArray(printedMediaDateShowArray);
+//        DataHolder.getInstance().setPrintedMediaNamesShowArray(printedMediaNamesShowArray);
+//
+//        DataHolder.getInstance().setColumnistsShowArray(columnistsShowArray);
+//
+//        Intent intent = new Intent(this, MesutActivity.class);
+//        intent.putExtra("index", position);
+//        startActivity(intent);
+
+
         DataHolder.getInstance().setPrintedMediaShareLinkArray(printedMediaShareLinkArray);
+        DataHolder.getInstance().setVerticalModels(verticalModels);
         DataHolder.getInstance().setPrintedMediaFullPageShowArray(printedMediaFullPageShowArray);
         DataHolder.getInstance().setPrintedMediaSubPageShowArray(printedMediaSubPageShowArray);
         DataHolder.getInstance().setPrintedMediaDateShowArray(printedMediaDateShowArray);
         DataHolder.getInstance().setPrintedMediaNamesShowArray(printedMediaNamesShowArray);
 
-        DataHolder.getInstance().setColumnistsShowArray(columnistsShowArray);
+        Intent intent = new Intent(this, Mesut3Activity.class);
 
-        Intent intent = new Intent(this, MesutActivity.class);
+
         intent.putExtra("index", position);
         startActivity(intent);
+
+
 
 
 

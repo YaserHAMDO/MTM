@@ -77,50 +77,29 @@ public class MediaReportActivity extends AppCompatActivity implements MediaRepor
     }
 
     private void initValues() {
-        startDate = MyUtils.getPreviousDate(1);
+        startDate = MyUtils.getCurrentDate();
         endDate = MyUtils.getCurrentDate();
 
 //        filteredDateTextView.setText(startDate + " ile " + endDate + " arasında tarihi kayıtlar gösterilmektedir.");
     }
 
     private void confDate() {
-        MaterialDatePicker.Builder<Pair<Long, Long>> materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
+        MaterialDatePicker.Builder<Long> materialDateBuilder = MaterialDatePicker.Builder.datePicker();
         materialDateBuilder.setTitleText("Tarih Seç");
-        materialDateBuilder.setTheme(R.style.MaterialDatePicker);
+        materialDateBuilder.setTheme(R.style.MaterialDatePicker); // You can customize the theme if needed
         materialDatePicker = materialDateBuilder.build();
 
-//        materialDatePicker.addOnPositiveButtonClickListener(
-//                new MaterialPickerOnPositiveButtonClickListener() {
-//                    @SuppressLint("SetTextI18n")
-//                    @Override
-//                    public void onPositiveButtonClick(Object selection) {
-//
-//                        // if the user clicks on the positive
-//                        // button that is ok button update the
-//                        // selected date
-////                        mShowSelectedDateText.setText("Selected Date is : " + materialDatePicker.getHeaderText());
-//                        // in the above statement, getHeaderText
-//                        // will return selected date preview from the
-//                        // dialog
-//                    }
-//                });
 
-        materialDatePicker.addOnPositiveButtonClickListener(
-                selection -> {
-                    Pair<Long, Long> selectionPair = (Pair<Long, Long>) materialDatePicker.getSelection();
-                    if (selectionPair != null) {
-                        long startDate = selectionPair.first;
-                        long endDate = selectionPair.second;
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                        String formattedStartDate = sdf.format(new Date(startDate));
-                        String formattedEndDate = sdf.format(new Date(endDate));
-//                        Toast.makeText(this, "Start Date: " + formattedStartDate + "\nEnd Date: " + formattedEndDate, Toast.LENGTH_SHORT).show();
-                        recyclerView.setAdapter(null);
-                        progressBar.setVisibility(View.VISIBLE);
-                        filteredDateTextView.setText("");
-                        this.startDate = formattedStartDate;
-                        this.endDate = formattedEndDate;
-                        summaryList2(formattedStartDate, formattedEndDate);
+        materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+            Long selectedDate = (Long) selection;
+            if (selectedDate != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                String formattedSelectedDate = sdf.format(new Date(selectedDate));
+                filteredDateTextView.setText("");
+                this.startDate = formattedSelectedDate;
+                this.endDate = formattedSelectedDate;
+
+                        summaryList2(formattedSelectedDate, formattedSelectedDate);
                     }
                 });
     }
@@ -139,7 +118,7 @@ public class MediaReportActivity extends AppCompatActivity implements MediaRepor
                     MyUtils.changeDateFormat(startDate),
                     result.getData().get(i).getName(),
                     result.getData().get(i).getName(),
-                    Constants.KEY_MEDIA_REPORT_URL + result.getData().get(i).getMailUrl()
+                    "https://mailservice.medyatakip.com" + result.getData().get(i).getMailUrl() + "?date=" + startDate
             ));
 
         }
@@ -147,8 +126,8 @@ public class MediaReportActivity extends AppCompatActivity implements MediaRepor
         recyclerView.setAdapter(new MediaReportAdapter(this, items, this));
 
 
-
-        filteredDateTextView.setText(MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(endDate) + " arasında tarihi\nkayıtlar gösterilmektedir.");
+        filteredDateTextView.setText(MyUtils.changeDateFormat(startDate) + " tarihi kayıtlar gösterilmektedir.");
+//        filteredDateTextView.setText(MyUtils.changeDateFormat(startDate) + " ile " + MyUtils.changeDateFormat(endDate) + " arasında tarihi\nkayıtlar gösterilmektedir.");
 
     }
 

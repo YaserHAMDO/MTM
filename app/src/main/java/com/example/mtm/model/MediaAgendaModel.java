@@ -1,9 +1,12 @@
 package com.example.mtm.model;
 
+import java.util.ArrayList;
+
 public class MediaAgendaModel {
 
     private final String type;
     private final String imageUrl;
+
     private final String magazineImageUrl;
     private final String videoUrl;
     private final String title;
@@ -11,7 +14,10 @@ public class MediaAgendaModel {
     private final String gnoHash;
     private final String date;
 
-    public MediaAgendaModel(String type, String imageUrl, String magazineImageUrl, String videoUrl, String title, String body, String gnoHash, String date) {
+    private final ArrayList<String> clipImages;
+    private final ArrayList<String> fullImages;
+
+    public MediaAgendaModel(String type, String imageUrl, String magazineImageUrl, String videoUrl, String title, String body, String gnoHash, String date, ArrayList<String> clipImages, ArrayList<String> fullImages) {
         this.type = type;
         this.imageUrl = imageUrl;
         this.magazineImageUrl = magazineImageUrl;
@@ -20,6 +26,17 @@ public class MediaAgendaModel {
         this.body = body;
         this.gnoHash = gnoHash;
         this.date = date;
+        this.clipImages = clipImages;
+        this.fullImages = fullImages;
+    }
+
+
+    public ArrayList<String> getClipImages() {
+        return clipImages;
+    }
+
+    public ArrayList<String> getFullImages() {
+        return fullImages;
     }
 
     public String getVideoUrl() {

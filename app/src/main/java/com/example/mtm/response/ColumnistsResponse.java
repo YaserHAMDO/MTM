@@ -1,6 +1,7 @@
 package com.example.mtm.response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ColumnistsResponse {
 
@@ -20,6 +21,39 @@ public class ColumnistsResponse {
         return response;
     }
 
+    public class ContinuesClip{
+        public int pn;
+        public String fl;
+        public long gno;
+        public boolean fp;
+        public double area;
+        public boolean tm;
+
+        public int getPn() {
+            return pn;
+        }
+
+        public String getFl() {
+            return fl;
+        }
+
+        public long getGno() {
+            return gno;
+        }
+
+        public boolean isFp() {
+            return fp;
+        }
+
+        public double getArea() {
+            return area;
+        }
+
+        public boolean isTm() {
+            return tm;
+        }
+    }
+
     public class Data{
         public ArrayList<Doc> docs;
 
@@ -29,7 +63,7 @@ public class ColumnistsResponse {
     }
 
     public class Doc{
-        public Object gno;
+        public long gno;
         public String gnoHash;
         public Object mtoGno;
         public String title;
@@ -43,9 +77,10 @@ public class ColumnistsResponse {
         public Object pclip;
         public Journalist journalist;
         public boolean isFullPage;
+        public ArrayList<ContinuesClip> continuesClip;
         public String imageStoragePath;
 
-        public Object getGno() {
+        public long getGno() {
             return gno;
         }
 
@@ -101,6 +136,9 @@ public class ColumnistsResponse {
             return isFullPage;
         }
 
+        public ArrayList<ContinuesClip> getContinuesClip() {
+            return continuesClip;
+        }
         public String getImageStoragePath() {
             return imageStoragePath;
         }
@@ -130,7 +168,6 @@ public class ColumnistsResponse {
         public int pageCount;
         public String cdate;
         public double circulation;
-        public Object gno;
         public String infoclip;
         public String icHash;
         public String imageFirstPage;
@@ -156,9 +193,6 @@ public class ColumnistsResponse {
             return circulation;
         }
 
-        public Object getGno() {
-            return gno;
-        }
 
         public String getInfoclip() {
             return infoclip;
@@ -220,6 +254,5 @@ public class ColumnistsResponse {
             return status;
         }
     }
-
 
 }
