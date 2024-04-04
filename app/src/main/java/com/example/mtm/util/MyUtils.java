@@ -1,21 +1,14 @@
 package com.example.mtm.util;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.mtm.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -25,7 +18,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 
 public class MyUtils {
 

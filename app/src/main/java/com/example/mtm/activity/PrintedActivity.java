@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.mtm.R;
 import com.example.mtm.adapter.InternetAdapter;
@@ -14,7 +13,6 @@ import com.example.mtm.adapter.InternetSubListAdapter;
 import com.example.mtm.model.InternetModel;
 import com.example.mtm.model.InternetSubListModel;
 import com.example.mtm.response.InternetResponse;
-import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.util.DataHolder;
 
 import java.util.ArrayList;

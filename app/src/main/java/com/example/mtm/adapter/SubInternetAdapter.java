@@ -1,7 +1,5 @@
 package com.example.mtm.adapter;
 
-import static com.example.mtm.activity.SubInternetActivity.*;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
-import com.example.mtm.activity.SubInternetActivity;
 import com.example.mtm.model.SubInternetModel;
 import com.example.mtm.util.MyUtils;
 

@@ -17,15 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.mtm.R;
-import com.example.mtm.adapter.ColumnistAdapter;
 import com.example.mtm.adapter.NotificationsAdapter;
-import com.example.mtm.adapter.SubInternetAdapter;
-import com.example.mtm.model.ColumnistModel;
 import com.example.mtm.model.NotificationsModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.request.MarkAsReadRequestBody;
-import com.example.mtm.response.ColumnistsResponse;
 import com.example.mtm.response.MarkAsReadResponse;
 import com.example.mtm.response.NotificationsResponse;
 import com.example.mtm.util.Constants;

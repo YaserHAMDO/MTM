@@ -1,7 +1,6 @@
 package com.example.mtm.response;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ColumnistsResponse {
 

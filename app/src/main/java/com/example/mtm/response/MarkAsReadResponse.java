@@ -2,8 +2,6 @@ package com.example.mtm.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 public class MarkAsReadResponse {
     @SerializedName("data")
     private boolean success;

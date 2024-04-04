@@ -1,7 +1,6 @@
 package com.example.mtm.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -15,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.example.mtm.R;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
-import com.example.mtm.response.TokenResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;

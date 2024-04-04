@@ -1,7 +1,5 @@
 package com.example.mtm.activity;
 
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,18 +7,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mtm.R;
-import com.example.mtm.adapter.ColumnistAdapter;
 import com.example.mtm.adapter.MediaReportAdapter;
-import com.example.mtm.model.ColumnistModel;
 import com.example.mtm.model.MediaReportModel;
 import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
-import com.example.mtm.response.ColumnistsResponse;
 import com.example.mtm.response.SummaryListResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;

@@ -7,14 +7,12 @@ import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.InternetSubResponse;
 import com.example.mtm.response.MagazineFullPagesResponse;
 import com.example.mtm.response.MediaAgendaResponse;
-import com.example.mtm.response.MenuListResponse;
 import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.response.NewspaperFirstPagesResponse;
 import com.example.mtm.response.NotificationsResponse;
 import com.example.mtm.response.PrintedMediaSubResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
 import com.example.mtm.response.SummaryListResponse;
-import com.example.mtm.response.VisualMediaResponse;
 
 import java.util.ArrayList;
 

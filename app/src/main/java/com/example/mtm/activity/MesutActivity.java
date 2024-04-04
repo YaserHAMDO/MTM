@@ -18,8 +18,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.mtm.R;
-import com.example.mtm.adapter.SubInternetAdapter;
-import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.MyUtils;
 import com.example.mtm.util.ZoomClass;

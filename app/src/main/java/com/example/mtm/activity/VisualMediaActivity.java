@@ -17,7 +17,6 @@ import com.example.mtm.network.ApiService;
 import com.example.mtm.network.RetrofitClient;
 import com.example.mtm.response.InternetResponse;
 import com.example.mtm.response.SubMenuVisualMediaResponse;
-import com.example.mtm.response.VisualMediaResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.Logger;

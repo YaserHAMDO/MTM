@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 import android.webkit.WebView;
 
 public class ZoomClassWebView extends WebView implements GestureDetector.OnGestureListener {

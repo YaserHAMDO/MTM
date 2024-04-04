@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +22,6 @@ import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.DataHolder;
 import com.example.mtm.util.ZoomClass;
-import com.jsibbold.zoomage.ZoomageView;
 
 import java.util.ArrayList;
 

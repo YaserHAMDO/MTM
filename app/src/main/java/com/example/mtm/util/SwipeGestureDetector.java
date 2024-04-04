@@ -1,13 +1,8 @@
 package com.example.mtm.util;
 
-import static java.security.AccessController.getContext;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 

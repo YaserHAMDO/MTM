@@ -10,13 +10,8 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mtm.R;
-import com.example.mtm.network.ApiService;
-import com.example.mtm.network.RetrofitClient;
-import com.example.mtm.response.NewsPaperFullPagesResponse;
 import com.example.mtm.util.Constants;
 import com.example.mtm.util.PreferenceManager;
-
-import retrofit2.Call;
 
 @SuppressLint("CustomSplashScreen")
 public class LaunchScreenActivity extends AppCompatActivity {

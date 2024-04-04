@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.mtm.R;
 import com.example.mtm.model.ColumnistModel;
-import com.example.mtm.util.Constants;
 import com.example.mtm.util.MyUtils;
 
 import java.util.List;
