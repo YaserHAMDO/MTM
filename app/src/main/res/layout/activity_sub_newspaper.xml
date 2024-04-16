@@ -9,7 +9,7 @@
     android:layoutDirection="ltr"
     tools:context=".activity.SubNewspaperActivity">
 
-    <com.example.mtm.util.ZoomClass
+    <com.medyatakip.app.util.ZoomClass
         android:layout_gravity="center"
         android:id="@+id/imageView"
         android:layout_width="wrap_content"

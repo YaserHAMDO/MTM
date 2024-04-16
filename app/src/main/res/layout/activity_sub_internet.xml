@@ -71,7 +71,7 @@
         layout="@layout/web_view_layout" />
 
     <LinearLayout
-        android:id="@+id/mesut"
+        android:id="@+id/me"
         android:orientation="vertical"
         android:visibility="gone"
         android:layout_width="match_parent"
@@ -95,7 +95,7 @@
             android:textColor="@color/color3"
             android:textSize="20sp" />
 
-        <com.example.mtm.util.ZoomClass
+        <com.medyatakip.app.util.ZoomClass
             android:layout_gravity="center"
             android:id="@+id/imageView"
             android:layout_width="match_parent"

@@ -8,7 +8,7 @@
     tools:context=".activity.ColumnistsShowActivity">
 
 
-    <com.example.mtm.util.ZoomClass
+    <com.medyatakip.app.util.ZoomClass
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"

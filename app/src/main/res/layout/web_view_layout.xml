@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
 
-        <com.example.mtm.util.ZoomClassWebView
+        <com.medyatakip.app.util.ZoomClassWebView
             android:id="@+id/webView2"
             android:layout_gravity="center"
             android:layout_width="match_parent"

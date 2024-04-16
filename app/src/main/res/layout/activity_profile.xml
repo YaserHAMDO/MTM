@@ -9,7 +9,7 @@
     tools:context=".activity.ProfileActivity">
 
 
-    <com.example.mtm.util.ZoomClass
+    <com.medyatakip.app.util.ZoomClass
         android:visibility="gone"
         android:layout_marginTop="30dp"
         android:id="@+id/zoomImageView"

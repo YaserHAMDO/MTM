@@ -14,22 +14,22 @@
         android:theme="@style/Theme.MTM"
         tools:targetApi="31">
         <activity
-            android:name=".activity.SelimActivity"
+            android:name=".activity.MainActivity2"
             android:exported="false" />
         <activity
-            android:name=".activity.CansinActivity"
+            android:name=".activity.MainActivity3"
             android:exported="false" />
         <activity
             android:name=".activity.NotificationContentActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MesutActivity"
+            android:name=".activity.MeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.Mesut2Activity"
+            android:name=".activity.Me2Activity"
             android:exported="false" />
         <activity
-            android:name=".activity.Mesut3Activity"
+            android:name=".activity.Me3Activity"
             android:exported="false" />
         <activity
             android:name=".activity.ColumnistsShowActivity"
@@ -74,9 +74,6 @@
             android:name=".activity.NewspaperActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ImageShowActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.VideoShowActivity"
             android:exported="false" />
         <activity
@@ -100,6 +97,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".util.PushNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action
+                    android:name="com.google.firebase.MESSAGING_EVENT">
+                </action>
+            </intent-filter>
+        </service>
+
+
     </application>
 
 </manifest>
