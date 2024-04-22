@@ -52,6 +52,7 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
     private ProgressBar progressBar;
     private BottomSheetDialog bottomSheetDialog;
     private TextView dateTextView, allTextView, newsTextView, adsTextView, okTextView;
+    private LinearLayout dateLinearLayout;
     private String startDate, endDate;
     private TextView filteredDateTextView, title;
     private int index;
@@ -116,6 +117,7 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
         linearLayout.setVisibility(View.GONE);
 
         dateTextView = bottomSheetDialog.findViewById(R.id.dateTextView);
+        dateLinearLayout = bottomSheetDialog.findViewById(R.id.dateLinearLayout);
         allTextView = bottomSheetDialog.findViewById(R.id.allTextView);
         newsTextView = bottomSheetDialog.findViewById(R.id.newsTextView);
         adsTextView = bottomSheetDialog.findViewById(R.id.adsTextView);
@@ -126,7 +128,7 @@ public class NewspaperActivity extends AppCompatActivity implements NewspaperAda
 //        newsTextView.setVisibility(View.GONE);
 //        adsTextView.setVisibility(View.GONE);
 
-        dateTextView.setOnClickListener(v -> {
+        dateLinearLayout.setOnClickListener(v -> {
 
             if (!materialDatePickerControl) {
                 materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");

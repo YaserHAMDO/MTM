@@ -53,6 +53,8 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
 
     private TextView dateTextView, allTextView, newsTextView, adsTextView, okTextView;
 
+    private LinearLayout dateLinearLayout;
+
     private boolean materialDatePickerControl;
 
     private BottomSheetDialog bottomSheetDialog;
@@ -128,6 +130,7 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
         linearLayout.setVisibility(View.GONE);
 
         dateTextView = bottomSheetDialog.findViewById(R.id.dateTextView);
+        dateLinearLayout = bottomSheetDialog.findViewById(R.id.dateLinearLayout);
         allTextView = bottomSheetDialog.findViewById(R.id.allTextView);
         newsTextView = bottomSheetDialog.findViewById(R.id.newsTextView);
         adsTextView = bottomSheetDialog.findViewById(R.id.adsTextView);
@@ -138,7 +141,7 @@ public class ColumnistsActivity extends AppCompatActivity implements ColumnistAd
 //        newsTextView.setVisibility(View.GONE);
 //        adsTextView.setVisibility(View.GONE);
 
-        dateTextView.setOnClickListener(v -> {
+        dateLinearLayout.setOnClickListener(v -> {
 
             if (!materialDatePickerControl) {
                 materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");

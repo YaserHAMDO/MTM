@@ -66,6 +66,8 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
 
     private TextView dateTextView, allTextView, newsTextView, adsTextView, okTextView;
 
+    private LinearLayout dateLinearLayout;
+
     private boolean materialDatePickerControl;
 
     private BottomSheetDialog bottomSheetDialog;
@@ -177,6 +179,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
         bottomSheetDialog.setContentView(R.layout.filter_pop_up_layout);
 
         dateTextView = bottomSheetDialog.findViewById(R.id.dateTextView);
+        dateLinearLayout = bottomSheetDialog.findViewById(R.id.dateLinearLayout);
         allTextView = bottomSheetDialog.findViewById(R.id.allTextView);
         newsTextView = bottomSheetDialog.findViewById(R.id.newsTextView);
         adsTextView = bottomSheetDialog.findViewById(R.id.adsTextView);
@@ -188,7 +191,7 @@ public class NewsListActivity extends AppCompatActivity implements InternetSubLi
         }
 
 
-        dateTextView.setOnClickListener(v -> {
+        dateLinearLayout.setOnClickListener(v -> {
 
             if (!materialDatePickerControl) {
                 materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");

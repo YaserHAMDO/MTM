@@ -6,6 +6,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -134,6 +135,93 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
         setImageMatrix(mMatrix);
     }
 
+    private void setZoom25() {
+        mSaveScale = 2f; // Set scale factor to 2x zoom
+        if (getDrawable() == null || getDrawable().getIntrinsicWidth() == 0 || getDrawable().getIntrinsicHeight() == 0)
+            return;
+
+        int imageWidth = getDrawable().getIntrinsicWidth() / 2;
+        int imageHeight = getDrawable().getIntrinsicHeight() / 2;
+
+        // Calculate the scale factor based on the smaller dimension (width or height)
+        float scaleFactor = Math.min((float) viewWidth / imageWidth, (float) viewHeight / imageHeight) * mSaveScale;
+
+        // Calculate the center point of the image
+        float centerX = imageWidth;
+        float centerY = imageHeight;
+
+        // Calculate the translation to keep the zoom centered at the center of the image
+        float transX = viewWidth / 2f - scaleFactor * centerX;
+        float transY = viewHeight / 2f - scaleFactor * centerY;
+
+        mMatrix.setScale(scaleFactor, scaleFactor);
+        mMatrix.postTranslate(transX, transY);
+
+        origWidth = imageWidth * scaleFactor;
+        origHeight = imageHeight * scaleFactor;
+
+        setImageMatrix(mMatrix);
+    }
+
+
+    private void setZoom3() {
+        mSaveScale = 2f; // Set scale factor to 2x zoom
+        if (getDrawable() == null || getDrawable().getIntrinsicWidth() == 0 || getDrawable().getIntrinsicHeight() == 0)
+            return;
+
+        int imageWidth = getDrawable().getIntrinsicWidth();
+        int imageHeight = getDrawable().getIntrinsicHeight();
+
+        // Calculate the scale factor based on the smaller dimension (width or height)
+        float scaleFactor = Math.min((float) viewWidth / imageWidth, (float) viewHeight / imageHeight) * mSaveScale;
+
+        // Calculate the translation to keep the zoom centered
+        float transX = (viewWidth - imageWidth * scaleFactor) / 2f;
+        float transY = (viewHeight - imageHeight * scaleFactor) / 2f;
+
+        mMatrix.setScale(scaleFactor, scaleFactor);
+        mMatrix.postTranslate(transX, transY);
+
+        origWidth = imageWidth * scaleFactor;
+        origHeight = imageHeight * scaleFactor;
+
+        setImageMatrix(mMatrix);
+    }
+
+    private void setZoom(float x, float y) {
+        mSaveScale = 2f; // Set scale factor to 2x zoom
+        if (getDrawable() == null || getDrawable().getIntrinsicWidth() == 0 || getDrawable().getIntrinsicHeight() == 0)
+            return;
+
+        int imageWidth = getDrawable().getIntrinsicWidth() /2;
+        int imageHeight = getDrawable().getIntrinsicHeight() /2;
+
+        // Calculate the scale factor based on the smaller dimension (width or height)
+        float scaleFactor = Math.min((float) viewWidth / imageWidth, (float) viewHeight / imageHeight) * mSaveScale;
+
+        // Calculate the translation to keep the zoom centered at the clicked position
+        float transX = viewWidth / 2f - scaleFactor * x;
+        float transY = viewHeight / 2f - scaleFactor * y;
+
+        System.out.println("yaser scaleFactor " + scaleFactor);
+        System.out.println("yaser x " + x);
+        System.out.println("yaser y " + y);
+        System.out.println("yaser viewWidth " + viewWidth);
+        System.out.println("yaser viewHeight " + viewHeight);
+
+        mMatrix.setScale(scaleFactor, scaleFactor);
+//     mMatrix.postTranslate(transX - x, transY);
+  mMatrix.postTranslate(transX, transY);
+       // mMatrix.postTranslate(x, y);
+
+        origWidth = imageWidth * scaleFactor;
+        origHeight = imageHeight * scaleFactor;
+
+        setImageMatrix(mMatrix);
+    }
+
+
+
     private void fixTranslation() {
         mMatrix.getValues(mMatrixValues);
         float transX = mMatrixValues[Matrix.MTRANS_X];
@@ -173,7 +261,7 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
         viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         viewHeight = MeasureSpec.getSize(heightMeasureSpec);
         if (mSaveScale == 1f) {
-            fitToScreen();
+           fitToScreen();
         }
     }
 
@@ -280,7 +368,11 @@ public class ZoomClass extends AppCompatImageView implements View.OnTouchListene
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
         if (mSaveScale == 1f) {
-            setZoom();
+            float x = motionEvent.getX();
+            float y = motionEvent.getY();
+
+//            setZoom(x, y);
+            setZoom25();
         }
         else {
             fitToScreen();

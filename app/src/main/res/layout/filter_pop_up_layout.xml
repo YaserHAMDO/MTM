@@ -23,17 +23,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/dateLinearLayout"
+            android:paddingHorizontal="10dp"
             android:background="@drawable/test_d"
-            android:id="@+id/dateTextView"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingVertical="10dp"
-            android:text="Tarih seç"
-            android:textColor="@color/color3"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
+
+            <TextView
+
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="10dp"
+                android:text="Tarih seç"
+                android:textColor="@color/color6"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/outline_edit_calendar_24"/>
+
+        </LinearLayout>
+
+
 
         <View
             android:layout_width="match_parent"
